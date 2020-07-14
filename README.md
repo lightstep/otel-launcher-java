@@ -2,6 +2,7 @@
 
 _NOTE: the code in this repo is currently in alpha and will likely change_
 
+This is the Lightstep package for configuring OpenTelemetry
 
 ## Configuration
 
@@ -23,7 +24,7 @@ Supported system properties and environmental variables:
 * `LS_USE_TLS` - use TLS or not, default is _true_.
 
 ## Agent
-The Lightstep OTLP Agent is a configuration layer over OpenTelemetry Instrumentation Agent.
+The Lightstep OpenTelemetry Agent is a configuration layer over OpenTelemetry Instrumentation Agent.
 
 
 ### Usage
@@ -37,6 +38,10 @@ java -javaagent:path/to/target/lightstep-opentelemetry-auto-<version>.jar \
 ## Exporter
 
 The Lightstep OpenTelemetry Exporter is a configuration layer over OpenTelemetry OTLP trace exporter.
+
+### Installation
+
+pom.xml
 
 ```xml
 <dependency>
