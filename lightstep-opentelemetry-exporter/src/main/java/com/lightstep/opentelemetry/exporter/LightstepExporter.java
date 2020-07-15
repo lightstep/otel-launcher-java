@@ -1,9 +1,17 @@
 package com.lightstep.opentelemetry.exporter;
 
+import com.google.common.collect.ImmutableMap;
 import com.lightstep.opentelemetry.common.VariablesConverter;
+import io.opentelemetry.OpenTelemetry;
+import io.opentelemetry.context.propagation.DefaultContextPropagators;
+import io.opentelemetry.context.propagation.HttpTextFormat;
 import io.opentelemetry.exporters.otlp.OtlpGrpcSpanExporter;
+import io.opentelemetry.extensions.trace.propagation.B3Propagator;
+import io.opentelemetry.extensions.trace.propagation.JaegerPropagator;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import io.opentelemetry.trace.propagation.HttpTraceContext;
+import java.util.Map;
 
 public class LightstepExporter {
 
@@ -12,6 +20,18 @@ public class LightstepExporter {
     private String satelliteUrl = VariablesConverter.DEFAULT_LS_SATELLITE_URL;
     private long deadlineMillis = VariablesConverter.DEFAULT_LS_DEADLINE_MILLIS;
     private boolean useTransportSecurity = VariablesConverter.DEFAULT_LS_USE_TLS;
+    private Propagator propagator = Propagator.valueOfLabel(VariablesConverter.DEFAULT_PROPAGATOR);
+
+    private static final Map<Propagator, HttpTextFormat> PROPAGATORS =
+        ImmutableMap.of(
+            Propagator.TRACE_CONTEXT,
+            new HttpTraceContext(),
+            Propagator.B3,
+            B3Propagator.getMultipleHeaderPropagator(),
+            Propagator.B3_SINGLE,
+            B3Propagator.getSingleHeaderPropagator(),
+            Propagator.JAEGER,
+            new JaegerPropagator());
 
     /**
      * Sets the token for Lightstep access
@@ -32,6 +52,11 @@ public class LightstepExporter {
      */
     public Builder setSatelliteUrl(String satelliteUrl) {
       this.satelliteUrl = satelliteUrl;
+      return this;
+    }
+
+    public Builder setPropagator(Propagator propagator) {
+      this.propagator = propagator;
       return this;
     }
 
@@ -58,7 +83,14 @@ public class LightstepExporter {
      * @return a new exporter's instance
      */
     public OtlpGrpcSpanExporter build() {
-      VariablesConverter.convert(satelliteUrl, useTransportSecurity, deadlineMillis, accessToken);
+      VariablesConverter.convert(satelliteUrl, useTransportSecurity, deadlineMillis, accessToken,
+          propagator.label());
+
+      if (propagator != null) {
+        final HttpTextFormat httpTextFormat = PROPAGATORS.get(propagator);
+        OpenTelemetry.setPropagators(
+            DefaultContextPropagators.builder().addHttpTextFormat(httpTextFormat).build());
+      }
 
       return OtlpGrpcSpanExporter.newBuilder()
           .readSystemProperties()
@@ -85,17 +117,11 @@ public class LightstepExporter {
       builder.useTransportSecurity = VariablesConverter.useTransportSecurity();
       builder.deadlineMillis = VariablesConverter.getDeadlineMillis();
       builder.satelliteUrl = VariablesConverter.getSatelliteUrl();
+      builder.propagator = Propagator.valueOf(VariablesConverter.getPropagator());
 
       return builder;
     }
 
-    private static String getProperty(String name, String defaultValue) {
-      String val = System.getProperty(name, System.getenv(name));
-      if (val == null || val.isEmpty()) {
-        return defaultValue;
-      }
-      return val;
-    }
   }
 
   /**

@@ -18,10 +18,14 @@ export OTEL_RESOURCE_ATTRIBUTES=service.name=test
 ###  System properties and environmental variables
 Supported system properties and environmental variables:
 
-* `LS_SATELLITE_URL` - satellite URL, default is _ingest.lightstep.com_.
-* `LS_DEADLINE_MILLIS` - maximum amount of time the tracer should wait for a response from the collector when sending a report, default is _30000_.
-* `LS_ACCESS_TOKEN` - token for Lightstep access
-* `LS_USE_TLS` - use TLS or not, default is _true_.
+## Configuration parameters
+| System property             | Environment variable         | Purpose                                                                                               | Default              | 
+|-----------------------------|------------------------------|-------------------------------------------------------------------------------------------------------|----------------------|       
+| LS_SATELLITE_URL            | LS_SATELLITE_URL             | Satellite URL                                                                                         | ingest.lightstep.com |
+| ls.access.token             | LS_ACCESS_TOKEN              | Token for Lightstep access                                                                            |                      |                        
+| ls.deadline.millis          | LS_DEADLINE_MILLIS           | Maximum amount of time the tracer should wait for a response from the collector when sending a report | 30000                |
+| ls.use.tls                  | LS_USE_TLS                   | use TLS or not                                                                                        | true                 |
+| otel.propagators            | OTEL_PROPAGATORS             | Propagator                                                                                            | b3                   |
 
 ## Agent
 The Lightstep OpenTelemetry Agent is a configuration layer over OpenTelemetry Instrumentation Agent.
