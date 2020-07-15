@@ -18,7 +18,6 @@ export OTEL_RESOURCE_ATTRIBUTES=service.name=test
 ###  System properties and environmental variables
 Supported system properties and environmental variables:
 
-## Configuration parameters
 | System property             | Environment variable         | Purpose                                                                                               | Default              | 
 |-----------------------------|------------------------------|-------------------------------------------------------------------------------------------------------|----------------------|       
 | ls.satellite.url            | LS_SATELLITE_URL             | Satellite URL                                                                                         | ingest.lightstep.com |
