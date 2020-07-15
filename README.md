@@ -21,7 +21,7 @@ Supported system properties and environmental variables:
 ## Configuration parameters
 | System property             | Environment variable         | Purpose                                                                                               | Default              | 
 |-----------------------------|------------------------------|-------------------------------------------------------------------------------------------------------|----------------------|       
-| LS_SATELLITE_URL            | LS_SATELLITE_URL             | Satellite URL                                                                                         | ingest.lightstep.com |
+| ls.satellite.url            | LS_SATELLITE_URL             | Satellite URL                                                                                         | ingest.lightstep.com |
 | ls.access.token             | LS_ACCESS_TOKEN              | Token for Lightstep access                                                                            |                      |                        
 | ls.deadline.millis          | LS_DEADLINE_MILLIS           | Maximum amount of time the tracer should wait for a response from the collector when sending a report | 30000                |
 | ls.use.tls                  | LS_USE_TLS                   | use TLS or not                                                                                        | true                 |
