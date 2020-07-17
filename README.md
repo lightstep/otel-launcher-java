@@ -18,12 +18,12 @@ export OTEL_RESOURCE_ATTRIBUTES=service.name=test
 ###  System properties and environmental variables
 Supported system properties and environmental variables:
 
-| System property                  | Environment variable             | Purpose                                                                                               | Default              | 
+| System property                  | Environment variable             | Purpose                         | Default              | 
 |----------------------------------|----------------------------------|---------------------------------|----------------------|       
 | otel.exporter.otlp.span.endpoint | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Satellite URL                   | ingest.lightstep.com |
 | ls.access.token                  | LS_ACCESS_TOKEN                  | Token for Lightstep access      |                      |                        
 | ls.deadline.millis               | LS_DEADLINE_MILLIS               | Timeout of sending span data    | 30000                |
-| otel.exporter.otlp.span.insecure | OTEL_EXPORTER_OTLP_SPAN_INSECURE | use insecure transport or not   | false                |
+| otel.exporter.otlp.span.insecure | OTEL_EXPORTER_OTLP_SPAN_INSECURE | Use insecure transport or not   | false                |
 | otel.propagators                 | OTEL_PROPAGATORS                 | Propagator                      | b3                   |
 | otel.log.level                   | OTEL_LOG_LEVEL                   | Log level for agent             | info                 |
 
