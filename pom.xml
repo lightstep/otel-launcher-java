@@ -23,7 +23,8 @@
     <maven.compiler.target>1.7</maven.compiler.target>
     <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <otlp.version>0.6.0</otlp.version>
+    <opentelemtry.version>0.6.0</opentelemtry.version>
+    <opentelemetry.instrumentation.version>0.6.0</opentelemetry.instrumentation.version>
   </properties>
 
 </project>

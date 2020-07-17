@@ -17,7 +17,7 @@ public class LightstepExporter {
 
   public static class Builder {
     private String accessToken = "";
-    private String satelliteUrl = VariablesConverter.DEFAULT_LS_SATELLITE_URL;
+    private String spanEndpoint = VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT;
     private long deadlineMillis = VariablesConverter.DEFAULT_LS_DEADLINE_MILLIS;
     private boolean useTransportSecurity = VariablesConverter.DEFAULT_LS_USE_TLS;
     private Propagator propagator = Propagator.valueOfLabel(VariablesConverter.DEFAULT_PROPAGATOR);
@@ -47,11 +47,11 @@ public class LightstepExporter {
     /**
      * Sets the satellite url
      *
-     * @param satelliteUrl satellite url
+     * @param spanEndpoint satellite url
      * @return this builder's instance
      */
-    public Builder setSatelliteUrl(String satelliteUrl) {
-      this.satelliteUrl = satelliteUrl;
+    public Builder setSpanEndpoint(String spanEndpoint) {
+      this.spanEndpoint = spanEndpoint;
       return this;
     }
 
@@ -83,7 +83,7 @@ public class LightstepExporter {
      * @return a new exporter's instance
      */
     public OtlpGrpcSpanExporter build() {
-      VariablesConverter.convert(satelliteUrl, useTransportSecurity, deadlineMillis, accessToken,
+      VariablesConverter.convert(spanEndpoint, useTransportSecurity, deadlineMillis, accessToken,
           propagator.label());
 
       if (propagator != null) {
@@ -116,7 +116,7 @@ public class LightstepExporter {
       builder.accessToken = VariablesConverter.getAccessToken();
       builder.useTransportSecurity = VariablesConverter.useTransportSecurity();
       builder.deadlineMillis = VariablesConverter.getDeadlineMillis();
-      builder.satelliteUrl = VariablesConverter.getSatelliteUrl();
+      builder.spanEndpoint = VariablesConverter.getSpanEndpoint();
       builder.propagator = Propagator.valueOf(VariablesConverter.getPropagator());
 
       return builder;

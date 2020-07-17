@@ -1,23 +1,23 @@
 package com.lightstep.opentelemetry.common;
 
 public class VariablesConverter {
-  public static final String DEFAULT_LS_SATELLITE_URL = "ingest.lightstep.com";
+  public static final String DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "ingest.lightstep.com";
   public static final long DEFAULT_LS_DEADLINE_MILLIS = 30000;
   public static final boolean DEFAULT_LS_USE_TLS = true;
   public static final String DEFAULT_PROPAGATOR = "b3";
 
   private static final String LS_ACCESS_TOKEN = "LS_ACCESS_TOKEN";
-  private static final String LS_SATELLITE_URL = "LS_SATELLITE_URL";
+  private static final String OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT";
   private static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
   private static final String LS_USE_TLS = "LS_USE_TLS";
   private static final String LS_DEADLINE_MILLIS = "LS_DEADLINE_MILLIS";
 
-  public static void convert(String satelliteUrl,
+  public static void convert(String spanEndpoint,
       boolean useTls,
       long deadlineMillis,
       String accessToken,
       String propagator) {
-    System.setProperty("otel.otlp.endpoint", satelliteUrl);
+    System.setProperty("otel.otlp.endpoint", spanEndpoint);
     System.setProperty("otel.otlp.use.tls", String.valueOf(useTls));
     System.setProperty("otel.otlp.span.timeout", String.valueOf(deadlineMillis));
     System.setProperty("otel.otlp.metadata", "lightstep-access-token=" + accessToken);
@@ -25,7 +25,7 @@ public class VariablesConverter {
   }
 
   public static void convertFromEnv() {
-    convert(getSatelliteUrl(), useTransportSecurity(), getDeadlineMillis(), getAccessToken(),
+    convert(getSpanEndpoint(), useTransportSecurity(), getDeadlineMillis(), getAccessToken(),
         getPropagator());
   }
 
@@ -33,8 +33,8 @@ public class VariablesConverter {
     return getProperty(LS_ACCESS_TOKEN, "");
   }
 
-  public static String getSatelliteUrl() {
-    return getProperty(LS_SATELLITE_URL, DEFAULT_LS_SATELLITE_URL);
+  public static String getSpanEndpoint() {
+    return getProperty(OTEL_EXPORTER_OTLP_SPAN_ENDPOINT, DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT);
   }
 
   public static String getPropagator() {

@@ -22,10 +22,10 @@
       <version>0.1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>io.opentelemetry.auto</groupId>
-      <artifactId>opentelemetry-auto</artifactId>
+      <groupId>io.opentelemetry.instrumentation.auto</groupId>
+      <artifactId>opentelemetry-javaagent</artifactId>
       <classifier>all</classifier>
-      <version>0.5.0-SNAPSHOT</version>
+      <version>${opentelemetry.instrumentation.version}</version>
     </dependency>
   </dependencies>
 
@@ -82,6 +82,16 @@
   </build>
 
   <repositories>
+    <repository>
+      <id>bintray-open-telemetry-maven</id>
+      <url>https://dl.bintray.com/open-telemetry/maven/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
     <repository>
       <id>oss-snapshot-local</id>
       <name>oss-snapshot-local</name>

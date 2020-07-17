@@ -18,13 +18,13 @@ export OTEL_RESOURCE_ATTRIBUTES=service.name=test
 ###  System properties and environmental variables
 Supported system properties and environmental variables:
 
-| System property             | Environment variable         | Purpose                                                                                               | Default              | 
-|-----------------------------|------------------------------|-------------------------------------------------------------------------------------------------------|----------------------|       
-| ls.satellite.url            | LS_SATELLITE_URL             | Satellite URL                                                                                         | ingest.lightstep.com |
-| ls.access.token             | LS_ACCESS_TOKEN              | Token for Lightstep access                                                                            |                      |                        
-| ls.deadline.millis          | LS_DEADLINE_MILLIS           | Maximum amount of time the tracer should wait for a response from the collector when sending a report | 30000                |
-| ls.use.tls                  | LS_USE_TLS                   | use TLS or not                                                                                        | true                 |
-| otel.propagators            | OTEL_PROPAGATORS             | Propagator                                                                                            | b3                   |
+| System property                  | Environment variable             | Purpose                                                                                               | Default              | 
+|----------------------------------|----------------------------------|-------------------------------------------------------------------------------------------------------|----------------------|       
+| otel.exporter.otlp.span.endpoint | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Satellite URL                                                                                         | ingest.lightstep.com |
+| ls.access.token                  | LS_ACCESS_TOKEN                  | Token for Lightstep access                                                                            |                      |                        
+| ls.deadline.millis               | LS_DEADLINE_MILLIS               | Maximum amount of time the tracer should wait for a response from the collector when sending a report | 30000                |
+| ls.use.tls                       | LS_USE_TLS                       | use TLS or not                                                                                        | true                 |
+| otel.propagators                 | OTEL_PROPAGATORS                 | Propagator                                                                                            | b3                   |
 
 ## Agent
 The Lightstep OpenTelemetry Agent is a configuration layer over OpenTelemetry Instrumentation Agent.
@@ -62,7 +62,7 @@ pom.xml
 // Create builder
 Builder builder = LightstepExporter.newBuilder()
                       .setAccessToken("{your_access_token}")
-                      .setSatelliteUrl("{lightstep_host}");
+                      .setSpanEndpoint("{lightstep_host}");
 
 // Instantiate the otlp exporter
 OtlpGrpcSpanExporter exporter = builder.build();
