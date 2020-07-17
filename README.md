@@ -19,13 +19,13 @@ export OTEL_RESOURCE_ATTRIBUTES=service.name=test
 Supported system properties and environmental variables:
 
 | System property                  | Environment variable             | Purpose                                                                                               | Default              | 
-|----------------------------------|----------------------------------|-------------------------------------------------------------------------------------------------------|----------------------|       
-| otel.exporter.otlp.span.endpoint | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Satellite URL                                                                                         | ingest.lightstep.com |
-| ls.access.token                  | LS_ACCESS_TOKEN                  | Token for Lightstep access                                                                            |                      |                        
-| ls.deadline.millis               | LS_DEADLINE_MILLIS               | Maximum amount of time the tracer should wait for a response from the collector when sending a report | 30000                |
-| otel.exporter.otlp.span.insecure | OTEL_EXPORTER_OTLP_SPAN_INSECURE | use insecure transport or not                                                                         | false                |
-| otel.propagators                 | OTEL_PROPAGATORS                 | Propagator                                                                                            | b3                   |
-| OTEL_LOG_LEVEL                   | OTEL_LOG_LEVEL                   | Log level for agent                                                                                   | info                 |
+|----------------------------------|----------------------------------|---------------------------------|----------------------|       
+| otel.exporter.otlp.span.endpoint | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Satellite URL                   | ingest.lightstep.com |
+| ls.access.token                  | LS_ACCESS_TOKEN                  | Token for Lightstep access      |                      |                        
+| ls.deadline.millis               | LS_DEADLINE_MILLIS               | Timeout of sending span data    | 30000                |
+| otel.exporter.otlp.span.insecure | OTEL_EXPORTER_OTLP_SPAN_INSECURE | use insecure transport or not   | false                |
+| otel.propagators                 | OTEL_PROPAGATORS                 | Propagator                      | b3                   |
+| OTEL_LOG_LEVEL                   | OTEL_LOG_LEVEL                   | Log level for agent             | info                 |
 
 ## Agent
 The Lightstep OpenTelemetry Agent is a configuration layer over OpenTelemetry Instrumentation Agent.
