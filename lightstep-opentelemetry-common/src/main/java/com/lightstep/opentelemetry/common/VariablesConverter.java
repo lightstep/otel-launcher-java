@@ -3,29 +3,29 @@ package com.lightstep.opentelemetry.common;
 public class VariablesConverter {
   public static final String DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "ingest.lightstep.com";
   public static final long DEFAULT_LS_DEADLINE_MILLIS = 30000;
-  public static final boolean DEFAULT_LS_USE_TLS = true;
+  public static final boolean DEFAULT_OTEL_EXPORTER_OTLP_SPAN_INSECURE = false;
   public static final String DEFAULT_PROPAGATOR = "b3";
 
   private static final String LS_ACCESS_TOKEN = "LS_ACCESS_TOKEN";
   private static final String OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT";
   private static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
-  private static final String LS_USE_TLS = "LS_USE_TLS";
+  private static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
   private static final String LS_DEADLINE_MILLIS = "LS_DEADLINE_MILLIS";
 
   public static void convert(String spanEndpoint,
-      boolean useTls,
+      boolean insecureTransport,
       long deadlineMillis,
       String accessToken,
       String propagator) {
     System.setProperty("otel.otlp.endpoint", spanEndpoint);
-    System.setProperty("otel.otlp.use.tls", String.valueOf(useTls));
+    System.setProperty("otel.otlp.use.tls", String.valueOf(!insecureTransport));
     System.setProperty("otel.otlp.span.timeout", String.valueOf(deadlineMillis));
     System.setProperty("otel.otlp.metadata", "lightstep-access-token=" + accessToken);
     System.setProperty("ota.propagators", propagator);
   }
 
   public static void convertFromEnv() {
-    convert(getSpanEndpoint(), useTransportSecurity(), getDeadlineMillis(), getAccessToken(),
+    convert(getSpanEndpoint(), useInsecureTransport(), getDeadlineMillis(), getAccessToken(),
         getPropagator());
   }
 
@@ -41,8 +41,9 @@ public class VariablesConverter {
     return getProperty(OTEL_PROPAGATORS, DEFAULT_PROPAGATOR);
   }
 
-  public static boolean useTransportSecurity() {
-    return Boolean.parseBoolean(getProperty(LS_USE_TLS, String.valueOf(DEFAULT_LS_USE_TLS)));
+  public static boolean useInsecureTransport() {
+    return Boolean.parseBoolean(getProperty(OTEL_EXPORTER_OTLP_SPAN_INSECURE, String.valueOf(
+        DEFAULT_OTEL_EXPORTER_OTLP_SPAN_INSECURE)));
   }
 
   public static long getDeadlineMillis() {

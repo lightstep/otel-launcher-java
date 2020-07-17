@@ -23,7 +23,7 @@ Supported system properties and environmental variables:
 | otel.exporter.otlp.span.endpoint | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Satellite URL                                                                                         | ingest.lightstep.com |
 | ls.access.token                  | LS_ACCESS_TOKEN                  | Token for Lightstep access                                                                            |                      |                        
 | ls.deadline.millis               | LS_DEADLINE_MILLIS               | Maximum amount of time the tracer should wait for a response from the collector when sending a report | 30000                |
-| ls.use.tls                       | LS_USE_TLS                       | use TLS or not                                                                                        | true                 |
+| otel.exporter.otlp.span.insecure | OTEL_EXPORTER_OTLP_SPAN_INSECURE | use insecure transport or not                                                                         | false                |
 | otel.propagators                 | OTEL_PROPAGATORS                 | Propagator                                                                                            | b3                   |
 
 ## Agent

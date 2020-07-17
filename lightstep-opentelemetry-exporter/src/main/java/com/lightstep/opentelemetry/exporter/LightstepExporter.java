@@ -19,7 +19,7 @@ public class LightstepExporter {
     private String accessToken = "";
     private String spanEndpoint = VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT;
     private long deadlineMillis = VariablesConverter.DEFAULT_LS_DEADLINE_MILLIS;
-    private boolean useTransportSecurity = VariablesConverter.DEFAULT_LS_USE_TLS;
+    private boolean insecureTransport = VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_SPAN_INSECURE;
     private Propagator propagator = Propagator.valueOfLabel(VariablesConverter.DEFAULT_PROPAGATOR);
 
     private static final Map<Propagator, HttpTextFormat> PROPAGATORS =
@@ -72,8 +72,8 @@ public class LightstepExporter {
       return this;
     }
 
-    public Builder useTransportSecurity(boolean useTransportSecurity) {
-      this.useTransportSecurity = useTransportSecurity;
+    public Builder useInsecureTransport(boolean insecureTransport) {
+      this.insecureTransport = insecureTransport;
       return this;
     }
 
@@ -83,7 +83,7 @@ public class LightstepExporter {
      * @return a new exporter's instance
      */
     public OtlpGrpcSpanExporter build() {
-      VariablesConverter.convert(spanEndpoint, useTransportSecurity, deadlineMillis, accessToken,
+      VariablesConverter.convert(spanEndpoint, insecureTransport, deadlineMillis, accessToken,
           propagator.label());
 
       if (propagator != null) {
@@ -114,7 +114,7 @@ public class LightstepExporter {
     public static Builder fromEnv() {
       final Builder builder = new Builder();
       builder.accessToken = VariablesConverter.getAccessToken();
-      builder.useTransportSecurity = VariablesConverter.useTransportSecurity();
+      builder.insecureTransport = VariablesConverter.useInsecureTransport();
       builder.deadlineMillis = VariablesConverter.getDeadlineMillis();
       builder.spanEndpoint = VariablesConverter.getSpanEndpoint();
       builder.propagator = Propagator.valueOf(VariablesConverter.getPropagator());
