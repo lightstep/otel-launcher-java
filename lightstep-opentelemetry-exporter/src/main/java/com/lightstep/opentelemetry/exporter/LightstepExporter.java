@@ -83,8 +83,9 @@ public class LightstepExporter {
      * @return a new exporter's instance
      */
     public OtlpGrpcSpanExporter build() {
-      VariablesConverter.convert(spanEndpoint, insecureTransport, deadlineMillis, accessToken,
-          propagator.label());
+      VariablesConverter
+          .setSystemProperties(spanEndpoint, insecureTransport, deadlineMillis, accessToken,
+              null, null);
 
       if (propagator != null) {
         final HttpTextFormat httpTextFormat = PROPAGATORS.get(propagator);

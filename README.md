@@ -25,6 +25,7 @@ Supported system properties and environmental variables:
 | ls.deadline.millis               | LS_DEADLINE_MILLIS               | Maximum amount of time the tracer should wait for a response from the collector when sending a report | 30000                |
 | otel.exporter.otlp.span.insecure | OTEL_EXPORTER_OTLP_SPAN_INSECURE | use insecure transport or not                                                                         | false                |
 | otel.propagators                 | OTEL_PROPAGATORS                 | Propagator                                                                                            | b3                   |
+| OTEL_LOG_LEVEL                   | OTEL_LOG_LEVEL                   | Log level for agent                                                                                   | info                 |
 
 ## Agent
 The Lightstep OpenTelemetry Agent is a configuration layer over OpenTelemetry Instrumentation Agent.

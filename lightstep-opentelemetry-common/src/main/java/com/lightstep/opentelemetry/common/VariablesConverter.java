@@ -5,32 +5,44 @@ public class VariablesConverter {
   public static final long DEFAULT_LS_DEADLINE_MILLIS = 30000;
   public static final boolean DEFAULT_OTEL_EXPORTER_OTLP_SPAN_INSECURE = false;
   public static final String DEFAULT_PROPAGATOR = "b3";
+  public static final String DEFAULT_OTEL_LOG_LEVEL = "info";
 
   private static final String LS_ACCESS_TOKEN = "LS_ACCESS_TOKEN";
   private static final String OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT";
   private static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
   private static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
   private static final String LS_DEADLINE_MILLIS = "LS_DEADLINE_MILLIS";
+  private static final String OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL";
 
-  public static void convert(String spanEndpoint,
+  public static void setSystemProperties(String spanEndpoint,
       boolean insecureTransport,
       long deadlineMillis,
       String accessToken,
-      String propagator) {
+      String propagator,
+      String logLevel) {
     System.setProperty("otel.otlp.endpoint", spanEndpoint);
     System.setProperty("otel.otlp.use.tls", String.valueOf(!insecureTransport));
     System.setProperty("otel.otlp.span.timeout", String.valueOf(deadlineMillis));
     System.setProperty("otel.otlp.metadata", "lightstep-access-token=" + accessToken);
-    System.setProperty("ota.propagators", propagator);
+    if (propagator != null) {
+      System.setProperty("ota.propagators", propagator);
+    }
+    if (logLevel != null) {
+      System.setProperty("io.opentelemetry.auto.slf4j.simpleLogger.defaultLogLevel", logLevel);
+    }
   }
 
   public static void convertFromEnv() {
-    convert(getSpanEndpoint(), useInsecureTransport(), getDeadlineMillis(), getAccessToken(),
-        getPropagator());
+    setSystemProperties(getSpanEndpoint(), useInsecureTransport(), getDeadlineMillis(),
+        getAccessToken(), getPropagator(), getLogLevel());
   }
 
   public static String getAccessToken() {
     return getProperty(LS_ACCESS_TOKEN, "");
+  }
+
+  public static String getLogLevel() {
+    return getProperty(OTEL_LOG_LEVEL, DEFAULT_OTEL_LOG_LEVEL);
   }
 
   public static String getSpanEndpoint() {
