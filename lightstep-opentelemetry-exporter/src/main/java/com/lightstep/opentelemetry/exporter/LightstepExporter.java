@@ -16,11 +16,11 @@ import java.util.Map;
 public class LightstepExporter {
 
   public static class Builder {
-    private String accessToken = "";
-    private String spanEndpoint = VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT;
-    private long deadlineMillis = VariablesConverter.DEFAULT_LS_DEADLINE_MILLIS;
-    private boolean insecureTransport = VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_SPAN_INSECURE;
-    private Propagator propagator = Propagator.valueOfLabel(VariablesConverter.DEFAULT_PROPAGATOR);
+    private String accessToken;
+    private String spanEndpoint;
+    private long deadlineMillis;
+    private boolean insecureTransport;
+    private Propagator propagator;
 
     private static final Map<Propagator, HttpTextFormat> PROPAGATORS =
         ImmutableMap.of(
@@ -32,6 +32,10 @@ public class LightstepExporter {
             B3Propagator.getSingleHeaderPropagator(),
             Propagator.JAEGER,
             new JaegerPropagator());
+
+    private Builder() {
+      readEnvVariablesAndSystemProperties();
+    }
 
     /**
      * Sets the token for Lightstep access
@@ -85,7 +89,7 @@ public class LightstepExporter {
     public OtlpGrpcSpanExporter build() {
       VariablesConverter
           .setSystemProperties(spanEndpoint, insecureTransport, deadlineMillis, accessToken,
-              null, null);
+              null, null, false);
 
       if (propagator != null) {
         final HttpTextFormat httpTextFormat = PROPAGATORS.get(propagator);
@@ -107,20 +111,12 @@ public class LightstepExporter {
       OpenTelemetrySdk.getTracerProvider().addSpanProcessor(spansProcessor);
     }
 
-    /**
-     * Creates builder from system properties and environmental variables.
-     *
-     * @return this builder's instance
-     */
-    public static Builder fromEnv() {
-      final Builder builder = new Builder();
-      builder.accessToken = VariablesConverter.getAccessToken();
-      builder.insecureTransport = VariablesConverter.useInsecureTransport();
-      builder.deadlineMillis = VariablesConverter.getDeadlineMillis();
-      builder.spanEndpoint = VariablesConverter.getSpanEndpoint();
-      builder.propagator = Propagator.valueOf(VariablesConverter.getPropagator());
-
-      return builder;
+    private void readEnvVariablesAndSystemProperties() {
+      this.accessToken = VariablesConverter.getAccessToken();
+      this.insecureTransport = VariablesConverter.useInsecureTransport();
+      this.deadlineMillis = VariablesConverter.getDeadlineMillis();
+      this.spanEndpoint = VariablesConverter.getSpanEndpoint();
+      this.propagator = Propagator.valueOf(VariablesConverter.getPropagator());
     }
 
   }

@@ -1,6 +1,11 @@
 package com.lightstep.opentelemetry.common;
 
+
+import java.util.logging.Logger;
+
 public class VariablesConverter {
+  private static final Logger logger = Logger.getLogger(VariablesConverter.class.getName());
+
   public static final String DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "ingest.lightstep.com";
   public static final long DEFAULT_LS_DEADLINE_MILLIS = 30000;
   public static final boolean DEFAULT_OTEL_EXPORTER_OTLP_SPAN_INSECURE = false;
@@ -19,7 +24,21 @@ public class VariablesConverter {
       long deadlineMillis,
       String accessToken,
       String propagator,
-      String logLevel) {
+      String logLevel,
+      boolean isAgent) {
+
+    if (DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT.equals(spanEndpoint)
+        && (accessToken == null || accessToken.isEmpty())) {
+      String msg =
+          "Invalid configuration: token missing. Must be set to send data to " + spanEndpoint
+              + ". Set environment variable LS_ACCESS_TOKEN";
+      if (isAgent) {
+        logger.severe(msg + ".");
+      } else {
+        logger.severe(msg + " or call setAccessToken in the code.");
+      }
+    }
+
     System.setProperty("otel.otlp.endpoint", spanEndpoint);
     System.setProperty("otel.otlp.use.tls", String.valueOf(!insecureTransport));
     System.setProperty("otel.otlp.span.timeout", String.valueOf(deadlineMillis));
@@ -34,7 +53,7 @@ public class VariablesConverter {
 
   public static void convertFromEnv() {
     setSystemProperties(getSpanEndpoint(), useInsecureTransport(), getDeadlineMillis(),
-        getAccessToken(), getPropagator(), getLogLevel());
+        getAccessToken(), getPropagator(), getLogLevel(), true);
   }
 
   public static String getAccessToken() {

@@ -76,16 +76,6 @@ OpenTelemetrySdk.getTracerProvider()
 Tracer tracer = OpenTelemetry.getTracer("instrumentation-library-name","1.0.0");
 ```
 
-#### Configuration from system properties and environmental variables
-
-Lightstep exporter can be configured by system properties and environmental variables:
-
-```java
-Builder builder = LightstepExporter.Builder.fromEnv();
-```
-
-
-
 #### Easy initialization
 
 ```java
