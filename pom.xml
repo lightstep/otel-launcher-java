@@ -24,7 +24,7 @@
     <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <opentelemtry.version>0.6.0</opentelemtry.version>
-    <opentelemetry.instrumentation.version>0.6.0</opentelemetry.instrumentation.version>
+    <opentelemetry.instrumentation.version>0.7.0-SNAPSHOT</opentelemetry.instrumentation.version>
   </properties>
 
 </project>
