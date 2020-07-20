@@ -39,6 +39,12 @@ public class VariablesConverter {
       }
     }
 
+    if (accessToken != null && !accessToken.isEmpty() && accessToken.length() != 32
+        && accessToken.length() != 84 && accessToken.length() != 104) {
+      logger.severe(
+          "Invalid configuration: invalid token. Token must be a 32, 84 or 104 character long string.");
+    }
+
     System.setProperty("otel.otlp.endpoint", spanEndpoint);
     System.setProperty("otel.otlp.use.tls", String.valueOf(!insecureTransport));
     System.setProperty("otel.otlp.span.timeout", String.valueOf(deadlineMillis));
