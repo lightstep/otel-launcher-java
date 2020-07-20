@@ -18,7 +18,6 @@ public class LightstepExporter {
   public static class Builder {
     private String accessToken;
     private String spanEndpoint;
-    private long deadlineMillis;
     private boolean insecureTransport;
     private Propagator propagator;
 
@@ -64,18 +63,6 @@ public class LightstepExporter {
       return this;
     }
 
-    /**
-     * Overrides the default deadlineMillis with the provided value.
-     *
-     * @param deadlineMillis The maximum amount of time the tracer should wait for a response from
-     * the collector when sending a report.
-     * @return this builder's instance
-     */
-    public Builder setDeadlineMillis(long deadlineMillis) {
-      this.deadlineMillis = deadlineMillis;
-      return this;
-    }
-
     public Builder useInsecureTransport(boolean insecureTransport) {
       this.insecureTransport = insecureTransport;
       return this;
@@ -88,8 +75,7 @@ public class LightstepExporter {
      */
     public OtlpGrpcSpanExporter build() {
       VariablesConverter
-          .setSystemProperties(spanEndpoint, insecureTransport, deadlineMillis, accessToken,
-              null, null, false);
+          .setSystemProperties(spanEndpoint, insecureTransport, accessToken, null, null, false);
 
       if (propagator != null) {
         final HttpTextFormat httpTextFormat = PROPAGATORS.get(propagator);
@@ -114,7 +100,6 @@ public class LightstepExporter {
     private void readEnvVariablesAndSystemProperties() {
       this.accessToken = VariablesConverter.getAccessToken();
       this.insecureTransport = VariablesConverter.useInsecureTransport();
-      this.deadlineMillis = VariablesConverter.getDeadlineMillis();
       this.spanEndpoint = VariablesConverter.getSpanEndpoint();
       this.propagator = Propagator.valueOf(VariablesConverter.getPropagator());
     }

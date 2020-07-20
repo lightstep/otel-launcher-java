@@ -16,12 +16,10 @@ public class VariablesConverter {
   private static final String OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT";
   private static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
   private static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
-  private static final String LS_DEADLINE_MILLIS = "LS_DEADLINE_MILLIS";
   private static final String OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL";
 
   public static void setSystemProperties(String spanEndpoint,
       boolean insecureTransport,
-      long deadlineMillis,
       String accessToken,
       String propagator,
       String logLevel,
@@ -47,7 +45,7 @@ public class VariablesConverter {
 
     System.setProperty("otel.otlp.endpoint", spanEndpoint);
     System.setProperty("otel.otlp.use.tls", String.valueOf(!insecureTransport));
-    System.setProperty("otel.otlp.span.timeout", String.valueOf(deadlineMillis));
+    System.setProperty("otel.otlp.span.timeout", String.valueOf(DEFAULT_LS_DEADLINE_MILLIS));
     System.setProperty("otel.otlp.metadata", "lightstep-access-token=" + accessToken);
     if (propagator != null) {
       System.setProperty("ota.propagators", propagator);
@@ -58,7 +56,7 @@ public class VariablesConverter {
   }
 
   public static void convertFromEnv() {
-    setSystemProperties(getSpanEndpoint(), useInsecureTransport(), getDeadlineMillis(),
+    setSystemProperties(getSpanEndpoint(), useInsecureTransport(),
         getAccessToken(), getPropagator(), getLogLevel(), true);
   }
 
@@ -81,11 +79,6 @@ public class VariablesConverter {
   public static boolean useInsecureTransport() {
     return Boolean.parseBoolean(getProperty(OTEL_EXPORTER_OTLP_SPAN_INSECURE, String.valueOf(
         DEFAULT_OTEL_EXPORTER_OTLP_SPAN_INSECURE)));
-  }
-
-  public static long getDeadlineMillis() {
-    return Long.parseLong(
-        getProperty(LS_DEADLINE_MILLIS, String.valueOf(DEFAULT_LS_DEADLINE_MILLIS)));
   }
 
   private static String getProperty(String name, String defaultValue) {
