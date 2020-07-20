@@ -20,8 +20,8 @@ Supported system properties and environmental variables:
 
 | System property                  | Environment variable             | Purpose                         | Default              | 
 |----------------------------------|----------------------------------|---------------------------------|----------------------|       
-| otel.exporter.otlp.span.endpoint | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Satellite URL                   | ingest.lightstep.com |
 | ls.access.token                  | LS_ACCESS_TOKEN                  | Token for Lightstep access      |                      |                        
+| otel.exporter.otlp.span.endpoint | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Satellite URL                   | ingest.lightstep.com |
 | otel.exporter.otlp.span.insecure | OTEL_EXPORTER_OTLP_SPAN_INSECURE | Use insecure transport or not   | false                |
 | otel.propagators                 | OTEL_PROPAGATORS                 | Propagator                      | b3                   |
 | otel.log.level                   | OTEL_LOG_LEVEL                   | Log level for agent             | info                 |
@@ -29,13 +29,18 @@ Supported system properties and environmental variables:
 ## Agent
 The Lightstep OpenTelemetry Agent is a configuration layer over OpenTelemetry Instrumentation Agent.
 
-
 ### Usage
 
 #### Run
 
-java -javaagent:path/to/target/lightstep-opentelemetry-auto-<version>.jar \
+```shell script
+export OTEL_RESOURCE_ATTRIBUTES=service.name=your-service-name
+export LS_ACCESS_TOKEN=your-token
+export OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.staging.lightstep.com
+
+java -javaagent:path/to/lightstep-opentelemetry-auto-<version>.jar \
      -jar myapp.jar
+```
 
 
 ## Exporter
@@ -56,6 +61,16 @@ pom.xml
 
 ### Usage
 
+#### Easy initialization
+
+```java
+// Installs exporter into tracer SDK default provider with batching span processor.
+LightstepExporter.newBuilder()
+                      .setAccessToken("{your_access_token}")
+                      .setSpanEndpoint("{lightstep_host}")
+                      .install();
+```
+
 #### Manual configuration
 
 ```java
@@ -74,14 +89,6 @@ OpenTelemetrySdk.getTracerProvider()
 // Get tracer
 Tracer tracer = OpenTelemetry.getTracer("instrumentation-library-name","1.0.0");
 ```
-
-#### Easy initialization
-
-```java
-// Installs exporter into tracer SDK default provider with batching span processor.
-builder.install();
-```
-
 
 ## License
 
