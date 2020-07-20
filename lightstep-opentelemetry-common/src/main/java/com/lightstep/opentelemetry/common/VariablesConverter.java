@@ -30,15 +30,18 @@ public class VariablesConverter {
           "Invalid configuration: token missing. Must be set to send data to " + spanEndpoint
               + ". Set environment variable LS_ACCESS_TOKEN";
       if (isAgent) {
-        logger.severe(msg + ".");
+        msg += ".";
       } else {
-        logger.severe(msg + " or call setAccessToken in the code.");
+        msg += " or call setAccessToken in the code.";
       }
+      logger.severe(msg);
+      throw new IllegalStateException(msg);
     }
 
     if (!isValidToken(accessToken)) {
-      logger.severe(
-          "Invalid configuration: invalid token. Token must be a 32, 84 or 104 character long string.");
+      String msg = "Invalid configuration: invalid token. Token must be a 32, 84 or 104 character long string.";
+      logger.severe(msg);
+      throw new IllegalStateException(msg);
     }
 
     System.setProperty("otel.otlp.endpoint", spanEndpoint);

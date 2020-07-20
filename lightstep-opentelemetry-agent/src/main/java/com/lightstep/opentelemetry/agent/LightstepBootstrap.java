@@ -7,7 +7,12 @@ import java.lang.instrument.Instrumentation;
 public class LightstepBootstrap {
 
   public static void premain(final String agentArgs, final Instrumentation inst) {
-    VariablesConverter.convertFromEnv();
+    try {
+      VariablesConverter.convertFromEnv();
+    } catch (IllegalStateException e) {
+      System.err.println("Agent is not installed. " + e.getMessage());
+      return;
+    }
     AgentBootstrap.premain(agentArgs, inst);
   }
 
