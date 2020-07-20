@@ -34,8 +34,8 @@ The Lightstep OpenTelemetry Agent is a configuration layer over OpenTelemetry In
 #### Run
 
 ```shell script
-export OTEL_RESOURCE_ATTRIBUTES=service.name=your-service-name
 export LS_ACCESS_TOKEN=your-token
+export OTEL_RESOURCE_ATTRIBUTES=service.name=your-service-name
 export OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.staging.lightstep.com
 
 java -javaagent:path/to/lightstep-opentelemetry-auto-<version>.jar \
@@ -79,15 +79,15 @@ Builder builder = LightstepExporter.newBuilder()
                       .setAccessToken("{your_access_token}")
                       .setSpanEndpoint("{lightstep_host}");
 
-// Instantiate the otlp exporter
+// Instantiate the exporter
 OtlpGrpcSpanExporter exporter = builder.build();
 
-// Add Span Processor with Lightstep exporter
+// Add Span Processor with exporter
 OpenTelemetrySdk.getTracerProvider()
                       .addSpanProcessor(SimpleSpanProcessor.newBuilder(exporter).build());
 
 // Get tracer
-Tracer tracer = OpenTelemetry.getTracer("instrumentation-library-name","1.0.0");
+Tracer tracer = OpenTelemetry.getTracer("instrumentation-library-name", "1.0.0");
 ```
 
 ## License
