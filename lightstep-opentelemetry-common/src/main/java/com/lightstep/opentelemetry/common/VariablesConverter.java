@@ -16,7 +16,7 @@ public class VariablesConverter {
   private static final String OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT";
   private static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
   private static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
-  private static final String OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL";
+  static final String OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL";
 
   public static void setSystemProperties(String spanEndpoint,
       boolean insecureTransport,
@@ -25,8 +25,7 @@ public class VariablesConverter {
       String logLevel,
       boolean isAgent) {
 
-    if (DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT.equals(spanEndpoint)
-        && (accessToken == null || accessToken.isEmpty())) {
+    if (isTokenRequired(spanEndpoint) && (accessToken == null || accessToken.isEmpty())) {
       String msg =
           "Invalid configuration: token missing. Must be set to send data to " + spanEndpoint
               + ". Set environment variable LS_ACCESS_TOKEN";
@@ -37,8 +36,7 @@ public class VariablesConverter {
       }
     }
 
-    if (accessToken != null && !accessToken.isEmpty() && accessToken.length() != 32
-        && accessToken.length() != 84 && accessToken.length() != 104) {
+    if (!isValidToken(accessToken)) {
       logger.severe(
           "Invalid configuration: invalid token. Token must be a 32, 84 or 104 character long string.");
     }
@@ -53,6 +51,15 @@ public class VariablesConverter {
     if (logLevel != null) {
       System.setProperty("io.opentelemetry.auto.slf4j.simpleLogger.defaultLogLevel", logLevel);
     }
+  }
+
+  static boolean isValidToken(String token) {
+    return token == null || token.isEmpty() || token.length() == 32 || token.length() == 84
+        || token.length() == 104;
+  }
+
+  static boolean isTokenRequired(String spanEndpoint) {
+    return DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT.equals(spanEndpoint);
   }
 
   public static void convertFromEnv() {
