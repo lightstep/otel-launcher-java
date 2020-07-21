@@ -44,8 +44,7 @@
 
   <scm>
     <connection>https://github.com/lightstep/otel-java</connection>
-    <developerConnection>https://github.com/lightstep/otel-java
-    </developerConnection>
+    <developerConnection>https://github.com/lightstep/otel-java</developerConnection>
     <url>https://github.com/lightstep/otel-java</url>
   </scm>
 
