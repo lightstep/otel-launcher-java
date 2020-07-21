@@ -4,46 +4,28 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <groupId>com.lightstep.opentelemetry</groupId>
-    <artifactId>lightstep-opentelemetry</artifactId>
+    <artifactId>otel-launcher-parent</artifactId>
     <version>0.1.0-SNAPSHOT</version>
   </parent>
-
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>lightstep-opentelemetry-exporter</artifactId>
+  <artifactId>otel-launcher-agent</artifactId>
   <version>0.1.0-SNAPSHOT</version>
 
-  <name>Lightstep OpenTelemetry Exporter</name>
-  <description>Lightstep OpenTelemetry Exporter</description>
+  <name>Lightstep OTel Launcher Agent</name>
+  <description>Lightstep OTel Launcher Agent</description>
 
   <dependencies>
     <dependency>
       <groupId>com.lightstep.opentelemetry</groupId>
-      <artifactId>lightstep-opentelemetry-common</artifactId>
+      <artifactId>otel-launcher-common</artifactId>
       <version>0.1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-exporters-otlp</artifactId>
-      <version>${opentelemtry.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-extension-trace-propagators</artifactId>
-      <version>${opentelemtry.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-netty</artifactId>
-      <version>1.24.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13</version>
-      <scope>test</scope>
+      <groupId>io.opentelemetry.instrumentation.auto</groupId>
+      <artifactId>opentelemetry-javaagent</artifactId>
+      <classifier>all</classifier>
+      <version>${opentelemetry.instrumentation.version}</version>
     </dependency>
   </dependencies>
 
@@ -76,11 +58,20 @@
                   </excludes>
                 </filter>
               </filters>
-              <outputFile>${project.build.directory}/${project.artifactId}.jar</outputFile>
+              <outputFile>
+                ${project.build.directory}/lightstep-opentelemetry-auto-${project.version}.jar
+              </outputFile>
               <transformers>
                 <transformer implementation=
                   "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>com.lightstep.opentelemetry.exporter.LightstepExporter</mainClass>
+                  <manifestEntries>
+                    <Main-Class>io.opentelemetry.auto.bootstrap.AgentBootstrap</Main-Class>
+                    <Agent-Class>com.lightstep.opentelemetry.agent.LightstepBootstrap</Agent-Class>
+                    <Premain-Class>com.lightstep.opentelemetry.agent.LightstepBootstrap
+                    </Premain-Class>
+                    <Can-Redefine-Classes>true</Can-Redefine-Classes>
+                    <Can-Retransform-Classes>true</Can-Retransform-Classes>
+                  </manifestEntries>
                 </transformer>
               </transformers>
             </configuration>
@@ -89,5 +80,23 @@
       </plugin>
     </plugins>
   </build>
+
+  <repositories>
+    <repository>
+      <id>bintray-open-telemetry-maven</id>
+      <url>https://dl.bintray.com/open-telemetry/maven/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>oss-snapshot-local</id>
+      <name>oss-snapshot-local</name>
+      <url>http://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+    </repository>
+  </repositories>
 
 </project>

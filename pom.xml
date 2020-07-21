@@ -5,19 +5,19 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.lightstep.opentelemetry</groupId>
-  <artifactId>lightstep-opentelemetry</artifactId>
+  <artifactId>otel-launcher-parent</artifactId>
   <packaging>pom</packaging>
   <version>0.1.0-SNAPSHOT</version>
 
   <modules>
-    <module>lightstep-opentelemetry-exporter</module>
-    <module>lightstep-opentelemetry-agent</module>
-    <module>lightstep-opentelemetry-common</module>
+    <module>otel-launcher-exporter</module>
+    <module>otel-launcher-agent</module>
+    <module>otel-launcher-common</module>
   </modules>
 
-  <name>Lightstep OpenTelemetry Configuration Layer for Java</name>
-  <description>Lightstep OpenTelemetry Configuration Layer for Java</description>
-  <url>https://github.com/lightstep/otel-java</url>
+  <name>Lightstep OTel Launcher Parent</name>
+  <description>Lightstep OTel Launcher Parent</description>
+  <url>https://github.com/lightstep/otel-launcher-java</url>
 
   <properties>
     <maven.compiler.source>1.7</maven.compiler.source>
@@ -43,9 +43,9 @@
   </developers>
 
   <scm>
-    <connection>https://github.com/lightstep/otel-java</connection>
-    <developerConnection>https://github.com/lightstep/otel-java</developerConnection>
-    <url>https://github.com/lightstep/otel-java</url>
+    <connection>https://github.com/lightstep/otel-launcher-java</connection>
+    <developerConnection>https://github.com/lightstep/otel-launcher-java</developerConnection>
+    <url>https://github.com/lightstep/otel-launcher-java</url>
   </scm>
 
   <licenses>
@@ -58,7 +58,7 @@
   <distributionManagement>
     <repository>
       <id>lightstep-bintray</id>
-      <url>https://api.bintray.com/maven/lightstep/maven/lightstep-otel-java/;publish=1
+      <url>https://api.bintray.com/maven/lightstep/maven/otel-launcher-java/;publish=1
       </url>
     </repository>
   </distributionManagement>
