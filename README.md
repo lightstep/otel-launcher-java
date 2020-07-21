@@ -69,7 +69,7 @@ pom.xml
 ```xml
 <dependency>
     <groupId>com.lightstep.opentelemetry</groupId>
-    <artifactId>otel-launcher-exporter</artifactId>
+    <artifactId>launcher-exporter</artifactId>
     <version>VERSION</version>
 </dependency>
 ```
