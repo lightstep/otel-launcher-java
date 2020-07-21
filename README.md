@@ -1,3 +1,5 @@
+[![Apache-2.0 license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 # Lightstep OpenTelemetry Configuration Layer for Java
 
 _NOTE: the code in this repo is currently in alpha and will likely change_
