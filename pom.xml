@@ -10,9 +10,9 @@
   <version>0.1.0-SNAPSHOT</version>
 
   <modules>
-    <module>otel-launcher-exporter</module>
-    <module>otel-launcher-agent</module>
-    <module>otel-launcher-common</module>
+    <module>exporter</module>
+    <module>agent</module>
+    <module>common</module>
   </modules>
 
   <name>Lightstep OTel Launcher Parent</name>
