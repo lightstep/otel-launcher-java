@@ -31,9 +31,22 @@ Supported system properties and environmental variables:
 ## Agent
 The Lightstep OpenTelemetry Agent is a configuration layer over OpenTelemetry Instrumentation Agent.
 
-### Usage
+### Run
 
-#### Run
+Configuration parameters are passed as Java system properties (-D flags) or as environment variables.
+
+#### Configuration via Java system properties
+
+```shell script
+export LS_ACCESS_TOKEN=your-token
+export OTEL_RESOURCE_ATTRIBUTES=service.name=your-service-name
+
+java -javaagent:path/to/lightstep-opentelemetry-auto-<version>.jar \
+     -Dotel.exporter.otlp.span.endpoint=ingest.staging.lightstep.com \
+     -jar myapp.jar
+```
+
+#### Configuration via environment variables
 
 ```shell script
 export LS_ACCESS_TOKEN=your-token
