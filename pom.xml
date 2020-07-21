@@ -17,6 +17,7 @@
 
   <name>Lightstep OpenTelemetry Configuration Layer for Java</name>
   <description>Lightstep OpenTelemetry Configuration Layer for Java</description>
+  <url>https://github.com/lightstep/otel-java</url>
 
   <properties>
     <maven.compiler.source>1.7</maven.compiler.source>
@@ -27,6 +28,41 @@
     <opentelemetry.instrumentation.version>0.7.0-SNAPSHOT</opentelemetry.instrumentation.version>
     <powermock.version>2.0.7</powermock.version>
   </properties>
+
+  <organization>
+    <name>Lightstep</name>
+    <url>http://lightstep.com/</url>
+  </organization>
+
+  <developers>
+    <developer>
+      <email>hello@lightstep.com</email>
+      <id>lightstep</id>
+      <name>Lightstep</name>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>https://github.com/lightstep/otel-java</connection>
+    <developerConnection>https://github.com/lightstep/otel-java
+    </developerConnection>
+    <url>https://github.com/lightstep/otel-java</url>
+  </scm>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <distributionManagement>
+    <repository>
+      <id>lightstep-bintray</id>
+      <url>https://api.bintray.com/maven/lightstep/maven/lightstep-otel-java/;publish=1
+      </url>
+    </repository>
+  </distributionManagement>
 
   <dependencyManagement>
     <dependencies>
