@@ -101,7 +101,7 @@ public class LightstepExporter {
       this.accessToken = VariablesConverter.getAccessToken();
       this.insecureTransport = VariablesConverter.useInsecureTransport();
       this.spanEndpoint = VariablesConverter.getSpanEndpoint();
-      this.propagator = Propagator.valueOf(VariablesConverter.getPropagator());
+      this.propagator = Propagator.valueOfLabel(VariablesConverter.getPropagator());
     }
 
   }
