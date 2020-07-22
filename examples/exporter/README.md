@@ -2,7 +2,7 @@
 
 ## Configuration
 
-Update config.properties with correct values for 
+Update [config.properties](./config.properties) file with correct values for 
 - _ls.access.token_
 - _otel.exporter.otlp.span.endpoint_
 
