@@ -12,8 +12,8 @@ public class VariablesConverter {
   public static final String DEFAULT_PROPAGATOR = "b3";
   public static final String DEFAULT_OTEL_LOG_LEVEL = "info";
 
-  private static final String LS_ACCESS_TOKEN = "LS_ACCESS_TOKEN";
-  private static final String OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT";
+  static final String LS_ACCESS_TOKEN = "LS_ACCESS_TOKEN";
+  static final String OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT";
   private static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
   private static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
   static final String OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL";

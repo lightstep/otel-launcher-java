@@ -23,6 +23,8 @@ public class VariablesConverterTest {
   @Before
   public void before() {
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_LOG_LEVEL));
+    System.clearProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN));
+    System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_ENDPOINT));
   }
 
   @Test
@@ -60,6 +62,45 @@ public class VariablesConverterTest {
     mockSystem();
     Mockito.when(System.getenv(VariablesConverter.OTEL_LOG_LEVEL)).thenReturn("error");
     assertEquals("error", VariablesConverter.getLogLevel());
+  }
+
+  @Test
+  public void getAccessToken_Default() {
+    assertEquals("", VariablesConverter.getAccessToken());
+  }
+
+  @Test
+  public void getAccessToken_fromSystemProperty() {
+    System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN), "token-prop");
+    assertEquals("token-prop", VariablesConverter.getAccessToken());
+  }
+
+  @Test
+  public void getAccessToken_fromEnvVariable() {
+    mockSystem();
+    Mockito.when(System.getenv(VariablesConverter.LS_ACCESS_TOKEN)).thenReturn("token-env");
+    assertEquals("token-env", VariablesConverter.getAccessToken());
+  }
+
+  @Test
+  public void getSpanEndpoint_Default() {
+    assertEquals(VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT,
+        VariablesConverter.getSpanEndpoint());
+  }
+
+  @Test
+  public void getSpanEndpoint_fromSystemProperty() {
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_ENDPOINT),
+        "endpoint-prop");
+    assertEquals("endpoint-prop", VariablesConverter.getSpanEndpoint());
+  }
+
+  @Test
+  public void getSpanEndpoint_fromEnvVariable() {
+    mockSystem();
+    Mockito.when(System.getenv(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_ENDPOINT))
+        .thenReturn("endpoint-env");
+    assertEquals("endpoint-env", VariablesConverter.getSpanEndpoint());
   }
 
   private void mockSystem() {
