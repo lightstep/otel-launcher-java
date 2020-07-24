@@ -14,8 +14,8 @@ public class VariablesConverter {
 
   static final String LS_ACCESS_TOKEN = "LS_ACCESS_TOKEN";
   static final String OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT";
-  private static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
-  private static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
+  static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
+  static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
   static final String OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL";
 
   public static void setSystemProperties(String spanEndpoint,
