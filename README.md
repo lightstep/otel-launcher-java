@@ -58,9 +58,9 @@ java -javaagent:path/to/lightstep-opentelemetry-javaagent-<version>.jar \
 ```
 
 
-## Exporter
+## Launcher
 
-The Lightstep OpenTelemetry Exporter is a configuration layer over OpenTelemetry OTLP trace exporter.
+The Lightstep OpenTelemetry Launcher is a configuration layer over OpenTelemetry OTLP trace exporter.
 
 ### Installation
 
