@@ -4,4 +4,4 @@ build:
 
 
 run:
-	java -jar target/launcher-exporter-example.jar
+	java -jar target/opentelemetry-launcher-example.jar

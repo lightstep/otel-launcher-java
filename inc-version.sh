@@ -16,9 +16,9 @@ NEW_VERSION="${CURRENT_VERSION%.*}.$((${CURRENT_VERSION##*.} + 1))"
 mvn versions:set -DnewVersion=$NEW_VERSION -DgenerateBackupPoms=false
 
 # Add and commit the changes
-git add otel-launcher-agent/pom.xml
-git add otel-launcher-common/pom.xml
-git add otel-launcher-exporter/pom.xml
+git add agent/pom.xml
+git add common/pom.xml
+git add launcher/pom.xml
 git add pom.xml
 
 git commit -m "VERSION $NEW_VERSION"

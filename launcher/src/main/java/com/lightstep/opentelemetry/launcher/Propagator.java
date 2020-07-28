@@ -1,4 +1,4 @@
-package com.lightstep.opentelemetry.exporter;
+package com.lightstep.opentelemetry.launcher;
 
 public enum Propagator {
   TRACE_CONTEXT("tracecontext"), B3("b3"), B3_SINGLE("b3single"), JAEGER("jaeger");

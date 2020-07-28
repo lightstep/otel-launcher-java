@@ -4,21 +4,21 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <groupId>com.lightstep.opentelemetry</groupId>
-    <artifactId>launcher-parent</artifactId>
+    <artifactId>opentelemetry-parent</artifactId>
     <version>0.1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>launcher-agent</artifactId>
+  <artifactId>opentelemetry-agent</artifactId>
   <version>0.1.0-SNAPSHOT</version>
 
-  <name>Lightstep OTel Launcher Agent</name>
-  <description>Lightstep OTel Launcher Agent</description>
+  <name>Lightstep OpenTelemetry Agent</name>
+  <description>Lightstep OpenTelemetry Agent</description>
 
   <dependencies>
     <dependency>
       <groupId>com.lightstep.opentelemetry</groupId>
-      <artifactId>launcher-common</artifactId>
+      <artifactId>opentelemetry-common</artifactId>
       <version>0.1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
@@ -59,7 +59,7 @@
                 </filter>
               </filters>
               <outputFile>
-                ${project.build.directory}/lightstep-opentelemetry-auto-${project.version}.jar
+                ${project.build.directory}/lightstep-opentelemetry-javaagent-${project.version}.jar
               </outputFile>
               <transformers>
                 <transformer implementation=
