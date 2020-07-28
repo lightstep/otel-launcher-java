@@ -1,6 +1,6 @@
 package com.lightstep.opentelemetry.launcher.example;
 
-import com.lightstep.opentelemetry.exporter.LightstepExporter;
+import com.lightstep.opentelemetry.launcher.OpenTelemetryConfiguration;
 import io.opentelemetry.OpenTelemetry;
 import io.opentelemetry.exporters.otlp.OtlpGrpcSpanExporter;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
@@ -17,10 +17,10 @@ public class Main {
   public static void main(String[] args) throws Exception {
     Properties properties = loadConfig();
 
-    OtlpGrpcSpanExporter exporter = LightstepExporter.newBuilder()
+    OtlpGrpcSpanExporter exporter = OpenTelemetryConfiguration.newBuilder()
         .setAccessToken(properties.getProperty("ls.access.token"))
         .setSpanEndpoint(properties.getProperty("otel.exporter.otlp.span.endpoint"))
-        .build();
+        .buildExporter();
 
     OpenTelemetrySdk.getTracerProvider()
         .addSpanProcessor(SimpleSpanProcessor.newBuilder(exporter).build());
@@ -48,8 +48,7 @@ public class Main {
 
   private static Properties loadConfig()
       throws IOException {
-    FileInputStream fs = new FileInputStream(
-        "/Users/malafes/projects_lightstep/otel-launcher-java/examples/exporter/config.properties");
+    FileInputStream fs = new FileInputStream("config.properties");
     Properties config = new Properties();
     config.load(fs);
     return config;

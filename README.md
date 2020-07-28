@@ -41,7 +41,7 @@ Configuration parameters are passed as Java system properties (-D flags) or as e
 export LS_ACCESS_TOKEN=your-token
 export OTEL_RESOURCE_ATTRIBUTES=service.name=your-service-name
 
-java -javaagent:path/to/lightstep-opentelemetry-auto-<version>.jar \
+java -javaagent:path/to/lightstep-opentelemetry-javaagent-<version>.jar \
      -Dotel.exporter.otlp.span.endpoint=ingest.staging.lightstep.com \
      -jar myapp.jar
 ```
@@ -53,7 +53,7 @@ export LS_ACCESS_TOKEN=your-token
 export OTEL_RESOURCE_ATTRIBUTES=service.name=your-service-name
 export OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.staging.lightstep.com
 
-java -javaagent:path/to/lightstep-opentelemetry-auto-<version>.jar \
+java -javaagent:path/to/lightstep-opentelemetry-javaagent-<version>.jar \
      -jar myapp.jar
 ```
 
@@ -69,7 +69,7 @@ pom.xml
 ```xml
 <dependency>
     <groupId>com.lightstep.opentelemetry</groupId>
-    <artifactId>launcher-exporter</artifactId>
+    <artifactId>opentelemetry-launcher</artifactId>
     <version>VERSION</version>
 </dependency>
 ```
@@ -80,22 +80,25 @@ pom.xml
 
 ```java
 // Installs exporter into tracer SDK default provider with batching span processor.
-LightstepExporter.newBuilder()
+OpenTelemetryConfiguration.newBuilder()
                       .setAccessToken("{your_access_token}")
                       .setSpanEndpoint("{lightstep_host}")
                       .install();
+
+// Get tracer
+Tracer tracer = OpenTelemetry.getTracer("instrumentation-library-name", "1.0.0");
 ```
 
 #### Manual configuration
 
 ```java
 // Create builder
-Builder builder = LightstepExporter.newBuilder()
+Builder builder = OpenTelemetryConfiguration.newBuilder()
                       .setAccessToken("{your_access_token}")
                       .setSpanEndpoint("{lightstep_host}");
 
 // Instantiate the exporter
-OtlpGrpcSpanExporter exporter = builder.build();
+OtlpGrpcSpanExporter exporter = builder.buildExporter();
 
 // Add Span Processor with exporter
 OpenTelemetrySdk.getTracerProvider()

@@ -1,4 +1,4 @@
-package com.lightstep.opentelemetry.exporter;
+package com.lightstep.opentelemetry.launcher;
 
 import com.google.common.collect.ImmutableMap;
 import com.lightstep.opentelemetry.common.VariablesConverter;
@@ -13,7 +13,7 @@ import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.trace.propagation.HttpTraceContext;
 import java.util.Map;
 
-public class LightstepExporter {
+public class OpenTelemetryConfiguration {
 
   public static class Builder {
     private String accessToken;
@@ -73,7 +73,7 @@ public class LightstepExporter {
      *
      * @return a new exporter's instance
      */
-    public OtlpGrpcSpanExporter build() {
+    public OtlpGrpcSpanExporter buildExporter() {
       VariablesConverter
           .setSystemProperties(spanEndpoint, insecureTransport, accessToken, null, null, false);
 
@@ -93,7 +93,8 @@ public class LightstepExporter {
      * Installs exporter into tracer SDK default provider with batching span processor.
      */
     public void install() {
-      BatchSpanProcessor spansProcessor = BatchSpanProcessor.newBuilder(this.build()).build();
+      BatchSpanProcessor spansProcessor = BatchSpanProcessor.newBuilder(this.buildExporter())
+          .build();
       OpenTelemetrySdk.getTracerProvider().addSpanProcessor(spansProcessor);
     }
 

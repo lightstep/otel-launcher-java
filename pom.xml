@@ -5,18 +5,18 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.lightstep.opentelemetry</groupId>
-  <artifactId>launcher-parent</artifactId>
+  <artifactId>opentelemetry-parent</artifactId>
   <packaging>pom</packaging>
   <version>0.1.0-SNAPSHOT</version>
 
   <modules>
-    <module>exporter</module>
+    <module>launcher</module>
     <module>agent</module>
     <module>common</module>
   </modules>
 
-  <name>Lightstep OTel Launcher Parent</name>
-  <description>Lightstep OTel Launcher Parent</description>
+  <name>Lightstep OpenTelemetry Parent</name>
+  <description>Lightstep OpenTelemetry Parent</description>
   <url>https://github.com/lightstep/otel-launcher-java</url>
 
   <properties>
@@ -25,7 +25,7 @@
     <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <opentelemtry.version>0.6.0</opentelemtry.version>
-    <opentelemetry.instrumentation.version>0.7.0-SNAPSHOT</opentelemetry.instrumentation.version>
+    <opentelemetry.instrumentation.version>0.6.1</opentelemetry.instrumentation.version>
     <powermock.version>2.0.7</powermock.version>
   </properties>
 
