@@ -17,6 +17,7 @@ public class VariablesConverter {
   static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
   static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
   static final String OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL";
+  static final String OTEL_RESOURCE_ATTRIBUTES = "OTEL_RESOURCE_ATTRIBUTES";
 
   public static void setSystemProperties(String spanEndpoint,
       boolean insecureTransport,
@@ -24,6 +25,13 @@ public class VariablesConverter {
       String propagator,
       String logLevel,
       boolean isAgent) {
+
+    if (!hasServiceName()) {
+      String msg = "Invalid configuration: service name missing. Set environment variable "
+          + "OTEL_RESOURCE_ATTRIBUTES with value service.name=<your-service>.";
+      logger.severe(msg);
+      throw new IllegalStateException(msg);
+    }
 
     if (isTokenRequired(spanEndpoint) && (accessToken == null || accessToken.isEmpty())) {
       String msg =
@@ -72,6 +80,14 @@ public class VariablesConverter {
 
   public static String getAccessToken() {
     return getProperty(LS_ACCESS_TOKEN, "");
+  }
+
+  public static boolean hasServiceName() {
+    final String otelResourceAttributes = System.getenv(OTEL_RESOURCE_ATTRIBUTES);
+    if (otelResourceAttributes == null) {
+      return false;
+    }
+    return otelResourceAttributes.matches("service.name\\s*=\\s*\\S+");
   }
 
   public static String getLogLevel() {
