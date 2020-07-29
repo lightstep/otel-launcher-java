@@ -151,6 +151,62 @@ public class VariablesConverterTest {
     assertTrue(VariablesConverter.useInsecureTransport());
   }
 
+  @Test
+  public void hasServiceName_noEqualSign() {
+    mockSystem();
+    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
+        .thenReturn("service.name");
+    assertFalse(VariablesConverter.hasServiceName());
+  }
+
+  @Test
+  public void hasServiceName_null() {
+    mockSystem();
+    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
+        .thenReturn(null);
+    assertFalse(VariablesConverter.hasServiceName());
+  }
+
+  @Test
+  public void hasServiceName_empty() {
+    mockSystem();
+    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
+        .thenReturn("");
+    assertFalse(VariablesConverter.hasServiceName());
+  }
+
+  @Test
+  public void hasServiceName_noValue() {
+    mockSystem();
+    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
+        .thenReturn("service.name=");
+    assertFalse(VariablesConverter.hasServiceName());
+  }
+
+  @Test
+  public void hasServiceName() {
+    mockSystem();
+    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
+        .thenReturn("service.name=test");
+    assertTrue(VariablesConverter.hasServiceName());
+  }
+
+  @Test
+  public void hasServiceName_spaces() {
+    mockSystem();
+    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
+        .thenReturn("service.name  =test");
+    assertTrue(VariablesConverter.hasServiceName());
+  }
+
+  @Test
+  public void hasServiceName_moreSpaces() {
+    mockSystem();
+    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
+        .thenReturn("service.name  =  test");
+    assertTrue(VariablesConverter.hasServiceName());
+  }
+
   private void mockSystem() {
     PowerMockito.mockStatic(System.class);
     Mockito.when(System.getProperty(anyString(), anyString())).thenAnswer(
