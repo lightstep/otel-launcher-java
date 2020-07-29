@@ -190,6 +190,24 @@ public class VariablesConverterTest {
     assertTrue(VariablesConverter.useInsecureTransport());
   }
 
+  @Test
+  public void getResourceAttributes_Default() {
+    assertEquals(null, VariablesConverter.getResourceAttributes());
+  }
+
+  @Test
+  public void getResourceAttributes_fromSystemProperty() {
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES), "key1=value1");
+    assertEquals("key1=value1", VariablesConverter.getResourceAttributes());
+  }
+
+  @Test
+  public void getResourceAttributes_fromEnvVariable() {
+    mockSystem();
+    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES)).thenReturn("key1=value1");
+    assertEquals("key1=value1", VariablesConverter.getResourceAttributes());
+  }
+
   private void mockSystem() {
     PowerMockito.mockStatic(System.class);
     Mockito.when(System.getProperty(anyString(), anyString())).thenAnswer(
