@@ -2,6 +2,7 @@ package com.lightstep.opentelemetry.common;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 
@@ -27,6 +28,8 @@ public class VariablesConverterTest {
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_ENDPOINT));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_PROPAGATORS));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_INSECURE));
+    System.clearProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME));
+    System.clearProperty(toSystemProperty(VariablesConverter.LS_SERVICE_VERSION));
   }
 
   @Test
@@ -64,6 +67,42 @@ public class VariablesConverterTest {
     mockSystem();
     Mockito.when(System.getenv(VariablesConverter.OTEL_LOG_LEVEL)).thenReturn("error");
     assertEquals("error", VariablesConverter.getLogLevel());
+  }
+
+  @Test
+  public void getServiceName_Default() {
+    assertNull(VariablesConverter.getServiceName());
+  }
+
+  @Test
+  public void getServiceName_fromSystemProperty() {
+    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME), "service-prop");
+    assertEquals("service-prop", VariablesConverter.getServiceName());
+  }
+
+  @Test
+  public void getServiceName_fromEnvVariable() {
+    mockSystem();
+    Mockito.when(System.getenv(VariablesConverter.LS_SERVICE_NAME)).thenReturn("service-env");
+    assertEquals("service-env", VariablesConverter.getServiceName());
+  }
+
+  @Test
+  public void getServiceVersion_Default() {
+    assertNull(VariablesConverter.getServiceVersion());
+  }
+
+  @Test
+  public void getServiceVersion_fromSystemProperty() {
+    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_VERSION), "version-prop");
+    assertEquals("version-prop", VariablesConverter.getServiceVersion());
+  }
+
+  @Test
+  public void getServiceVersion_fromEnvVariable() {
+    mockSystem();
+    Mockito.when(System.getenv(VariablesConverter.LS_SERVICE_VERSION)).thenReturn("version-env");
+    assertEquals("version-env", VariablesConverter.getServiceVersion());
   }
 
   @Test
@@ -149,62 +188,6 @@ public class VariablesConverterTest {
     Mockito.when(System.getenv(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_INSECURE))
         .thenReturn("true");
     assertTrue(VariablesConverter.useInsecureTransport());
-  }
-
-  @Test
-  public void hasServiceName_noEqualSign() {
-    mockSystem();
-    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
-        .thenReturn("service.name");
-    assertFalse(VariablesConverter.hasServiceName());
-  }
-
-  @Test
-  public void hasServiceName_null() {
-    mockSystem();
-    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
-        .thenReturn(null);
-    assertFalse(VariablesConverter.hasServiceName());
-  }
-
-  @Test
-  public void hasServiceName_empty() {
-    mockSystem();
-    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
-        .thenReturn("");
-    assertFalse(VariablesConverter.hasServiceName());
-  }
-
-  @Test
-  public void hasServiceName_noValue() {
-    mockSystem();
-    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
-        .thenReturn("service.name=");
-    assertFalse(VariablesConverter.hasServiceName());
-  }
-
-  @Test
-  public void hasServiceName() {
-    mockSystem();
-    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
-        .thenReturn("service.name=test");
-    assertTrue(VariablesConverter.hasServiceName());
-  }
-
-  @Test
-  public void hasServiceName_spaces() {
-    mockSystem();
-    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
-        .thenReturn("service.name  =test");
-    assertTrue(VariablesConverter.hasServiceName());
-  }
-
-  @Test
-  public void hasServiceName_moreSpaces() {
-    mockSystem();
-    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
-        .thenReturn("service.name  =  test");
-    assertTrue(VariablesConverter.hasServiceName());
   }
 
   private void mockSystem() {

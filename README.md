@@ -8,20 +8,13 @@ This is the Lightstep package for configuring OpenTelemetry
 
 ## Configuration
 
-### Service Name
-
-It's required to define service name.  
-Currently, it's possible only via environment variable `OTEL_RESOURCE_ATTRIBUTES`
-
-```shell script
-export OTEL_RESOURCE_ATTRIBUTES=service.name=test
-```
-
 ###  System properties and environmental variables
 Supported system properties and environmental variables:
 
 | System property                  | Environment variable             | Purpose                         | Default              | 
 |----------------------------------|----------------------------------|---------------------------------|----------------------|       
+| ls.service.name                  | LS_SERVICE_NAME                  | Service name                    |                      |                        
+| ls.service.version               | LS_SERVICE_VERSION               | Service version                 |                      |                        
 | ls.access.token                  | LS_ACCESS_TOKEN                  | Token for Lightstep access      |                      |                        
 | otel.exporter.otlp.span.endpoint | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Satellite URL                   | ingest.lightstep.com |
 | otel.exporter.otlp.span.insecure | OTEL_EXPORTER_OTLP_SPAN_INSECURE | Use insecure transport or not   | false                |
@@ -39,9 +32,9 @@ Configuration parameters are passed as Java system properties (-D flags) or as e
 
 ```shell script
 export LS_ACCESS_TOKEN=your-token
-export OTEL_RESOURCE_ATTRIBUTES=service.name=your-service-name
 
 java -javaagent:path/to/lightstep-opentelemetry-javaagent-<version>.jar \
+     -Dls.service.name=your-service-name
      -Dotel.exporter.otlp.span.endpoint=ingest.staging.lightstep.com \
      -jar myapp.jar
 ```
@@ -50,7 +43,7 @@ java -javaagent:path/to/lightstep-opentelemetry-javaagent-<version>.jar \
 
 ```shell script
 export LS_ACCESS_TOKEN=your-token
-export OTEL_RESOURCE_ATTRIBUTES=service.name=your-service-name
+export LS_SERVICE_NAME=your-service-name
 export OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.staging.lightstep.com
 
 java -javaagent:path/to/lightstep-opentelemetry-javaagent-<version>.jar \
@@ -81,6 +74,7 @@ pom.xml
 ```java
 // Installs exporter into tracer SDK default provider with batching span processor.
 OpenTelemetryConfiguration.newBuilder()
+                      .setServiceName("{service_name}")
                       .setAccessToken("{your_access_token}")
                       .setSpanEndpoint("{lightstep_host}")
                       .install();
@@ -94,6 +88,7 @@ Tracer tracer = OpenTelemetry.getTracer("instrumentation-library-name", "1.0.0")
 ```java
 // Create builder
 Builder builder = OpenTelemetryConfiguration.newBuilder()
+                      .setServiceName("{service_name}")
                       .setAccessToken("{your_access_token}")
                       .setSpanEndpoint("{lightstep_host}");
 

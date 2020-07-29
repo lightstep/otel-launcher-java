@@ -17,6 +17,8 @@ public class OpenTelemetryConfiguration {
 
   public static class Builder {
     private String accessToken;
+    private String serviceName;
+    private String serviceVersion;
     private String spanEndpoint;
     private boolean insecureTransport;
     private Propagator propagator;
@@ -44,6 +46,16 @@ public class OpenTelemetryConfiguration {
      */
     public Builder setAccessToken(String accessToken) {
       this.accessToken = accessToken;
+      return this;
+    }
+
+    public Builder setServiceName(String serviceName) {
+      this.serviceName = serviceName;
+      return this;
+    }
+
+    public Builder setServiceVersion(String serviceVersion) {
+      this.serviceVersion = serviceVersion;
       return this;
     }
 
@@ -75,7 +87,8 @@ public class OpenTelemetryConfiguration {
      */
     public OtlpGrpcSpanExporter buildExporter() {
       VariablesConverter
-          .setSystemProperties(spanEndpoint, insecureTransport, accessToken, null, null, false);
+          .setSystemProperties(spanEndpoint, insecureTransport, accessToken, null, null,
+              serviceName, serviceVersion, false);
 
       if (propagator != null) {
         final HttpTextFormat httpTextFormat = PROPAGATORS.get(propagator);
@@ -100,6 +113,8 @@ public class OpenTelemetryConfiguration {
 
     private void readEnvVariablesAndSystemProperties() {
       this.accessToken = VariablesConverter.getAccessToken();
+      this.serviceName = VariablesConverter.getServiceName();
+      this.serviceVersion = VariablesConverter.getServiceVersion();
       this.insecureTransport = VariablesConverter.useInsecureTransport();
       this.spanEndpoint = VariablesConverter.getSpanEndpoint();
       this.propagator = Propagator.valueOfLabel(VariablesConverter.getPropagator());

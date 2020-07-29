@@ -13,22 +13,30 @@ public class VariablesConverter {
   public static final String DEFAULT_OTEL_LOG_LEVEL = "info";
 
   static final String LS_ACCESS_TOKEN = "LS_ACCESS_TOKEN";
+  static final String LS_SERVICE_NAME = "LS_SERVICE_NAME";
+  static final String LS_SERVICE_VERSION = "LS_SERVICE_VERSION";
   static final String OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT";
   static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
   static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
   static final String OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL";
-  static final String OTEL_RESOURCE_ATTRIBUTES = "OTEL_RESOURCE_ATTRIBUTES";
 
   public static void setSystemProperties(String spanEndpoint,
       boolean insecureTransport,
       String accessToken,
       String propagator,
       String logLevel,
+      String serviceName,
+      String serviceVersion,
       boolean isAgent) {
 
-    if (!hasServiceName()) {
+    if (serviceName == null || serviceName.isEmpty()) {
       String msg = "Invalid configuration: service name missing. Set environment variable "
-          + "OTEL_RESOURCE_ATTRIBUTES with value service.name=<your-service>.";
+          + "LS_SERVICE_NAME";
+      if (isAgent) {
+        msg += ".";
+      } else {
+        msg += " or call setServiceName in the code.";
+      }
       logger.severe(msg);
       throw new IllegalStateException(msg);
     }
@@ -62,6 +70,12 @@ public class VariablesConverter {
     if (logLevel != null) {
       System.setProperty("io.opentelemetry.auto.slf4j.simpleLogger.defaultLogLevel", logLevel);
     }
+
+    String otelResourceAttributes = "service.name=" + serviceName;
+    if (serviceVersion != null) {
+      otelResourceAttributes += ",service.version=" + serviceVersion;
+    }
+    System.setProperty("otel.resource.attributes", otelResourceAttributes);
   }
 
   static boolean isValidToken(String token) {
@@ -75,19 +89,19 @@ public class VariablesConverter {
 
   public static void convertFromEnv() {
     setSystemProperties(getSpanEndpoint(), useInsecureTransport(),
-        getAccessToken(), getPropagator(), getLogLevel(), true);
+        getAccessToken(), getPropagator(), getLogLevel(), getServiceName(), getServiceVersion(), true);
   }
 
   public static String getAccessToken() {
     return getProperty(LS_ACCESS_TOKEN, "");
   }
 
-  public static boolean hasServiceName() {
-    final String otelResourceAttributes = System.getenv(OTEL_RESOURCE_ATTRIBUTES);
-    if (otelResourceAttributes == null) {
-      return false;
-    }
-    return otelResourceAttributes.matches("service.name\\s*=\\s*\\S+");
+  public static String getServiceName() {
+    return getProperty(LS_SERVICE_NAME, null);
+  }
+
+  public static String getServiceVersion() {
+    return getProperty(LS_SERVICE_VERSION, null);
   }
 
   public static String getLogLevel() {
