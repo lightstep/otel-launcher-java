@@ -89,7 +89,8 @@ public class VariablesConverter {
 
   public static void convertFromEnv() {
     setSystemProperties(getSpanEndpoint(), useInsecureTransport(),
-        getAccessToken(), getPropagator(), getLogLevel(), getServiceName(), getServiceVersion(), true);
+        getAccessToken(), getPropagator(), getLogLevel(), getServiceName(), getServiceVersion(),
+        true);
   }
 
   public static String getAccessToken() {
