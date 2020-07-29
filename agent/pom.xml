@@ -80,23 +80,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <repositories>
-    <repository>
-      <id>bintray-open-telemetry-maven</id>
-      <url>https://dl.bintray.com/open-telemetry/maven/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>oss-snapshot-local</id>
-      <name>oss-snapshot-local</name>
-      <url>http://oss.jfrog.org/artifactory/oss-snapshot-local</url>
-    </repository>
-  </repositories>
-
 </project>

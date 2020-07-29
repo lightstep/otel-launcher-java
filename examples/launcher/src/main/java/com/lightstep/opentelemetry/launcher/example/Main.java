@@ -18,6 +18,7 @@ public class Main {
     Properties properties = loadConfig();
 
     OtlpGrpcSpanExporter exporter = OpenTelemetryConfiguration.newBuilder()
+        .setServiceName(properties.getProperty("ls.service.name"))
         .setAccessToken(properties.getProperty("ls.access.token"))
         .setSpanEndpoint(properties.getProperty("otel.exporter.otlp.span.endpoint"))
         .buildExporter();
