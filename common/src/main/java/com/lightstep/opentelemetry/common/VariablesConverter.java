@@ -19,6 +19,7 @@ public class VariablesConverter {
   static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
   static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
   static final String OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL";
+  static final String OTEL_RESOURCE_ATTRIBUTES = "OTEL_RESOURCE_ATTRIBUTES";
 
   public static void setSystemProperties(String spanEndpoint,
       boolean insecureTransport,
@@ -75,6 +76,11 @@ public class VariablesConverter {
     if (serviceVersion != null) {
       otelResourceAttributes += ",service.version=" + serviceVersion;
     }
+    String envResourceAttributes = getResourceAttributes();
+    if (envResourceAttributes != null && !envResourceAttributes.isEmpty()) {
+      // Keep the existing env Resource attributes, if any.
+      otelResourceAttributes += "," + envResourceAttributes;
+    }
     System.setProperty("otel.resource.attributes", otelResourceAttributes);
   }
 
@@ -120,6 +126,11 @@ public class VariablesConverter {
   public static boolean useInsecureTransport() {
     return Boolean.parseBoolean(getProperty(OTEL_EXPORTER_OTLP_SPAN_INSECURE, String.valueOf(
         DEFAULT_OTEL_EXPORTER_OTLP_SPAN_INSECURE)));
+  }
+
+  // Internal usage, do not need to expose publicly.
+  static String getResourceAttributes() {
+    return getProperty(OTEL_RESOURCE_ATTRIBUTES, null);
   }
 
   private static String getProperty(String name, String defaultValue) {
