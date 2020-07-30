@@ -20,6 +20,7 @@ Supported system properties and environmental variables:
 | otel.exporter.otlp.span.insecure | OTEL_EXPORTER_OTLP_SPAN_INSECURE | Use insecure transport or not   | false                |
 | otel.propagators                 | OTEL_PROPAGATORS                 | Propagator                      | b3                   |
 | otel.log.level                   | OTEL_LOG_LEVEL                   | Log level for agent             | info                 |
+| otel.resource.labels             | OTEL_RESOURCE_LABELS             | Comma separated key-value pairs |                      |
 
 ## Agent
 The Lightstep OpenTelemetry Agent is a configuration layer over OpenTelemetry Instrumentation Agent.
