@@ -23,13 +23,15 @@ public class VariablesConverterTest {
 
   @Before
   public void before() {
-    System.clearProperty(toSystemProperty(VariablesConverter.OTEL_LOG_LEVEL));
     System.clearProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN));
+    System.clearProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME));
+    System.clearProperty(toSystemProperty(VariablesConverter.LS_SERVICE_VERSION));
+    System.clearProperty(toSystemProperty(VariablesConverter.OTEL_LOG_LEVEL));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_ENDPOINT));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_PROPAGATORS));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_INSECURE));
-    System.clearProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME));
-    System.clearProperty(toSystemProperty(VariablesConverter.LS_SERVICE_VERSION));
+    System.clearProperty(toSystemProperty(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES));
+    System.clearProperty(toSystemProperty(VariablesConverter.OTEL_RESOURCE_LABELS));
   }
 
   @Test
@@ -192,20 +194,40 @@ public class VariablesConverterTest {
 
   @Test
   public void getResourceAttributes_Default() {
-    assertEquals(null, VariablesConverter.getResourceAttributes());
+    assertNull(VariablesConverter.getResourceAttributes());
   }
 
   @Test
   public void getResourceAttributes_fromSystemProperty() {
-    System.setProperty(toSystemProperty(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES), "key1=value1");
+    System
+        .setProperty(toSystemProperty(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES), "key1=value1");
     assertEquals("key1=value1", VariablesConverter.getResourceAttributes());
   }
 
   @Test
   public void getResourceAttributes_fromEnvVariable() {
     mockSystem();
-    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES)).thenReturn("key1=value1");
+    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
+        .thenReturn("key1=value1");
     assertEquals("key1=value1", VariablesConverter.getResourceAttributes());
+  }
+
+  @Test
+  public void getResourceLabels_Default() {
+    assertNull(VariablesConverter.getResourceLabels());
+  }
+
+  @Test
+  public void getResourceLabels_fromSystemProperty() {
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_RESOURCE_LABELS), "key1=value1");
+    assertEquals("key1=value1", VariablesConverter.getResourceLabels());
+  }
+
+  @Test
+  public void getResourceLabels_fromEnvVariable() {
+    mockSystem();
+    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_LABELS)).thenReturn("key1=value1");
+    assertEquals("key1=value1", VariablesConverter.getResourceLabels());
   }
 
   private void mockSystem() {
