@@ -11,16 +11,16 @@ This is the Lightstep package for configuring OpenTelemetry
 ###  System properties and environmental variables
 Supported system properties and environmental variables:
 
-| System property                  | Environment variable             | Purpose                         | Default              | 
-|----------------------------------|----------------------------------|---------------------------------|----------------------|       
-| ls.service.name                  | LS_SERVICE_NAME                  | Service name                    |                      |                        
-| ls.service.version               | LS_SERVICE_VERSION               | Service version                 |                      |                        
-| ls.access.token                  | LS_ACCESS_TOKEN                  | Token for Lightstep access      |                      |                        
-| otel.exporter.otlp.span.endpoint | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Satellite URL                   | ingest.lightstep.com |
-| otel.exporter.otlp.span.insecure | OTEL_EXPORTER_OTLP_SPAN_INSECURE | Use insecure transport or not   | false                |
-| otel.propagators                 | OTEL_PROPAGATORS                 | Propagator                      | b3                   |
-| otel.log.level                   | OTEL_LOG_LEVEL                   | Log level for agent             | info                 |
-| otel.resource.labels             | OTEL_RESOURCE_LABELS             | Comma separated key-value pairs |                      |
+| System property                  | Environment variable             | Purpose                                                   | Default              | 
+|----------------------------------|----------------------------------|-----------------------------------------------------------|----------------------|       
+| ls.service.name                  | LS_SERVICE_NAME                  | Service name                                              |                      |                        
+| ls.service.version               | LS_SERVICE_VERSION               | Service version                                           |                      |                        
+| ls.access.token                  | LS_ACCESS_TOKEN                  | Token for Lightstep access                                |                      |                        
+| otel.exporter.otlp.span.endpoint | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Satellite URL                                             | ingest.lightstep.com |
+| otel.exporter.otlp.span.insecure | OTEL_EXPORTER_OTLP_SPAN_INSECURE | Use insecure transport or not                             | false                |
+| otel.propagators                 | OTEL_PROPAGATORS                 | Propagator                                                | b3                   |
+| otel.log.level                   | OTEL_LOG_LEVEL                   | Log level for agent, to see more messages set to _debug_  | info                 |
+| otel.resource.labels             | OTEL_RESOURCE_LABELS             | Comma separated key-value pairs                           |                      |
 
 ## Agent
 The Lightstep OpenTelemetry Agent is a configuration layer over OpenTelemetry Instrumentation Agent.
