@@ -11,7 +11,7 @@ VERSION=`mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpress
 echo "Publishing $VERSION"
 
 # Build and deploy to Bintray
-mvn -s .circleci.settings.xml -Dmaven.test.skip=true deploy -pl .,lightstep-tracer-jre,lightstep-tracer-jre-bundle,shadow
+mvn -s .circleci.settings.xml -Dmaven.test.skip=true deploy
 
 # Sign the jar and other files in Bintray
 curl -H "X-GPG-PASSPHRASE:$BINTRAY_GPG_PASSPHRASE" -u $BINTRAY_USER:$BINTRAY_API_KEY -X POST "https://api.bintray.com/gpg/lightstep/maven/lightstep-tracer-jre/versions/$VERSION"
