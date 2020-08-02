@@ -24,9 +24,12 @@ Supported system properties and environmental variables:
 
 ## Agent
 The Lightstep OpenTelemetry Agent is a configuration layer over OpenTelemetry Instrumentation Agent.
+Download the [latest version](https://github.com/lightstep/otel-launcher-java/releases/latest/)
+of `lightstep-opentelemetry-javaagent.jar`.
 
 ### Run
 
+The instrumentation agent is enabled using the -javaagent flag to the JVM.
 Configuration parameters are passed as Java system properties (-D flags) or as environment variables.
 
 #### Configuration via Java system properties
@@ -51,6 +54,7 @@ java -javaagent:path/to/lightstep-opentelemetry-javaagent-<version>.jar \
      -jar myapp.jar
 ```
 
+Observe that system properties have higher priority than environment variables.
 
 ## Launcher
 
