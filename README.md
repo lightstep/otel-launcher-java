@@ -1,4 +1,4 @@
-[![Circle CI](https://circleci.com/gh/lightstep/otel-launcher-java.svg?style=shield)](https://circleci.com/gh/lightstep/otel-launcher-java) [![Apache-2.0 license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Download](https://api.bintray.com/packages/lightstep/maven/otel-launcher-java/images/download.svg) ](https://bintray.com/lightstep/maven/otel-launcher-java) [![Circle CI](https://circleci.com/gh/lightstep/otel-launcher-java.svg?style=shield)](https://circleci.com/gh/lightstep/otel-launcher-java) [![Apache-2.0 license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 # Lightstep OpenTelemetry Configuration Layer for Java
 
