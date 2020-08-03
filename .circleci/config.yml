@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build:
+  test:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
@@ -36,3 +36,34 @@ jobs:
           paths:
             - ~/.m2
           key: v1-dependencies-{{ .Branch }}-{{ checksum "pom.xml" }}
+
+  release:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - maven-repo-v1-{{ .Branch }}-{{ checksum "pom.xml" }}
+            - maven-repo-v1-{{ .Branch }}-
+            - maven-repo-v1-
+      - run: make publish
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: maven-repo-v1-{{ .Branch }}-{{ checksum "pom.xml" }}
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
+  release:
+    jobs:
+      - release:
+          context: release-context
+          filters:
+            tags:
+              only: /^[0-9]+(\.[0-9]+)*$/
+            branches:
+              ignore: /.*/
