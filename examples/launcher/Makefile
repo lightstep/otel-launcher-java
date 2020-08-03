@@ -1,5 +1,4 @@
 build:
-	cd ../.. && mvn clean install -DskipTests
 	mvn clean package
 
 
