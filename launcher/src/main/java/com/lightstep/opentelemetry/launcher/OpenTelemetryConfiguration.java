@@ -1,6 +1,5 @@
 package com.lightstep.opentelemetry.launcher;
 
-import com.google.common.collect.ImmutableMap;
 import com.lightstep.opentelemetry.common.VariablesConverter;
 import io.opentelemetry.OpenTelemetry;
 import io.opentelemetry.context.propagation.DefaultContextPropagators;
@@ -11,6 +10,7 @@ import io.opentelemetry.extensions.trace.propagation.JaegerPropagator;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.trace.propagation.HttpTraceContext;
+import java.util.HashMap;
 import java.util.Map;
 
 public class OpenTelemetryConfiguration {
@@ -25,15 +25,14 @@ public class OpenTelemetryConfiguration {
     private Propagator propagator;
 
     private static final Map<Propagator, HttpTextFormat> PROPAGATORS =
-        ImmutableMap.of(
-            Propagator.TRACE_CONTEXT,
-            new HttpTraceContext(),
-            Propagator.B3,
-            B3Propagator.getMultipleHeaderPropagator(),
-            Propagator.B3_SINGLE,
-            B3Propagator.getSingleHeaderPropagator(),
-            Propagator.JAEGER,
-            new JaegerPropagator());
+        new HashMap<Propagator, HttpTextFormat>() {
+          {
+            put(Propagator.TRACE_CONTEXT, new HttpTraceContext());
+            put(Propagator.B3, B3Propagator.getMultipleHeaderPropagator());
+            put(Propagator.B3_SINGLE, B3Propagator.getSingleHeaderPropagator());
+            put(Propagator.JAEGER, new JaegerPropagator());
+          }
+        };
 
     private Builder() {
       readEnvVariablesAndSystemProperties();
