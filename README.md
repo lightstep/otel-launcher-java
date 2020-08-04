@@ -6,22 +6,6 @@ _NOTE: the code in this repo is currently in alpha and will likely change_
 
 This is the Lightstep package for configuring OpenTelemetry
 
-## Configuration
-
-###  System properties and environmental variables
-Supported system properties and environmental variables:
-
-| System property                  | Environment variable             | Purpose                                                   | Default              | 
-|----------------------------------|----------------------------------|-----------------------------------------------------------|----------------------|       
-| ls.service.name                  | LS_SERVICE_NAME                  | Service name                                              |                      |                        
-| ls.service.version               | LS_SERVICE_VERSION               | Service version                                           |                      |                        
-| ls.access.token                  | LS_ACCESS_TOKEN                  | Token for Lightstep access                                |                      |                        
-| otel.exporter.otlp.span.endpoint | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Satellite URL                                             | ingest.lightstep.com |
-| otel.exporter.otlp.span.insecure | OTEL_EXPORTER_OTLP_SPAN_INSECURE | Use insecure transport or not                             | false                |
-| otel.propagators                 | OTEL_PROPAGATORS                 | Propagator                                                | b3                   |
-| otel.log.level                   | OTEL_LOG_LEVEL                   | Log level for agent, to see more messages set to _debug_  | info                 |
-| otel.resource.labels             | OTEL_RESOURCE_LABELS             | Comma separated key-value pairs                           |                      |
-
 ## Agent
 The Lightstep OpenTelemetry Agent is a configuration layer over OpenTelemetry Instrumentation Agent.
 Download the [latest version](https://github.com/lightstep/otel-launcher-java/releases/latest/)
@@ -30,7 +14,8 @@ of `lightstep-opentelemetry-javaagent.jar`.
 ### Run
 
 The instrumentation agent is enabled using the -javaagent flag to the JVM.
-Configuration parameters are passed as Java system properties (-D flags) or as environment variables.
+Configuration parameters are passed as Java system properties (-D flags) or 
+as environment variables. [Full list of supported parameters](#system-properties-and-environmental-variables).
 
 #### Configuration via Java system properties
 
@@ -107,6 +92,20 @@ OpenTelemetrySdk.getTracerProvider()
 // Get tracer
 Tracer tracer = OpenTelemetry.getTracer("instrumentation-library-name", "1.0.0");
 ```
+
+##  System properties and environmental variables
+Supported system properties and environmental variables:
+
+| System property                  | Environment variable             | Purpose                                                   | Default              | 
+|----------------------------------|----------------------------------|-----------------------------------------------------------|----------------------|       
+| ls.service.name                  | LS_SERVICE_NAME                  | Service name                                              |                      |                        
+| ls.service.version               | LS_SERVICE_VERSION               | Service version                                           |                      |                        
+| ls.access.token                  | LS_ACCESS_TOKEN                  | Token for Lightstep access                                |                      |                        
+| otel.exporter.otlp.span.endpoint | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Satellite URL                                             | ingest.lightstep.com |
+| otel.exporter.otlp.span.insecure | OTEL_EXPORTER_OTLP_SPAN_INSECURE | Use insecure transport or not                             | false                |
+| otel.propagators                 | OTEL_PROPAGATORS                 | Propagator                                                | b3                   |
+| otel.log.level                   | OTEL_LOG_LEVEL                   | Log level for agent, to see more messages set to _debug_  | info                 |
+| otel.resource.labels             | OTEL_RESOURCE_LABELS             | Comma separated key-value pairs                           |                      |
 
 ## License
 
