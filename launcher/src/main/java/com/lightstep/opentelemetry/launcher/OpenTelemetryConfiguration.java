@@ -5,8 +5,10 @@ import io.opentelemetry.OpenTelemetry;
 import io.opentelemetry.context.propagation.DefaultContextPropagators;
 import io.opentelemetry.context.propagation.HttpTextFormat;
 import io.opentelemetry.exporters.otlp.OtlpGrpcSpanExporter;
+import io.opentelemetry.extensions.trace.propagation.AwsXRayPropagator;
 import io.opentelemetry.extensions.trace.propagation.B3Propagator;
 import io.opentelemetry.extensions.trace.propagation.JaegerPropagator;
+import io.opentelemetry.extensions.trace.propagation.OtTracerPropagator;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.trace.propagation.HttpTraceContext;
@@ -31,6 +33,8 @@ public class OpenTelemetryConfiguration {
             put(Propagator.B3, B3Propagator.getMultipleHeaderPropagator());
             put(Propagator.B3_SINGLE, B3Propagator.getSingleHeaderPropagator());
             put(Propagator.JAEGER, new JaegerPropagator());
+            put(Propagator.OT_TRACER, OtTracerPropagator.getInstance());
+            put(Propagator.XRAY, new AwsXRayPropagator());
           }
         };
 
