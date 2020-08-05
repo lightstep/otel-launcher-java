@@ -100,13 +100,8 @@
   <repositories>
     <repository>
       <id>bintray-open-telemetry-maven</id>
+      <name>bintray-open-telemetry-maven</name>
       <url>https://dl.bintray.com/open-telemetry/maven/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
     </repository>
     <repository>
       <id>oss-snapshot-local</id>
