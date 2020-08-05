@@ -96,7 +96,7 @@ Tracer tracer = OpenTelemetry.getTracer("instrumentation-library-name", "1.0.0")
 ### Logging
 
 It uses _java.util.logging_ therefore logging properties file can be specified via system property 
-_java.util.logging.config.file_. E.g. `-Djava.util.logging.config.file=path/to/logging.propertie`
+_java.util.logging.config.file_. E.g. `-Djava.util.logging.config.file=path/to/logging.properties`
 
 ##  System properties and environmental variables
 Supported system properties and environmental variables:
