@@ -3,4 +3,4 @@ build:
 
 
 run:
-	java -jar target/opentelemetry-launcher-example.jar
+	java -Djava.util.logging.config.file=src/main/resources/logging.properties -jar target/opentelemetry-launcher-example.jar
