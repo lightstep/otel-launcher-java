@@ -19,7 +19,6 @@ public class VariablesConverter {
   static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
   static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
   static final String OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL";
-  static final String OTEL_RESOURCE_LABELS = "OTEL_RESOURCE_LABELS";
   static final String OTEL_RESOURCE_ATTRIBUTES = "OTEL_RESOURCE_ATTRIBUTES";
 
   public static void setSystemProperties(String spanEndpoint,
@@ -29,7 +28,7 @@ public class VariablesConverter {
       String logLevel,
       String serviceName,
       String serviceVersion,
-      String resourceLabels,
+      String resourceAttributes,
       boolean isAgent) {
 
     if (serviceName == null || serviceName.isEmpty()) {
@@ -78,13 +77,8 @@ public class VariablesConverter {
     if (serviceVersion != null) {
       otelResourceAttributes += ",service.version=" + serviceVersion;
     }
-    if (resourceLabels != null && !resourceLabels.isEmpty()) {
-      otelResourceAttributes += "," + resourceLabels;
-    }
-    String envResourceAttributes = getResourceAttributes();
-    if (envResourceAttributes != null && !envResourceAttributes.isEmpty()) {
-      // Keep the existing env Resource attributes, if any.
-      otelResourceAttributes += "," + envResourceAttributes;
+    if (resourceAttributes != null && !resourceAttributes.isEmpty()) {
+      otelResourceAttributes += "," + resourceAttributes;
     }
     System.setProperty("otel.resource.attributes", otelResourceAttributes);
   }
@@ -101,7 +95,7 @@ public class VariablesConverter {
   public static void convertFromEnv() {
     setSystemProperties(getSpanEndpoint(), useInsecureTransport(),
         getAccessToken(), getPropagator(), getLogLevel(), getServiceName(), getServiceVersion(),
-        getResourceLabels(), true);
+        getResourceAttributes(), true);
   }
 
   public static String getAccessToken() {
@@ -114,10 +108,6 @@ public class VariablesConverter {
 
   public static String getServiceVersion() {
     return getProperty(LS_SERVICE_VERSION, null);
-  }
-
-  public static String getResourceLabels() {
-    return getProperty(OTEL_RESOURCE_LABELS, null);
   }
 
   public static String getLogLevel() {
@@ -138,7 +128,7 @@ public class VariablesConverter {
   }
 
   // Internal usage, do not need to expose publicly.
-  static String getResourceAttributes() {
+  public static String getResourceAttributes() {
     return getProperty(OTEL_RESOURCE_ATTRIBUTES, null);
   }
 

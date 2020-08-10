@@ -31,7 +31,6 @@ public class VariablesConverterTest {
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_PROPAGATORS));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_INSECURE));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES));
-    System.clearProperty(toSystemProperty(VariablesConverter.OTEL_RESOURCE_LABELS));
   }
 
   @Test
@@ -210,24 +209,6 @@ public class VariablesConverterTest {
     Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
         .thenReturn("key1=value1");
     assertEquals("key1=value1", VariablesConverter.getResourceAttributes());
-  }
-
-  @Test
-  public void getResourceLabels_Default() {
-    assertNull(VariablesConverter.getResourceLabels());
-  }
-
-  @Test
-  public void getResourceLabels_fromSystemProperty() {
-    System.setProperty(toSystemProperty(VariablesConverter.OTEL_RESOURCE_LABELS), "key1=value1");
-    assertEquals("key1=value1", VariablesConverter.getResourceLabels());
-  }
-
-  @Test
-  public void getResourceLabels_fromEnvVariable() {
-    mockSystem();
-    Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_LABELS)).thenReturn("key1=value1");
-    assertEquals("key1=value1", VariablesConverter.getResourceLabels());
   }
 
   private void mockSystem() {
