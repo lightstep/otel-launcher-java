@@ -10,7 +10,6 @@ public class App {
 
   @WithSpan
   public static void nestedMethod() throws Exception {
-    System.out.println("Nested method");
     TimeUnit.SECONDS.sleep(1);
   }
 
