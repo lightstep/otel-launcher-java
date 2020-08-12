@@ -30,7 +30,9 @@ jobs:
             - v1-dependencies-{{ .Branch }}-
             - v1-dependencies-
 
-      - run: mvn dependency:go-offline integration-test
+      - run: |
+          mvn dependency:go-offline integration-test
+          mvn -DrepoToken=$REPO_TOKEN -q jacoco:report coveralls:report
 
       - save_cache:
           paths:
