@@ -24,6 +24,19 @@
       <artifactId>okhttp</artifactId>
       <version>3.14.9</version>
     </dependency>
+
+    <!-- These dependencies are only need to add manual instrumentation;
+    for auto-instrumentation only, they can be omitted. -->
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-extension-auto-annotations</artifactId>
+      <version>0.7.0</version>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-api</artifactId>
+      <version>0.7.0</version>
+    </dependency>
   </dependencies>
 
   <build>
