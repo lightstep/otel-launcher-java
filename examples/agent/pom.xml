@@ -25,7 +25,7 @@
       <version>3.14.9</version>
     </dependency>
 
-    <!-- These dependencies are only need to add manual instrumentation;
+    <!-- These dependencies are only needed to add manual instrumentation;
     for auto-instrumentation only, they can be omitted. -->
     <dependency>
       <groupId>io.opentelemetry</groupId>
