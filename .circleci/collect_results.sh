@@ -12,4 +12,4 @@ mkdir -p $TEST_RESULTS_DIR >/dev/null 2>&1
 
 echo "saving test results"
 mkdir -p $TEST_RESULTS_DIR/results
-find workspace/**/target/surefire-reports -name \*.xml -exec cp {} $TEST_RESULTS_DIR \;
+find ./**/target/surefire-reports -name \*.xml -exec cp {} $TEST_RESULTS_DIR \;
