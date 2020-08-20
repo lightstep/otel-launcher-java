@@ -34,6 +34,11 @@ jobs:
           mvn dependency:go-offline integration-test
           mvn -DrepoToken=$REPO_TOKEN -q jacoco:report coveralls:report
 
+      - run:
+          name: Collect Test Results
+          when: always
+          command: .circleci/collect_results.sh
+
       - store_test_results:
           path: ./results
 
