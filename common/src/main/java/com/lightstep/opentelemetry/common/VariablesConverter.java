@@ -67,7 +67,7 @@ public class VariablesConverter {
     System.setProperty("otel.otlp.span.timeout", String.valueOf(DEFAULT_LS_DEADLINE_MILLIS));
     System.setProperty("otel.otlp.metadata", "lightstep-access-token=" + accessToken);
     if (propagators != null) {
-      System.setProperty("ota.propagators", propagators);
+      System.setProperty("otel.propagators", propagators);
     }
 
     String otelResourceAttributes = "service.name=" + serviceName;
