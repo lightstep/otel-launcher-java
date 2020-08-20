@@ -24,7 +24,7 @@ public class VariablesConverter {
   public static void setSystemProperties(String spanEndpoint,
       boolean insecureTransport,
       String accessToken,
-      String propagator,
+      String propagators,
       String logLevel,
       String serviceName,
       String serviceVersion,
@@ -66,11 +66,8 @@ public class VariablesConverter {
     System.setProperty("otel.otlp.use.tls", String.valueOf(!insecureTransport));
     System.setProperty("otel.otlp.span.timeout", String.valueOf(DEFAULT_LS_DEADLINE_MILLIS));
     System.setProperty("otel.otlp.metadata", "lightstep-access-token=" + accessToken);
-    if (propagator != null) {
-      System.setProperty("ota.propagators", propagator);
-    }
-    if (logLevel != null) {
-      System.setProperty("io.opentelemetry.auto.slf4j.simpleLogger.defaultLogLevel", logLevel);
+    if (propagators != null) {
+      System.setProperty("ota.propagators", propagators);
     }
 
     String otelResourceAttributes = "service.name=" + serviceName;
@@ -81,6 +78,18 @@ public class VariablesConverter {
       otelResourceAttributes += "," + resourceAttributes;
     }
     System.setProperty("otel.resource.attributes", otelResourceAttributes);
+
+    if (logLevel != null) {
+      System.setProperty("io.opentelemetry.auto.slf4j.simpleLogger.defaultLogLevel", logLevel);
+      if (logLevel.equals("debug")) {
+        String msg = "spanEndpoint: " + spanEndpoint;
+        if (propagators != null) {
+          msg += ", propagators: " + propagators;
+        }
+        msg += ", accessToken: " + accessToken + ", serviceName: " + serviceName;
+        logger.info(msg);
+      }
+    }
   }
 
   static boolean isValidToken(String token) {
