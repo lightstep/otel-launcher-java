@@ -34,6 +34,9 @@ jobs:
           mvn dependency:go-offline integration-test
           mvn -DrepoToken=$REPO_TOKEN -q jacoco:report coveralls:report
 
+      - store_test_results:
+          path: ./results
+
       - save_cache:
           paths:
             - ~/.m2
