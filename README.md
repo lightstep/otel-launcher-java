@@ -2,7 +2,7 @@
 
 # Lightstep OpenTelemetry Configuration Layer for Java
 
-_NOTE: the code in this repo is currently in alpha and will likely change_
+_NOTE: This is in beta and is expected to GA in Fall 2020._
 
 This is the Lightstep package for configuring OpenTelemetry
 
