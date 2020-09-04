@@ -31,9 +31,21 @@ public class VariablesConverter {
       String resourceAttributes,
       boolean isAgent) {
 
+    if (spanEndpoint == null || spanEndpoint.isEmpty()) {
+      String msg = "Invalid configuration: span endpoint missing. Set environment variable "
+          + OTEL_EXPORTER_OTLP_SPAN_ENDPOINT;
+      if (isAgent) {
+        msg += ".";
+      } else {
+        msg += " or call setSpanEndpoint in the code.";
+      }
+      logger.severe(msg);
+      throw new IllegalStateException(msg);
+    }
+
     if (serviceName == null || serviceName.isEmpty()) {
       String msg = "Invalid configuration: service name missing. Set environment variable "
-          + "LS_SERVICE_NAME";
+          + LS_SERVICE_NAME;
       if (isAgent) {
         msg += ".";
       } else {
@@ -46,7 +58,7 @@ public class VariablesConverter {
     if (isTokenRequired(spanEndpoint) && (accessToken == null || accessToken.isEmpty())) {
       String msg =
           "Invalid configuration: token missing. Must be set to send data to " + spanEndpoint
-              + ". Set environment variable LS_ACCESS_TOKEN";
+              + ". Set environment variable " + LS_ACCESS_TOKEN;
       if (isAgent) {
         msg += ".";
       } else {
