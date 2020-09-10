@@ -1,5 +1,10 @@
 <a name="Pending Release"></a>
-## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.7.2...master)
+## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.8.0...master)
+
+<a name="0.8.0"></a>
+## [0.8.0](https://github.com/lightstep/otel-launcher-java/compare/0.7.2...0.8.0)
+* Use OpenTelemetry Java API version 0.8.0
+* Use OpenTelemetry Java Instrumentation version 0.8.0
 
 <a name="0.7.2"></a>
 ## [0.7.2](https://github.com/lightstep/otel-launcher-java/compare/0.7.1...0.7.2)
