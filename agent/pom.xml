@@ -56,10 +56,11 @@
                 <transformer implementation=
                   "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <manifestEntries>
-                    <Main-Class>io.opentelemetry.auto.bootstrap.AgentBootstrap</Main-Class>
+                    <Main-Class>io.opentelemetry.javaagent.OpenTelemetryAgent</Main-Class>
                     <Agent-Class>com.lightstep.opentelemetry.agent.LightstepBootstrap</Agent-Class>
                     <Premain-Class>com.lightstep.opentelemetry.agent.LightstepBootstrap
                     </Premain-Class>
+                    <Implementation-Version>0.8.0</Implementation-Version>
                     <Can-Redefine-Classes>true</Can-Redefine-Classes>
                     <Can-Retransform-Classes>true</Can-Retransform-Classes>
                   </manifestEntries>
