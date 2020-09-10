@@ -3,7 +3,7 @@ package com.lightstep.opentelemetry.launcher;
 import com.lightstep.opentelemetry.common.VariablesConverter;
 import io.opentelemetry.OpenTelemetry;
 import io.opentelemetry.context.propagation.DefaultContextPropagators;
-import io.opentelemetry.context.propagation.HttpTextFormat;
+import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.exporters.otlp.OtlpGrpcSpanExporter;
 import io.opentelemetry.extensions.trace.propagation.AwsXRayPropagator;
 import io.opentelemetry.extensions.trace.propagation.B3Propagator;
@@ -26,8 +26,8 @@ public class OpenTelemetryConfiguration {
     private boolean insecureTransport;
     private Propagator propagator;
 
-    private static final Map<Propagator, HttpTextFormat> PROPAGATORS =
-        new HashMap<Propagator, HttpTextFormat>() {
+    private static final Map<Propagator, TextMapPropagator> PROPAGATORS =
+        new HashMap<Propagator, TextMapPropagator>() {
           {
             put(Propagator.TRACE_CONTEXT, new HttpTraceContext());
             put(Propagator.B3, B3Propagator.getMultipleHeaderPropagator());
@@ -95,9 +95,9 @@ public class OpenTelemetryConfiguration {
               serviceName, serviceVersion, resourceAttributes, false);
 
       if (propagator != null) {
-        final HttpTextFormat httpTextFormat = PROPAGATORS.get(propagator);
+        final TextMapPropagator textMapPropagator = PROPAGATORS.get(propagator);
         OpenTelemetry.setPropagators(
-            DefaultContextPropagators.builder().addHttpTextFormat(httpTextFormat).build());
+            DefaultContextPropagators.builder().addTextMapPropagator(textMapPropagator).build());
       }
 
       return OtlpGrpcSpanExporter.newBuilder()
