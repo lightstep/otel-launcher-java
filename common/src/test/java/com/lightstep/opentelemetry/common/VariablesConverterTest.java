@@ -2,6 +2,7 @@ package com.lightstep.opentelemetry.common;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -209,6 +210,13 @@ public class VariablesConverterTest {
     Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
         .thenReturn("key1=value1");
     assertEquals("key1=value1", VariablesConverter.getResourceAttributes());
+  }
+
+  @Test
+  public void getHostName() {
+    final String hostName = VariablesConverter.getHostName();
+    assertNotNull(hostName);
+    assertFalse(hostName.isEmpty());
   }
 
   private void mockSystem() {

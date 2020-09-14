@@ -1,6 +1,8 @@
 package com.lightstep.opentelemetry.common;
 
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.logging.Logger;
 
 public class VariablesConverter {
@@ -89,6 +91,11 @@ public class VariablesConverter {
     if (resourceAttributes != null && !resourceAttributes.isEmpty()) {
       otelResourceAttributes += "," + resourceAttributes;
     }
+    String hostname = getHostName();
+    if (hostname != null && !hostname.isEmpty()) {
+      otelResourceAttributes += ",lightstep.hostname=" + hostname;
+    }
+
     System.setProperty("otel.resource.attributes", otelResourceAttributes);
 
     if (logLevel != null) {
@@ -159,5 +166,13 @@ public class VariablesConverter {
       return defaultValue;
     }
     return val;
+  }
+
+  static String getHostName() {
+    try {
+      return InetAddress.getLocalHost().getHostName();
+    } catch (final IOException e) {
+      return "";
+    }
   }
 }
