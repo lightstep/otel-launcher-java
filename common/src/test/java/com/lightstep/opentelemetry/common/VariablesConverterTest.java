@@ -35,6 +35,18 @@ public class VariablesConverterTest {
   }
 
   @Test
+  public void convertFromEnv() {
+    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME), "service-env");
+    System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
+        StringUtils.repeat("s", 32));
+
+    VariablesConverter.convertFromEnv();
+
+    String resourceAttributes = System.getProperty("otel.resource.attributes");
+    assertTrue(resourceAttributes.contains("lightstep.hostname="));
+  }
+
+  @Test
   public void isValidToken() {
     assertTrue(VariablesConverter.isValidToken(StringUtils.repeat("s", 32)));
     assertTrue(VariablesConverter.isValidToken(StringUtils.repeat("s", 84)));
