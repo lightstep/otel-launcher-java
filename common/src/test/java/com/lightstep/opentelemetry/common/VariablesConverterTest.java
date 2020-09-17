@@ -2,6 +2,7 @@ package com.lightstep.opentelemetry.common;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -31,6 +32,41 @@ public class VariablesConverterTest {
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_PROPAGATORS));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_INSECURE));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES));
+  }
+
+  @Test
+  public void convertFromEnv() {
+    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME), "service-1");
+    System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
+        StringUtils.repeat("s", 32));
+    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_VERSION), "1.0");
+
+    VariablesConverter.convertFromEnv();
+
+    String hostname = VariablesConverter.getHostName();
+
+    String resourceAttributes = System.getProperty("otel.resource.attributes");
+    assertTrue(resourceAttributes.contains("service.name=service-1"));
+    assertTrue(resourceAttributes.contains("service.version=1.0"));
+    assertTrue(resourceAttributes.contains("lightstep.hostname=" + hostname));
+  }
+
+  @Test
+  public void convertFromEnv_withAttributes() {
+    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME), "service-1");
+    System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
+        StringUtils.repeat("s", 32));
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES),
+        "lightstep.hostname=my-host");
+
+    VariablesConverter.convertFromEnv();
+
+    String hostname = VariablesConverter.getHostName();
+
+    String resourceAttributes = System.getProperty("otel.resource.attributes");
+    assertTrue(resourceAttributes.contains("service.name=service-1"));
+    assertTrue(resourceAttributes.contains("lightstep.hostname=my-host"));
+    assertFalse(resourceAttributes.contains("lightstep.hostname=" + hostname));
   }
 
   @Test
@@ -209,6 +245,13 @@ public class VariablesConverterTest {
     Mockito.when(System.getenv(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES))
         .thenReturn("key1=value1");
     assertEquals("key1=value1", VariablesConverter.getResourceAttributes());
+  }
+
+  @Test
+  public void getHostName() {
+    final String hostName = VariablesConverter.getHostName();
+    assertNotNull(hostName);
+    assertFalse(hostName.isEmpty());
   }
 
   private void mockSystem() {
