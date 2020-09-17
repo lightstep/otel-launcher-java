@@ -92,7 +92,7 @@ public class VariablesConverter {
     System.setProperty("otel.resource.attributes", otelResourceAttributes);
 
     if (logLevel != null) {
-      System.setProperty("io.opentelemetry.auto.slf4j.simpleLogger.defaultLogLevel", logLevel);
+      System.setProperty("io.opentelemetry.javaagent.slf4j.simpleLogger.defaultLogLevel", logLevel);
       if (logLevel.equals("debug")) {
         String msg = "spanEndpoint: " + spanEndpoint;
         if (propagators != null) {
