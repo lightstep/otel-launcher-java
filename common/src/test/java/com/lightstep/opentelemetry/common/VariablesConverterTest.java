@@ -36,13 +36,16 @@ public class VariablesConverterTest {
 
   @Test
   public void convertFromEnv() {
-    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME), "service-env");
+    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME), "service-1");
     System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
         StringUtils.repeat("s", 32));
+    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_VERSION), "1.0");
 
     VariablesConverter.convertFromEnv();
 
     String resourceAttributes = System.getProperty("otel.resource.attributes");
+    assertTrue(resourceAttributes.contains("service.name=service-1"));
+    assertTrue(resourceAttributes.contains("service.version=1.0"));
     assertTrue(resourceAttributes.contains("lightstep.hostname="));
   }
 
