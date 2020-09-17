@@ -89,11 +89,14 @@ public class VariablesConverter {
       otelResourceAttributes += ",service.version=" + serviceVersion;
     }
 
-    String hostname = getHostName();
-    if (hostname != null && !hostname.isEmpty()) {
-      otelResourceAttributes += ",lightstep.hostname=" + hostname;
+    if (resourceAttributes == null || resourceAttributes.isEmpty()
+        || !resourceAttributes.contains("lightstep.hostname=")) {
+      String hostname = getHostName();
+      if (hostname != null && !hostname.isEmpty()) {
+        otelResourceAttributes += ",lightstep.hostname=" + hostname;
+      }
     }
-    
+
     if (resourceAttributes != null && !resourceAttributes.isEmpty()) {
       otelResourceAttributes += "," + resourceAttributes;
     }
