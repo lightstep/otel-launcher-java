@@ -1,5 +1,7 @@
 <a name="Pending Release"></a>
 ## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.8.0...master)
+* Set lighstep.hostname tag
+* Fixed setting log level 
 
 <a name="0.8.0"></a>
 ## [0.8.0](https://github.com/lightstep/otel-launcher-java/compare/0.7.2...0.8.0)
