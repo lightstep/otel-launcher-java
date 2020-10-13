@@ -90,10 +90,10 @@ public class VariablesConverter {
     }
 
     if (resourceAttributes == null || resourceAttributes.isEmpty()
-        || !resourceAttributes.contains("lightstep.hostname=")) {
+        || !resourceAttributes.contains("host.name=")) {
       String hostname = getHostName();
       if (hostname != null && !hostname.isEmpty()) {
-        otelResourceAttributes += ",lightstep.hostname=" + hostname;
+        otelResourceAttributes += ",host.name=" + hostname;
       }
     }
 
