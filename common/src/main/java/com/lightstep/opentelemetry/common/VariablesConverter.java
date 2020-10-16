@@ -76,10 +76,10 @@ public class VariablesConverter {
       throw new IllegalStateException(msg);
     }
 
-    System.setProperty("otel.otlp.endpoint", spanEndpoint);
-    System.setProperty("otel.otlp.use.tls", String.valueOf(!insecureTransport));
-    System.setProperty("otel.otlp.span.timeout", String.valueOf(DEFAULT_LS_DEADLINE_MILLIS));
-    System.setProperty("otel.otlp.metadata", "lightstep-access-token=" + accessToken);
+    System.setProperty("otel.exporter.otlp.span.endpoint", spanEndpoint);
+    System.setProperty("otel.exporter.otlp.span.insecure", String.valueOf(insecureTransport));
+    System.setProperty("otel.exporter.otlp.span.timeout", String.valueOf(DEFAULT_LS_DEADLINE_MILLIS));
+    System.setProperty("otel.exporter.otlp.span.headers", "lightstep-access-token=" + accessToken);
     if (propagators != null) {
       System.setProperty("otel.propagators", propagators);
     }
@@ -114,6 +114,9 @@ public class VariablesConverter {
         logger.info(msg);
       }
     }
+
+    // Do not enable metrics
+    System.setProperty("otel.exporter", "OtlpSpan");
   }
 
   static boolean isValidToken(String token) {

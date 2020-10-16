@@ -29,12 +29,12 @@ public class OpenTelemetryConfiguration {
     private static final Map<Propagator, TextMapPropagator> PROPAGATORS =
         new HashMap<Propagator, TextMapPropagator>() {
           {
-            put(Propagator.TRACE_CONTEXT, new HttpTraceContext());
+            put(Propagator.TRACE_CONTEXT, HttpTraceContext.getInstance());
             put(Propagator.B3, B3Propagator.getMultipleHeaderPropagator());
             put(Propagator.B3_SINGLE, B3Propagator.getSingleHeaderPropagator());
-            put(Propagator.JAEGER, new JaegerPropagator());
+            put(Propagator.JAEGER, JaegerPropagator.getInstance());
             put(Propagator.OT_TRACER, OtTracerPropagator.getInstance());
-            put(Propagator.XRAY, new AwsXRayPropagator());
+            put(Propagator.XRAY, AwsXRayPropagator.getInstance());
           }
         };
 
@@ -112,7 +112,7 @@ public class OpenTelemetryConfiguration {
     public void install() {
       BatchSpanProcessor spansProcessor = BatchSpanProcessor.newBuilder(this.buildExporter())
           .build();
-      OpenTelemetrySdk.getTracerProvider().addSpanProcessor(spansProcessor);
+      OpenTelemetrySdk.getTracerManagement().addSpanProcessor(spansProcessor);
     }
 
     private void readEnvVariablesAndSystemProperties() {
