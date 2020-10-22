@@ -1,6 +1,6 @@
 [![Download](https://api.bintray.com/packages/lightstep/maven/otel-launcher-java/images/download.svg) ](https://bintray.com/lightstep/maven/otel-launcher-java) [![Circle CI](https://circleci.com/gh/lightstep/otel-launcher-java.svg?style=shield)](https://circleci.com/gh/lightstep/otel-launcher-java) [![Coverage Status](https://coveralls.io/repos/github/lightstep/otel-launcher-java/badge.svg)](https://coveralls.io/github/lightstep/otel-launcher-java) [![Apache-2.0 license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-# Lightstep OpenTelemetry Configuration Layer for Java
+# Lightstep Distro for OpenTelemetry Java
 
 _NOTE: This is in beta and is expected to GA in Fall 2020._
 
