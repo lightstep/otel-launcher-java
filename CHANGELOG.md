@@ -1,6 +1,10 @@
 <a name="Pending Release"></a>
-## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.8.1...master)
+## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.9.0...master)
+
+<a name="0.9.0"></a>
+## [0.9.0](https://github.com/lightstep/otel-launcher-java/compare/0.8.1...0.9.0)
 * Replaced lightstep.hostname tag with host.name
+* Fixed OTLP metrics error messages
 * Use OpenTelemetry Java API version 0.9.1
 * Use OpenTelemetry Java Instrumentation version 0.9.0
 
