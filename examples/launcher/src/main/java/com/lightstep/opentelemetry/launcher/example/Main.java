@@ -23,7 +23,7 @@ public class Main {
         .setSpanEndpoint(properties.getProperty("otel.exporter.otlp.span.endpoint"))
         .buildExporter();
 
-    OpenTelemetrySdk.getTracerProvider()
+    OpenTelemetrySdk.getTracerManagement()
         .addSpanProcessor(SimpleSpanProcessor.newBuilder(exporter).build());
 
     Tracer tracer =
@@ -39,7 +39,7 @@ public class Main {
     // wait some seconds
     TimeUnit.SECONDS.sleep(15);
 
-    OpenTelemetrySdk.getTracerProvider().shutdown();
+    OpenTelemetrySdk.getTracerManagement().shutdown();
     System.out.println("Bye");
   }
 
