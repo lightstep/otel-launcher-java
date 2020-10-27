@@ -24,8 +24,9 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <opentelemtry.version>0.9.1</opentelemtry.version>
-    <opentelemetry.instrumentation.version>0.9.0</opentelemetry.instrumentation.version>
+    <opentelemtry.version>0.10.0-20201025.184226-80</opentelemtry.version>
+    <opentelemetry.instrumentation.version>0.10.0-20201026.171328-34
+    </opentelemetry.instrumentation.version>
     <powermock.version>2.0.7</powermock.version>
     <maven-source-plugin.version>3.2.0</maven-source-plugin.version>
     <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>

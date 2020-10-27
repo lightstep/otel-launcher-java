@@ -30,8 +30,8 @@ public class OpenTelemetryConfiguration {
         new HashMap<Propagator, TextMapPropagator>() {
           {
             put(Propagator.TRACE_CONTEXT, HttpTraceContext.getInstance());
-            put(Propagator.B3, B3Propagator.getMultipleHeaderPropagator());
-            put(Propagator.B3_SINGLE, B3Propagator.getSingleHeaderPropagator());
+            put(Propagator.B3, B3Propagator.builder().injectMultipleHeaders().build());
+            put(Propagator.B3_SINGLE, B3Propagator.getInstance());
             put(Propagator.JAEGER, JaegerPropagator.getInstance());
             put(Propagator.OT_TRACER, OtTracerPropagator.getInstance());
             put(Propagator.XRAY, AwsXRayPropagator.getInstance());
@@ -96,11 +96,11 @@ public class OpenTelemetryConfiguration {
 
       if (propagator != null) {
         final TextMapPropagator textMapPropagator = PROPAGATORS.get(propagator);
-        OpenTelemetry.setPropagators(
+        OpenTelemetry.setGlobalPropagators(
             DefaultContextPropagators.builder().addTextMapPropagator(textMapPropagator).build());
       }
 
-      return OtlpGrpcSpanExporter.newBuilder()
+      return OtlpGrpcSpanExporter.builder()
           .readSystemProperties()
           .readEnvironmentVariables()
           .build();
@@ -110,9 +110,9 @@ public class OpenTelemetryConfiguration {
      * Installs exporter into tracer SDK default provider with batching span processor.
      */
     public void install() {
-      BatchSpanProcessor spansProcessor = BatchSpanProcessor.newBuilder(this.buildExporter())
+      BatchSpanProcessor spansProcessor = BatchSpanProcessor.builder(this.buildExporter())
           .build();
-      OpenTelemetrySdk.getTracerManagement().addSpanProcessor(spansProcessor);
+      OpenTelemetrySdk.getGlobalTracerManagement().addSpanProcessor(spansProcessor);
     }
 
     private void readEnvVariablesAndSystemProperties() {
