@@ -1,7 +1,8 @@
 package com.lightstep.opentelemetry.launcher;
 
 import com.lightstep.opentelemetry.common.VariablesConverter;
-import io.opentelemetry.OpenTelemetry;
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.trace.propagation.HttpTraceContext;
 import io.opentelemetry.context.propagation.DefaultContextPropagators;
 import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.exporters.otlp.OtlpGrpcSpanExporter;
@@ -11,7 +12,6 @@ import io.opentelemetry.extensions.trace.propagation.JaegerPropagator;
 import io.opentelemetry.extensions.trace.propagation.OtTracerPropagator;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
-import io.opentelemetry.trace.propagation.HttpTraceContext;
 import java.util.HashMap;
 import java.util.Map;
 
