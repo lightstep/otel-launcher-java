@@ -116,7 +116,7 @@ public class VariablesConverter {
     }
 
     // Do not enable metrics
-    System.setProperty("otel.exporter", "OtlpSpan");
+    System.setProperty("otel.exporter", "otlp_span");
   }
 
   static boolean isValidToken(String token) {
