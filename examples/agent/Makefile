@@ -3,5 +3,5 @@ build:
 	cd ../.. && mvn clean package -DskipTests
 
 run:
-	java -javaagent:../../agent/target/lightstep-opentelemetry-javaagent-0.9.0.jar \
+	java -javaagent:../../agent/target/lightstep-opentelemetry-javaagent-0.10.0.jar \
 	-jar target/opentelemetry-agent-example.jar
