@@ -1,13 +1,13 @@
 package com.lightstep.opentelemetry.launcher.example;
 
 import com.lightstep.opentelemetry.launcher.OpenTelemetryConfiguration;
-import io.opentelemetry.OpenTelemetry;
-import io.opentelemetry.exporters.otlp.OtlpGrpcSpanExporter;
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.Span.Kind;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.exporter.otlp.OtlpGrpcSpanExporter;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
-import io.opentelemetry.trace.Span;
-import io.opentelemetry.trace.Span.Kind;
-import io.opentelemetry.trace.Tracer;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -23,11 +23,11 @@ public class Main {
         .setSpanEndpoint(properties.getProperty("otel.exporter.otlp.span.endpoint"))
         .buildExporter();
 
-    OpenTelemetrySdk.getTracerManagement()
-        .addSpanProcessor(SimpleSpanProcessor.newBuilder(exporter).build());
+    OpenTelemetrySdk.getGlobalTracerManagement()
+        .addSpanProcessor(SimpleSpanProcessor.builder(exporter).build());
 
     Tracer tracer =
-        OpenTelemetry.getTracerProvider().get("LightstepExample");
+        OpenTelemetry.getGlobalTracer("LightstepExample");
     Span span = tracer.spanBuilder("start example").setSpanKind(Kind.CLIENT).startSpan();
     span.setAttribute("Attribute 1", "Value 1");
     span.addEvent("Event 0");
@@ -39,7 +39,7 @@ public class Main {
     // wait some seconds
     TimeUnit.SECONDS.sleep(15);
 
-    OpenTelemetrySdk.getTracerManagement().shutdown();
+    OpenTelemetrySdk.getGlobalTracerManagement().shutdown();
     System.out.println("Bye");
   }
 

@@ -70,7 +70,7 @@ OpenTelemetryConfiguration.newBuilder()
                       .install();
 
 // Get tracer
-Tracer tracer = OpenTelemetry.getTracer("instrumentation-library-name", "1.0.0");
+Tracer tracer = OpenTelemetry.getGlobalTracer("instrumentation-library-name", "1.0.0");
 ```
 
 #### Manual configuration
@@ -86,11 +86,11 @@ Builder builder = OpenTelemetryConfiguration.newBuilder()
 OtlpGrpcSpanExporter exporter = builder.buildExporter();
 
 // Add Span Processor with exporter
-OpenTelemetrySdk.getTracerProvider()
-                      .addSpanProcessor(SimpleSpanProcessor.newBuilder(exporter).build());
+OpenTelemetrySdk.getGlobalTracerManagement()
+                      .addSpanProcessor(SimpleSpanProcessor.builder(exporter).build());
 
 // Get tracer
-Tracer tracer = OpenTelemetry.getTracer("instrumentation-library-name", "1.0.0");
+Tracer tracer = OpenTelemetry.getGlobalTracer("instrumentation-library-name", "1.0.0");
 ```
 
 ### Logging
