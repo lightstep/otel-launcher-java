@@ -1,6 +1,7 @@
 package com.lightstep.opentelemetry.launcher;
 
 import com.lightstep.opentelemetry.common.VariablesConverter;
+import com.lightstep.opentelemetry.common.VariablesConverter.Configuration;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.propagation.HttpTraceContext;
 import io.opentelemetry.context.propagation.DefaultContextPropagators;
@@ -91,8 +92,13 @@ public class OpenTelemetryConfiguration {
      */
     public OtlpGrpcSpanExporter buildExporter() {
       VariablesConverter
-          .setSystemProperties(spanEndpoint, insecureTransport, accessToken, null, null,
-              serviceName, serviceVersion, resourceAttributes, false);
+          .setSystemProperties(new Configuration()
+              .withSpanEndpoint(spanEndpoint)
+              .withInsecureTransport(insecureTransport)
+              .withAccessToken(accessToken)
+              .withServiceName(serviceName)
+              .withServiceVersion(serviceVersion)
+              .withResourceAttributes(resourceAttributes), false);
 
       if (propagator != null) {
         final TextMapPropagator textMapPropagator = PROPAGATORS.get(propagator);

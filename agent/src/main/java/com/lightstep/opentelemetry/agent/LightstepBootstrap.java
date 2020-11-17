@@ -3,6 +3,7 @@ package com.lightstep.opentelemetry.agent;
 import com.lightstep.opentelemetry.common.VariablesConverter;
 import io.opentelemetry.javaagent.OpenTelemetryAgent;
 import java.lang.instrument.Instrumentation;
+import java.lang.reflect.Method;
 
 public class LightstepBootstrap {
 
@@ -13,7 +14,18 @@ public class LightstepBootstrap {
       System.err.println("Agent is not installed. " + e.getMessage());
       return;
     }
+
     OpenTelemetryAgent.premain(agentArgs, inst);
+
+    try {
+      Class<?> oshiSystemInfoClass =
+          ClassLoader.getSystemClassLoader()
+              .loadClass("com.lightstep.opentelemetry.agent.SystemMetrics");
+      Method getCurrentPlatformEnumMethod = oshiSystemInfoClass.getMethod("registerObservers");
+      getCurrentPlatformEnumMethod.invoke(null);
+    } catch (Throwable ex) {
+      ex.printStackTrace();
+    }
   }
 
 }
