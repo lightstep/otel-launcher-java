@@ -101,16 +101,19 @@ _java.util.logging.config.file_. E.g. `-Djava.util.logging.config.file=path/to/l
 ##  System properties and environmental variables
 Supported system properties and environmental variables:
 
-| System property                  | Environment variable             | Purpose                                                                           | Default              | 
-|----------------------------------|----------------------------------|-----------------------------------------------------------------------------------|----------------------|       
-| ls.service.name                  | LS_SERVICE_NAME                  | Service name                                                                      |                      |                        
-| ls.service.version               | LS_SERVICE_VERSION               | Service version                                                                   |                      |                        
-| ls.access.token                  | LS_ACCESS_TOKEN                  | Token for Lightstep access                                                        |                      |                        
-| otel.exporter.otlp.span.endpoint | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Satellite URL                                                                     | ingest.lightstep.com |
-| otel.exporter.otlp.span.insecure | OTEL_EXPORTER_OTLP_SPAN_INSECURE | Use insecure transport or not                                                     | false                |
-| otel.propagators                 | OTEL_PROPAGATORS                 | Propagator                                                                        | b3                   |
-| otel.log.level                   | OTEL_LOG_LEVEL                   | Log level for agent, to see more messages set to _debug_, to disable set to _off_ | info                 |
-| otel.resource.attributes         | OTEL_RESOURCE_ATTRIBUTES         | Comma separated key-value pairs                                                   |                      |
+| System property                    | Environment variable               | Purpose                                                                           | Default              | 
+|------------------------------------|------------------------------------|-----------------------------------------------------------------------------------|----------------------|       
+| ls.service.name                    | LS_SERVICE_NAME                    | Service name                                                                      |                      |                        
+| ls.service.version                 | LS_SERVICE_VERSION                 | Service version                                                                   |                      |                        
+| ls.access.token                    | LS_ACCESS_TOKEN                    | Token for Lightstep access                                                        |                      |                        
+| otel.exporter.otlp.span.endpoint   | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT   | Satellite URL                                                                     | ingest.lightstep.com |
+| otel.exporter.otlp.span.insecure   | OTEL_EXPORTER_OTLP_SPAN_INSECURE   | Use insecure transport or not                                                     | false                |
+| otel.propagators                   | OTEL_PROPAGATORS                   | Propagator                                                                        | b3                   |
+| otel.log.level                     | OTEL_LOG_LEVEL                     | Log level for agent, to see more messages set to _debug_, to disable set to _off_ | info                 |
+| otel.resource.attributes           | OTEL_RESOURCE_ATTRIBUTES           | Comma separated key-value pairs                                                   |                      |
+| otel.exporter.otlp.metric.endpoint | OTEL_EXPORTER_OTLP_METRIC_ENDPOINT | Metric URL                                                                        | ingest.lightstep.com |
+| otel.exporter.otlp.metric.insecure | OTEL_EXPORTER_OTLP_METRIC_INSECURE | Use insecure transport or not                                                     | false                |
+| ls.metrics.enabled                 | LS_METRICS_ENABLED                 | Enabled metric or not                                                             | false                |
 
 ## License
 
