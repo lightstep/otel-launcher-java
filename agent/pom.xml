@@ -32,7 +32,11 @@
       <artifactId>oshi-core</artifactId>
       <version>5.3.5</version>
     </dependency>
-
+    <dependency>
+      <groupId>io.opentelemetry.instrumentation</groupId>
+      <artifactId>opentelemetry-oshi</artifactId>
+      <version>${opentelemetry.instrumentation.version}</version>
+    </dependency>
   </dependencies>
 
   <build>

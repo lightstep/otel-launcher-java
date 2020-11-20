@@ -20,7 +20,7 @@ public class LightstepBootstrap {
     try {
       Class<?> oshiSystemInfoClass =
           ClassLoader.getSystemClassLoader()
-              .loadClass("com.lightstep.opentelemetry.agent.SystemMetrics");
+              .loadClass("io.opentelemetry.instrumentation.oshi.SystemMetrics");
       Method getCurrentPlatformEnumMethod = oshiSystemInfoClass.getMethod("registerObservers");
       getCurrentPlatformEnumMethod.invoke(null);
     } catch (Throwable ex) {
