@@ -25,12 +25,12 @@
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-exporter-otlp</artifactId>
-      <version>${opentelemtry.version}</version>
+      <version>${opentelemetry.version}</version>
     </dependency>
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-extension-trace-propagators</artifactId>
-      <version>${opentelemtry.version}</version>
+      <version>${opentelemetry.version}</version>
     </dependency>
 
     <dependency>
