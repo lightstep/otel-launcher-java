@@ -32,7 +32,7 @@ public class OpenTelemetryConfiguration {
           {
             put(Propagator.TRACE_CONTEXT, HttpTraceContext.getInstance());
             put(Propagator.B3, B3Propagator.builder().injectMultipleHeaders().build());
-            put(Propagator.B3_SINGLE, B3Propagator.getInstance());
+            put(Propagator.B3_MULTI, B3Propagator.getInstance());
             put(Propagator.JAEGER, JaegerPropagator.getInstance());
             put(Propagator.OT_TRACER, OtTracerPropagator.getInstance());
             put(Propagator.XRAY, AwsXRayPropagator.getInstance());

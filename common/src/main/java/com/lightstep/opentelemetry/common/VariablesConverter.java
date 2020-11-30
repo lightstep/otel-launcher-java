@@ -13,7 +13,7 @@ public class VariablesConverter {
   public static final long DEFAULT_LS_DEADLINE_MILLIS = 30000;
   public static final boolean DEFAULT_OTEL_EXPORTER_OTLP_SPAN_INSECURE = false;
   public static final boolean DEFAULT_METRICS_ENABLED = false;
-  public static final String DEFAULT_PROPAGATOR = "b3";
+  public static final String DEFAULT_PROPAGATOR = "b3multi";
   public static final String DEFAULT_OTEL_LOG_LEVEL = "info";
 
   static final String LS_ACCESS_TOKEN = "LS_ACCESS_TOKEN";
