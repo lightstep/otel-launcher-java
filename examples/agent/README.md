@@ -16,14 +16,14 @@ make run
     ```xml
     <dependency>
         <groupId>io.opentelemetry</groupId>
-        <artifactId>opentelemetry-extension-auto-annotations</artifactId>
-        <version>0.10.0</version>
+        <artifactId>opentelemetry-extension-annotations</artifactId>
+        <version>0.11.0</version>
     </dependency>
 
     <dependency>
         <groupId>io.opentelemetry</groupId>
         <artifactId>opentelemetry-api</artifactId>
-        <version>0.10.0</version>
+        <version>0.11.0</version>
     </dependency>
     ```
 
@@ -39,7 +39,7 @@ make run
 
     1. Manually get tracer and create span
         ```java
-        Tracer tracer = OpenTelemetry.getTracer(System.getenv("LS_SERVICE_NAME"));
+        Tracer tracer = OpenTelemetry.getGlobalTracer(System.getenv("LS_SERVICE_NAME"));
         Span span = tracer.spanBuilder("name").startSpan();
         span.end();
         ```

@@ -1,5 +1,8 @@
 <a name="Pending Release"></a>
-## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.10.1...master)
+## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.11.0...master)
+
+<a name="0.11.0"></a>
+## [0.11.0](https://github.com/lightstep/otel-launcher-java/compare/0.10.1...0.11.0)
 * Use b3multi propagator by default
 * Add Metrics support with oshi instrumentation
 * Use OpenTelemetry Java API version 0.11.0
