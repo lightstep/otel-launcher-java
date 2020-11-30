@@ -1,8 +1,7 @@
 package com.lightstep.opentelemetry.launcher;
 
 public enum Propagator {
-  TRACE_CONTEXT("tracecontext"), B3_MULTI("b3multi"), B3("b3"), JAEGER("jaeger"),
-  OT_TRACER("ottracer"), XRAY("xray");
+  TRACE_CONTEXT("tracecontext"), B3_MULTI("b3multi"), B3("b3"), BAGGAGE("baggage");
 
   private final String label;
 

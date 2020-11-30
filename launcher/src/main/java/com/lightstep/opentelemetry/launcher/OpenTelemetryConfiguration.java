@@ -3,20 +3,26 @@ package com.lightstep.opentelemetry.launcher;
 import com.lightstep.opentelemetry.common.VariablesConverter;
 import com.lightstep.opentelemetry.common.VariablesConverter.Configuration;
 import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.baggage.propagation.W3CBaggagePropagator;
+import io.opentelemetry.api.trace.TracerProvider;
 import io.opentelemetry.api.trace.propagation.HttpTraceContext;
+import io.opentelemetry.context.propagation.ContextPropagators;
 import io.opentelemetry.context.propagation.DefaultContextPropagators;
 import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.exporter.otlp.OtlpGrpcSpanExporter;
-import io.opentelemetry.extension.trace.propagation.AwsXRayPropagator;
 import io.opentelemetry.extension.trace.propagation.B3Propagator;
-import io.opentelemetry.extension.trace.propagation.JaegerPropagator;
-import io.opentelemetry.extension.trace.propagation.OtTracerPropagator;
+import io.opentelemetry.extension.trace.propagation.TraceMultiPropagator;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class OpenTelemetryConfiguration {
+  private static final Logger logger = Logger.getLogger(OpenTelemetryConfiguration.class.getName());
 
   public static class Builder {
     private String accessToken;
@@ -25,7 +31,8 @@ public class OpenTelemetryConfiguration {
     private String spanEndpoint;
     private String resourceAttributes;
     private boolean insecureTransport;
-    private Propagator propagator;
+
+    private final List<Propagator> propagators = new ArrayList<>();
 
     private static final Map<Propagator, TextMapPropagator> PROPAGATORS =
         new HashMap<Propagator, TextMapPropagator>() {
@@ -33,9 +40,7 @@ public class OpenTelemetryConfiguration {
             put(Propagator.TRACE_CONTEXT, HttpTraceContext.getInstance());
             put(Propagator.B3, B3Propagator.builder().injectMultipleHeaders().build());
             put(Propagator.B3_MULTI, B3Propagator.getInstance());
-            put(Propagator.JAEGER, JaegerPropagator.getInstance());
-            put(Propagator.OT_TRACER, OtTracerPropagator.getInstance());
-            put(Propagator.XRAY, AwsXRayPropagator.getInstance());
+            put(Propagator.BAGGAGE, W3CBaggagePropagator.getInstance());
           }
         };
 
@@ -76,7 +81,7 @@ public class OpenTelemetryConfiguration {
     }
 
     public Builder setPropagator(Propagator propagator) {
-      this.propagator = propagator;
+      this.propagators.add(propagator);
       return this;
     }
 
@@ -100,16 +105,64 @@ public class OpenTelemetryConfiguration {
               .withServiceVersion(serviceVersion)
               .withResourceAttributes(resourceAttributes), false);
 
-      if (propagator != null) {
-        final TextMapPropagator textMapPropagator = PROPAGATORS.get(propagator);
-        OpenTelemetry.setGlobalPropagators(
-            DefaultContextPropagators.builder().addTextMapPropagator(textMapPropagator).build());
+      if (propagators.isEmpty()) {
+        String propagatorFromEnv = VariablesConverter.getPropagator();
+        String[] propagatorsArray = propagatorFromEnv.split("\\s*,\\s*");
+        for (String propagatorLabel : propagatorsArray) {
+          Propagator propagator = Propagator.valueOfLabel(propagatorLabel);
+          if (propagator == null) {
+            logger.warning("Unsupported propagator " + propagatorLabel);
+          } else {
+            propagators.add(propagator);
+          }
+        }
       }
+
+      final DefaultContextPropagators.Builder builder = DefaultContextPropagators.builder();
+      if (propagators.remove(Propagator.BAGGAGE)) {
+        builder.addTextMapPropagator(W3CBaggagePropagator.getInstance());
+      }
+      if (propagators.size() == 1) {
+        builder.addTextMapPropagator(PROPAGATORS.get(propagators.get(0)));
+      } else {
+        TraceMultiPropagator.Builder multiPropagatorBuilder = TraceMultiPropagator.builder();
+        for (Propagator propagator : propagators) {
+          multiPropagatorBuilder.addPropagator(PROPAGATORS.get(propagator));
+        }
+        builder.addTextMapPropagator(multiPropagatorBuilder.build());
+      }
+
+      setGlobalPropagators(builder.build());
 
       return OtlpGrpcSpanExporter.builder()
           .readSystemProperties()
           .readEnvironmentVariables()
           .build();
+    }
+
+    // Workaround https://github.com/open-telemetry/opentelemetry-java/pull/2096
+    public static void setGlobalPropagators(ContextPropagators propagators) {
+      OpenTelemetry.set(
+          OpenTelemetrySdk.builder()
+              .setResource(OpenTelemetrySdk.get().getResource())
+              .setClock(OpenTelemetrySdk.get().getClock())
+              .setMeterProvider(OpenTelemetry.getGlobalMeterProvider())
+              .setTracerProvider(unobfuscate(OpenTelemetry.getGlobalTracerProvider()))
+              .setPropagators(propagators)
+              .build());
+    }
+
+    private static TracerProvider unobfuscate(TracerProvider tracerProvider) {
+      if (tracerProvider.getClass().getName().endsWith("TracerSdkProvider")) {
+        return tracerProvider;
+      }
+      try {
+        Method unobfuscate = tracerProvider.getClass().getDeclaredMethod("unobfuscate");
+        unobfuscate.setAccessible(true);
+        return (TracerProvider) unobfuscate.invoke(tracerProvider);
+      } catch (Throwable t) {
+        return tracerProvider;
+      }
     }
 
     /**
@@ -127,8 +180,11 @@ public class OpenTelemetryConfiguration {
       this.serviceVersion = VariablesConverter.getServiceVersion();
       this.insecureTransport = VariablesConverter.useInsecureTransport();
       this.spanEndpoint = VariablesConverter.getSpanEndpoint();
-      this.propagator = Propagator.valueOfLabel(VariablesConverter.getPropagator());
       this.resourceAttributes = VariablesConverter.getResourceAttributes();
+    }
+
+    List<Propagator> getPropagators() {
+      return propagators;
     }
 
   }
