@@ -113,7 +113,6 @@ Supported system properties and environmental variables:
 | otel.resource.attributes           | OTEL_RESOURCE_ATTRIBUTES           | Comma separated key-value pairs                                                   |                      |
 | otel.exporter.otlp.metric.endpoint | OTEL_EXPORTER_OTLP_METRIC_ENDPOINT | Metric URL                                                                        | ingest.lightstep.com |
 | otel.exporter.otlp.metric.insecure | OTEL_EXPORTER_OTLP_METRIC_INSECURE | Use insecure transport or not                                                     | false                |
-| ls.metrics.enabled                 | LS_METRICS_ENABLED                 | Enabled metric or not                                                             | false                |
 
 ## License
 
