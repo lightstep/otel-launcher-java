@@ -111,8 +111,6 @@ Supported system properties and environmental variables:
 | otel.propagators                   | OTEL_PROPAGATORS                   | Propagator                                                                        | b3                   |
 | otel.log.level                     | OTEL_LOG_LEVEL                     | Log level for agent, to see more messages set to _debug_, to disable set to _off_ | info                 |
 | otel.resource.attributes           | OTEL_RESOURCE_ATTRIBUTES           | Comma separated key-value pairs                                                   |                      |
-| otel.exporter.otlp.metric.endpoint | OTEL_EXPORTER_OTLP_METRIC_ENDPOINT | Metric URL                                                                        | ingest.lightstep.com |
-| otel.exporter.otlp.metric.insecure | OTEL_EXPORTER_OTLP_METRIC_INSECURE | Use insecure transport or not                                                     | false                |
 
 ## License
 
