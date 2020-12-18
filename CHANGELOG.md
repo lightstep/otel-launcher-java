@@ -1,6 +1,7 @@
 <a name="Pending Release"></a>
 ## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.11.0...master)
 * Shade slf4j to prevents conflict with other SLF4J instances
+* Use OpenTelemetry Java Instrumentation version 0.12.1
 
 <a name="0.12.0"></a>
 ## [0.12.0](https://github.com/lightstep/otel-launcher-java/compare/0.11.0...0.12.0)
