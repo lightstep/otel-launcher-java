@@ -1,6 +1,6 @@
 package com.lightstep.opentelemetry.launcher.example;
 
-import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
@@ -28,9 +28,9 @@ public class App {
   }
 
   public static void firstMethod() throws Exception {
-    Tracer tracer = OpenTelemetry.getGlobalTracer(System.getenv("LS_SERVICE_NAME"));
+    Tracer tracer = GlobalOpenTelemetry.getTracer(System.getenv("LS_SERVICE_NAME"));
     Span span = tracer.spanBuilder("firstMethod").startSpan();
-    try (Scope scope = span.makeCurrent()) {
+    try (Scope ignored = span.makeCurrent()) {
       nestedMethod();
     }
     span.end();

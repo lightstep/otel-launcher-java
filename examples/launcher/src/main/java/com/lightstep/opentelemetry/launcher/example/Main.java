@@ -1,11 +1,11 @@
 package com.lightstep.opentelemetry.launcher.example;
 
 import com.lightstep.opentelemetry.launcher.OpenTelemetryConfiguration;
-import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.Span.Kind;
 import io.opentelemetry.api.trace.Tracer;
-import io.opentelemetry.exporter.otlp.OtlpGrpcSpanExporter;
+import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import java.io.FileInputStream;
@@ -27,7 +27,7 @@ public class Main {
         .addSpanProcessor(SimpleSpanProcessor.builder(exporter).build());
 
     Tracer tracer =
-        OpenTelemetry.getGlobalTracer("LightstepExample");
+        GlobalOpenTelemetry.getTracer("LightstepExample");
     Span span = tracer.spanBuilder("start example").setSpanKind(Kind.CLIENT).startSpan();
     span.setAttribute("Attribute 1", "Value 1");
     span.addEvent("Event 0");

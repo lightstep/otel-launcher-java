@@ -17,14 +17,16 @@ public class LightstepBootstrap {
 
     OpenTelemetryAgent.premain(agentArgs, inst);
 
-    try {
-      Class<?> oshiSystemInfoClass =
-          ClassLoader.getSystemClassLoader()
-              .loadClass("io.opentelemetry.instrumentation.oshi.SystemMetrics");
-      Method getCurrentPlatformEnumMethod = oshiSystemInfoClass.getMethod("registerObservers");
-      getCurrentPlatformEnumMethod.invoke(null);
-    } catch (Throwable ex) {
-      ex.printStackTrace();
+    if (VariablesConverter.getMetricsEnabled()) {
+      try {
+        Class<?> oshiSystemInfoClass =
+            ClassLoader.getSystemClassLoader()
+                .loadClass("io.opentelemetry.instrumentation.oshi.SystemMetrics");
+        Method getCurrentPlatformEnumMethod = oshiSystemInfoClass.getMethod("registerObservers");
+        getCurrentPlatformEnumMethod.invoke(null);
+      } catch (Throwable ex) {
+        ex.printStackTrace();
+      }
     }
   }
 
