@@ -4,17 +4,14 @@ import com.lightstep.opentelemetry.common.VariablesConverter;
 import com.lightstep.opentelemetry.common.VariablesConverter.Configuration;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.baggage.propagation.W3CBaggagePropagator;
-import io.opentelemetry.api.trace.TracerProvider;
-import io.opentelemetry.api.trace.propagation.HttpTraceContext;
+import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
 import io.opentelemetry.context.propagation.ContextPropagators;
-import io.opentelemetry.context.propagation.DefaultContextPropagators;
 import io.opentelemetry.context.propagation.TextMapPropagator;
-import io.opentelemetry.exporter.otlp.OtlpGrpcSpanExporter;
+import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.extension.trace.propagation.B3Propagator;
 import io.opentelemetry.extension.trace.propagation.TraceMultiPropagator;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,9 +34,9 @@ public class OpenTelemetryConfiguration {
     private static final Map<Propagator, TextMapPropagator> PROPAGATORS =
         new HashMap<Propagator, TextMapPropagator>() {
           {
-            put(Propagator.TRACE_CONTEXT, HttpTraceContext.getInstance());
-            put(Propagator.B3, B3Propagator.builder().injectMultipleHeaders().build());
-            put(Propagator.B3_MULTI, B3Propagator.getInstance());
+            put(Propagator.TRACE_CONTEXT, W3CTraceContextPropagator.getInstance());
+            put(Propagator.B3, B3Propagator.getInstance());
+            put(Propagator.B3_MULTI, B3Propagator.builder().injectMultipleHeaders().build());
             put(Propagator.BAGGAGE, W3CBaggagePropagator.getInstance());
           }
         };
@@ -118,51 +115,28 @@ public class OpenTelemetryConfiguration {
         }
       }
 
-      final DefaultContextPropagators.Builder builder = DefaultContextPropagators.builder();
+      List<TextMapPropagator> textMapPropagators = new ArrayList<>();
       if (propagators.remove(Propagator.BAGGAGE)) {
-        builder.addTextMapPropagator(W3CBaggagePropagator.getInstance());
+        textMapPropagators.add(W3CBaggagePropagator.getInstance());
       }
       if (propagators.size() == 1) {
-        builder.addTextMapPropagator(PROPAGATORS.get(propagators.get(0)));
+        textMapPropagators.add(PROPAGATORS.get(propagators.get(0)));
       } else {
-        TraceMultiPropagator.Builder multiPropagatorBuilder = TraceMultiPropagator.builder();
+        List<TextMapPropagator> multiPropagators = new ArrayList<>();
         for (Propagator propagator : propagators) {
-          multiPropagatorBuilder.addPropagator(PROPAGATORS.get(propagator));
+          multiPropagators.add(PROPAGATORS.get(propagator));
         }
-        builder.addTextMapPropagator(multiPropagatorBuilder.build());
+        textMapPropagators.add(TraceMultiPropagator.create(multiPropagators));
       }
 
-      setGlobalPropagators(builder.build());
+      OpenTelemetry.setGlobalPropagators(
+          ContextPropagators.create(
+              TextMapPropagator.composite(textMapPropagators)));
 
       return OtlpGrpcSpanExporter.builder()
           .readSystemProperties()
           .readEnvironmentVariables()
           .build();
-    }
-
-    // Workaround https://github.com/open-telemetry/opentelemetry-java/pull/2096
-    public static void setGlobalPropagators(ContextPropagators propagators) {
-      OpenTelemetry.set(
-          OpenTelemetrySdk.builder()
-              .setResource(OpenTelemetrySdk.get().getResource())
-              .setClock(OpenTelemetrySdk.get().getClock())
-              .setMeterProvider(OpenTelemetry.getGlobalMeterProvider())
-              .setTracerProvider(unobfuscate(OpenTelemetry.getGlobalTracerProvider()))
-              .setPropagators(propagators)
-              .build());
-    }
-
-    private static TracerProvider unobfuscate(TracerProvider tracerProvider) {
-      if (tracerProvider.getClass().getName().endsWith("TracerSdkProvider")) {
-        return tracerProvider;
-      }
-      try {
-        Method unobfuscate = tracerProvider.getClass().getDeclaredMethod("unobfuscate");
-        unobfuscate.setAccessible(true);
-        return (TracerProvider) unobfuscate.invoke(tracerProvider);
-      } catch (Throwable t) {
-        return tracerProvider;
-      }
     }
 
     /**

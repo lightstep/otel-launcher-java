@@ -30,7 +30,7 @@
     <dependency>
       <groupId>com.github.oshi</groupId>
       <artifactId>oshi-core</artifactId>
-      <version>5.3.5</version>
+      <version>5.3.6</version>
     </dependency>
     <dependency>
       <groupId>io.opentelemetry.instrumentation</groupId>
@@ -70,7 +70,7 @@
                     <Agent-Class>com.lightstep.opentelemetry.agent.LightstepBootstrap</Agent-Class>
                     <Premain-Class>com.lightstep.opentelemetry.agent.LightstepBootstrap
                     </Premain-Class>
-                    <Implementation-Version>0.12.1</Implementation-Version>
+                    <Implementation-Version>0.13.0</Implementation-Version>
                     <Can-Redefine-Classes>true</Can-Redefine-Classes>
                     <Can-Retransform-Classes>true</Can-Retransform-Classes>
                   </manifestEntries>

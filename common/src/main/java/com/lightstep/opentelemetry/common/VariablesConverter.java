@@ -147,6 +147,9 @@ public class VariablesConverter {
       // Disable metrics
       System.setProperty("otel.exporter", "otlp_span");
     }
+
+    // Disable oshi because we enable metrics manually
+    System.setProperty("otel.instrumentation.oshi.enabled", "false");
   }
 
   static boolean isValidToken(String token) {
@@ -173,7 +176,7 @@ public class VariablesConverter {
         .withMetricsEnabled(getMetricsEnabled()), true);
   }
 
-  private static boolean getMetricsEnabled() {
+  public static boolean getMetricsEnabled() {
     return Boolean.parseBoolean(getProperty(LS_METRICS_ENABLED, String.valueOf(
         DEFAULT_METRICS_ENABLED)));
   }
