@@ -82,15 +82,12 @@ Builder builder = OpenTelemetryConfiguration.newBuilder()
                       .setAccessToken("{your_access_token}")
                       .setSpanEndpoint("{lightstep_host}");
 
-// Instantiate the exporter
-OtlpGrpcSpanExporter exporter = builder.buildExporter();
+// Instantiate the openTelemetry
+OpenTelemetry openTelemetry = builder.buildOpenTelemetry();
 
-// Add Span Processor with exporter
-OpenTelemetrySdk.getGlobalTracerManagement()
-                      .addSpanProcessor(SimpleSpanProcessor.builder(exporter).build());
 
 // Get tracer
-Tracer tracer = OpenTelemetry.getGlobalTracer("instrumentation-library-name", "1.0.0");
+Tracer tracer = openTelemetry.get("instrumentation-library-name", "1.0.0");
 ```
 
 ### Logging
