@@ -91,7 +91,7 @@ public class OpenTelemetryConfiguration {
     /**
      * Constructs a new instance of the OpenTelemetry based on the builder's values.
      *
-     * @return a new exporter's instance
+     * @return a new OpenTelemetry instance
      */
     public OpenTelemetry buildOpenTelemetry() {
       VariablesConverter
