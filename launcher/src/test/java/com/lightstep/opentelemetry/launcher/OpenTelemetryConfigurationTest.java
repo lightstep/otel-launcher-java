@@ -14,7 +14,7 @@ public class OpenTelemetryConfigurationTest {
     Builder builder = OpenTelemetryConfiguration.newBuilder()
         .setServiceName("service-name")
         .setAccessToken(Strings.repeat("x", 32));
-    builder.buildExporter();
+    builder.buildOpenTelemetry();
     List<Propagator> propagators = builder.getPropagators();
     assertThat(propagators).hasSize(1);
     assertThat(propagators.get(0)).isEqualTo(Propagator.B3_MULTI);
@@ -26,7 +26,7 @@ public class OpenTelemetryConfigurationTest {
         .setServiceName("service-name")
         .setAccessToken(Strings.repeat("x", 32))
         .setPropagator(Propagator.TRACE_CONTEXT);
-    builder.buildExporter();
+    builder.buildOpenTelemetry();
     List<Propagator> propagators = builder.getPropagators();
     assertThat(propagators).hasSize(1);
     assertThat(propagators.get(0)).isEqualTo(Propagator.TRACE_CONTEXT);
@@ -40,7 +40,7 @@ public class OpenTelemetryConfigurationTest {
         .setPropagator(Propagator.TRACE_CONTEXT)
         .setPropagator(Propagator.B3_MULTI);
 
-    builder.buildExporter();
+    builder.buildOpenTelemetry();
     List<Propagator> propagators = builder.getPropagators();
     assertThat(propagators).hasSize(2);
     assertThat(propagators).containsOnly(Propagator.TRACE_CONTEXT, Propagator.B3_MULTI);
