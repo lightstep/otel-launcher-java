@@ -4,10 +4,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.google.common.base.Strings;
 import com.lightstep.opentelemetry.launcher.OpenTelemetryConfiguration.Builder;
+import io.opentelemetry.api.GlobalOpenTelemetry;
 import java.util.List;
+import org.junit.Before;
 import org.junit.Test;
 
 public class OpenTelemetryConfigurationTest {
+
+  @Before
+  public void before() {
+    GlobalOpenTelemetry.resetForTest();
+    System.clearProperty("otel.propagators");
+  }
 
   @Test
   public void testPropagators_Default() {

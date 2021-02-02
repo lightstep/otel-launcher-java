@@ -4,20 +4,11 @@ import com.lightstep.opentelemetry.common.VariablesConverter;
 import com.lightstep.opentelemetry.common.VariablesConverter.Configuration;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.api.baggage.propagation.W3CBaggagePropagator;
-import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
-import io.opentelemetry.context.propagation.ContextPropagators;
-import io.opentelemetry.context.propagation.TextMapPropagator;
-import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
-import io.opentelemetry.extension.trace.propagation.B3Propagator;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.trace.SdkTracerProvider;
-import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import io.opentelemetry.sdk.autoconfigure.OpenTelemetrySdkAutoConfiguration;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class OpenTelemetryConfiguration {
   private static final Logger logger = Logger.getLogger(OpenTelemetryConfiguration.class.getName());
@@ -28,19 +19,8 @@ public class OpenTelemetryConfiguration {
     private String serviceVersion;
     private String spanEndpoint;
     private String resourceAttributes;
-    private boolean insecureTransport;
-
     private final List<Propagator> propagators = new ArrayList<>();
 
-    private static final Map<Propagator, TextMapPropagator> PROPAGATORS =
-        new HashMap<Propagator, TextMapPropagator>() {
-          {
-            put(Propagator.TRACE_CONTEXT, W3CTraceContextPropagator.getInstance());
-            put(Propagator.B3, B3Propagator.getInstance());
-            put(Propagator.B3_MULTI, B3Propagator.builder().injectMultipleHeaders().build());
-            put(Propagator.BAGGAGE, W3CBaggagePropagator.getInstance());
-          }
-        };
 
     private Builder() {
       readEnvVariablesAndSystemProperties();
@@ -83,26 +63,12 @@ public class OpenTelemetryConfiguration {
       return this;
     }
 
-    public Builder useInsecureTransport(boolean insecureTransport) {
-      this.insecureTransport = insecureTransport;
-      return this;
-    }
-
     /**
      * Constructs a new instance of the OpenTelemetry based on the builder's values.
      *
      * @return a new OpenTelemetry instance
      */
     public OpenTelemetry buildOpenTelemetry() {
-      VariablesConverter
-          .setSystemProperties(new Configuration()
-              .withSpanEndpoint(spanEndpoint)
-              .withInsecureTransport(insecureTransport)
-              .withAccessToken(accessToken)
-              .withServiceName(serviceName)
-              .withServiceVersion(serviceVersion)
-              .withResourceAttributes(resourceAttributes), false);
-
       if (propagators.isEmpty()) {
         String propagatorFromEnv = VariablesConverter.getPropagator();
         String[] propagatorsArray = propagatorFromEnv.split("\\s*,\\s*");
@@ -116,26 +82,17 @@ public class OpenTelemetryConfiguration {
         }
       }
 
-      List<TextMapPropagator> textMapPropagators = new ArrayList<>();
-      for (Propagator propagator : propagators) {
-        textMapPropagators.add(PROPAGATORS.get(propagator));
-      }
+      VariablesConverter
+          .setSystemProperties(new Configuration()
+              .withSpanEndpoint(spanEndpoint)
+              .withAccessToken(accessToken)
+              .withServiceName(serviceName)
+              .withServiceVersion(serviceVersion)
+              .withPropagators(
+                  propagators.stream().map(Propagator::label).collect(Collectors.joining(",")))
+              .withResourceAttributes(resourceAttributes), false);
 
-      final OtlpGrpcSpanExporter otlpGrpcSpanExporter = OtlpGrpcSpanExporter.builder()
-          .readSystemProperties()
-          .readEnvironmentVariables()
-          .build();
-
-      SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
-          .addSpanProcessor(
-              BatchSpanProcessor.builder(otlpGrpcSpanExporter).build())
-          .build();
-
-      return OpenTelemetrySdk.builder()
-          .setTracerProvider(sdkTracerProvider)
-          .setPropagators(
-              ContextPropagators.create(TextMapPropagator.composite(textMapPropagators)))
-          .build();
+      return OpenTelemetrySdkAutoConfiguration.initialize();
     }
 
     /**
@@ -149,7 +106,6 @@ public class OpenTelemetryConfiguration {
       this.accessToken = VariablesConverter.getAccessToken();
       this.serviceName = VariablesConverter.getServiceName();
       this.serviceVersion = VariablesConverter.getServiceVersion();
-      this.insecureTransport = VariablesConverter.useInsecureTransport();
       this.spanEndpoint = VariablesConverter.getSpanEndpoint();
       this.resourceAttributes = VariablesConverter.getResourceAttributes();
     }

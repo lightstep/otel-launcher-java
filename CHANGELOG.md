@@ -1,5 +1,9 @@
 <a name="Pending Release"></a>
 ## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.14.0...master)
+* Use OpenTelemetry Java API version 0.15.0
+* Use OpenTelemetry Java Instrumentation version 0.15.0
+* Remove otel.exporter.otlp.span.insecure system property and OTEL_EXPORTER_OTLP_SPAN_INSECURE environment variable
+* Require span endpoint to start with http:// or https://
 
 <a name="0.14.0"></a>
 ## [0.14.0](https://github.com/lightstep/otel-launcher-java/compare/0.13.1...0.14.0)

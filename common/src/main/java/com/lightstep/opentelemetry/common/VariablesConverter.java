@@ -8,10 +8,9 @@ import java.util.logging.Logger;
 public class VariablesConverter {
   private static final Logger logger = Logger.getLogger(VariablesConverter.class.getName());
 
-  public static final String DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "ingest.lightstep.com";
-  public static final String DEFAULT_OTEL_EXPORTER_OTLP_METRIC_ENDPOINT = "ingest.lightstep.com";
+  public static final String DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "https://ingest.lightstep.com";
+  public static final String DEFAULT_OTEL_EXPORTER_OTLP_METRIC_ENDPOINT = "https://ingest.lightstep.com";
   public static final long DEFAULT_LS_DEADLINE_MILLIS = 30000;
-  public static final boolean DEFAULT_OTEL_EXPORTER_OTLP_SPAN_INSECURE = false;
   public static final boolean DEFAULT_METRICS_ENABLED = false;
   public static final String DEFAULT_PROPAGATOR = "b3multi";
   public static final String DEFAULT_OTEL_LOG_LEVEL = "info";
@@ -23,7 +22,6 @@ public class VariablesConverter {
   static final String OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT";
   static final String OTEL_EXPORTER_OTLP_METRIC_ENDPOINT = "OTEL_EXPORTER_OTLP_METRIC_ENDPOINT";
   static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
-  static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
   static final String OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL";
   static final String OTEL_RESOURCE_ATTRIBUTES = "OTEL_RESOURCE_ATTRIBUTES";
   static final String OTEL_IMR_EXPORT_INTERVAL = "OTEL_IMR_EXPORT_INTERVAL";
@@ -37,6 +35,13 @@ public class VariablesConverter {
       } else {
         msg += " or call setSpanEndpoint in the code.";
       }
+      logger.severe(msg);
+      throw new IllegalStateException(msg);
+    }
+
+    if (!configuration.spanEndpoint.toLowerCase().startsWith("http://")
+        && !configuration.spanEndpoint.toLowerCase().startsWith("https://")) {
+      String msg = "Invalid configuration: span endpoint should start with http:// or https://.";
       logger.severe(msg);
       throw new IllegalStateException(msg);
     }
@@ -75,13 +80,10 @@ public class VariablesConverter {
       throw new IllegalStateException(msg);
     }
 
-    System.setProperty("otel.exporter.otlp.span.endpoint", configuration.spanEndpoint);
+    System.setProperty("otel.exporter.otlp.endpoint", configuration.spanEndpoint);
     System
-        .setProperty("otel.exporter.otlp.span.insecure",
-            String.valueOf(configuration.insecureTransport));
-    System
-        .setProperty("otel.exporter.otlp.span.timeout", String.valueOf(DEFAULT_LS_DEADLINE_MILLIS));
-    System.setProperty("otel.exporter.otlp.span.headers",
+        .setProperty("otel.exporter.otlp.timeout", String.valueOf(DEFAULT_LS_DEADLINE_MILLIS));
+    System.setProperty("otel.exporter.otlp.headers",
         "lightstep-access-token=" + configuration.accessToken);
     if (configuration.propagators != null) {
       System.setProperty("otel.propagators", configuration.propagators);
@@ -137,15 +139,14 @@ public class VariablesConverter {
         System
             .setProperty("otel.imr.export.interval", String.valueOf(configuration.exportInterval));
       }
-      System.setProperty("otel.exporter.otlp.metric.endpoint", configuration.metricEndpoint);
-      System.setProperty("otel.exporter.otlp.metric.insecure",
-          String.valueOf(configuration.insecureTransport));
-      System.setProperty("otel.exporter.otlp.metric.headers",
+      System.setProperty("otel.exporter.otlp.endpoint", configuration.metricEndpoint);
+      System.setProperty("otel.exporter.otlp.headers",
           "lightstep-access-token=" + configuration.accessToken);
       System.setProperty("otel.exporter.otlp.timeout", String.valueOf(DEFAULT_LS_DEADLINE_MILLIS));
     } else {
       // Disable metrics
-      System.setProperty("otel.exporter", "otlp_span");
+      System.setProperty("otel.trace.exporter", "otlp_span");
+      System.setProperty("otel.metrics.exporter", "");
     }
 
     // Disable oshi because we enable metrics manually
@@ -164,7 +165,6 @@ public class VariablesConverter {
   public static void convertFromEnv() {
     setSystemProperties(new Configuration()
         .withSpanEndpoint(getSpanEndpoint())
-        .withInsecureTransport(useInsecureTransport())
         .withAccessToken(getAccessToken())
         .withPropagators(getPropagator())
         .withLogLevel(getLogLevel())
@@ -218,11 +218,6 @@ public class VariablesConverter {
     return getProperty(OTEL_PROPAGATORS, DEFAULT_PROPAGATOR);
   }
 
-  public static boolean useInsecureTransport() {
-    return Boolean.parseBoolean(getProperty(OTEL_EXPORTER_OTLP_SPAN_INSECURE, String.valueOf(
-        DEFAULT_OTEL_EXPORTER_OTLP_SPAN_INSECURE)));
-  }
-
   // Internal usage, do not need to expose publicly.
   public static String getResourceAttributes() {
     return getProperty(OTEL_RESOURCE_ATTRIBUTES, null);
@@ -246,7 +241,6 @@ public class VariablesConverter {
 
   public static class Configuration {
     private String spanEndpoint;
-    private boolean insecureTransport;
     private String accessToken;
     private String propagators;
     private String logLevel;
@@ -290,11 +284,6 @@ public class VariablesConverter {
 
     public Configuration withResourceAttributes(String resourceAttributes) {
       this.resourceAttributes = resourceAttributes;
-      return this;
-    }
-
-    public Configuration withInsecureTransport(boolean insecureTransport) {
-      this.insecureTransport = insecureTransport;
       return this;
     }
 

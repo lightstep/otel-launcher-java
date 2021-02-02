@@ -5,7 +5,6 @@ import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.Span.Kind;
 import io.opentelemetry.api.trace.Tracer;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -31,9 +30,8 @@ public class Main {
     span.end();
 
     // wait some seconds
-    TimeUnit.SECONDS.sleep(15);
+    TimeUnit.SECONDS.sleep(30);
 
-    OpenTelemetrySdk.getGlobalTracerManagement().shutdown();
     System.out.println("Bye");
   }
 
@@ -43,7 +41,8 @@ public class Main {
 
   private static Properties loadConfig()
       throws IOException {
-    FileInputStream fs = new FileInputStream("config.properties");
+    FileInputStream fs = new FileInputStream(
+        "/Users/malafes/projects_lightstep/otel-launcher-java/examples/launcher/config.properties");
     Properties config = new Properties();
     config.load(fs);
     return config;
