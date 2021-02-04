@@ -30,7 +30,6 @@ public class VariablesConverterTest {
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_LOG_LEVEL));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_ENDPOINT));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_PROPAGATORS));
-    System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_INSECURE));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES));
   }
 
@@ -200,31 +199,6 @@ public class VariablesConverterTest {
     Mockito.when(System.getenv(VariablesConverter.OTEL_PROPAGATORS))
         .thenReturn("propagator-env");
     assertEquals("propagator-env", VariablesConverter.getPropagator());
-  }
-
-  @Test
-  public void useInsecureTransport_Default() {
-    assertEquals(VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_SPAN_INSECURE,
-        VariablesConverter.useInsecureTransport());
-  }
-
-  @Test
-  public void useInsecureTransport_fromSystemProperty() {
-    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_INSECURE),
-        "true");
-    assertTrue(VariablesConverter.useInsecureTransport());
-
-    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_INSECURE),
-        "false");
-    assertFalse(VariablesConverter.useInsecureTransport());
-  }
-
-  @Test
-  public void useInsecureTransport_fromEnvVariable() {
-    mockSystem();
-    Mockito.when(System.getenv(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_INSECURE))
-        .thenReturn("true");
-    assertTrue(VariablesConverter.useInsecureTransport());
   }
 
   @Test
