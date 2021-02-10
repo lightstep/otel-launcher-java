@@ -145,7 +145,7 @@ public class VariablesConverter {
       System.setProperty("otel.exporter.otlp.timeout", String.valueOf(DEFAULT_LS_DEADLINE_MILLIS));
     } else {
       // Disable metrics
-      System.setProperty("otel.trace.exporter", "otlp_span");
+      System.setProperty("otel.traces.exporter", "otlp_span");
       System.setProperty("otel.metrics.exporter", "");
     }
 
