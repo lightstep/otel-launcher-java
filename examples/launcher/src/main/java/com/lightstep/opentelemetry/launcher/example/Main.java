@@ -3,7 +3,7 @@ package com.lightstep.opentelemetry.launcher.example;
 import com.lightstep.opentelemetry.launcher.OpenTelemetryConfiguration;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.Span;
-import io.opentelemetry.api.trace.Span.Kind;
+import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.api.trace.Tracer;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class Main {
         .buildOpenTelemetry();
 
     Tracer tracer = openTelemetry.getTracer("LightstepExample");
-    Span span = tracer.spanBuilder("start example").setSpanKind(Kind.CLIENT).startSpan();
+    Span span = tracer.spanBuilder("start example").setSpanKind(SpanKind.CLIENT).startSpan();
     span.setAttribute("Attribute 1", "Value 1");
     span.addEvent("Event 0");
     // execute my use case - here we simulate a wait
@@ -41,8 +41,7 @@ public class Main {
 
   private static Properties loadConfig()
       throws IOException {
-    FileInputStream fs = new FileInputStream(
-        "/Users/malafes/projects_lightstep/otel-launcher-java/examples/launcher/config.properties");
+    FileInputStream fs = new FileInputStream("config.properties");
     Properties config = new Properties();
     config.load(fs);
     return config;
