@@ -70,7 +70,7 @@ OpenTelemetryConfiguration.newBuilder()
                       .install();
 
 // Get tracer
-Tracer tracer = OpenTelemetry.getGlobalTracer("instrumentation-library-name", "1.0.0");
+Tracer tracer = GlobalOpenTelemetry.getTracer("instrumentation-library-name", "1.0.0");
 ```
 
 #### Manual configuration
