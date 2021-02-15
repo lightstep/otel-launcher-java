@@ -4,7 +4,6 @@
 ```shell script
 export LS_ACCESS_TOKEN=your-token
 export LS_SERVICE_NAME=your-service-name
-export OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
 
 make buid
 make run
@@ -17,13 +16,13 @@ make run
     <dependency>
         <groupId>io.opentelemetry</groupId>
         <artifactId>opentelemetry-extension-annotations</artifactId>
-        <version>0.14.1</version>
+        <version>0.16.0</version>
     </dependency>
 
     <dependency>
         <groupId>io.opentelemetry</groupId>
         <artifactId>opentelemetry-api</artifactId>
-        <version>0.14.1</version>
+        <version>0.16.0</version>
     </dependency>
     ```
 
@@ -39,7 +38,7 @@ make run
 
     1. Manually get tracer and create span
         ```java
-        Tracer tracer = OpenTelemetry.getGlobalTracer(System.getenv("LS_SERVICE_NAME"));
+        Tracer tracer = GlobalOpenTelemetry.getTracer(System.getenv("LS_SERVICE_NAME"));
         Span span = tracer.spanBuilder("name").startSpan();
         span.end();
         ```
