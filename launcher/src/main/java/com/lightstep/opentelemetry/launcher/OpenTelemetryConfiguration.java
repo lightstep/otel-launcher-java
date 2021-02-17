@@ -19,6 +19,8 @@ public class OpenTelemetryConfiguration {
     private String serviceVersion;
     private String spanEndpoint;
     private String resourceAttributes;
+    @Deprecated
+    private boolean insecureTransport;
     private final List<Propagator> propagators = new ArrayList<>();
 
 
@@ -64,6 +66,15 @@ public class OpenTelemetryConfiguration {
     }
 
     /**
+     * Deprecated, instead set endpoint starting with http:// or https://
+     */
+    @Deprecated
+    public Builder useInsecureTransport(boolean insecureTransport) {
+      this.insecureTransport = insecureTransport;
+      return this;
+    }
+
+    /**
      * Constructs a new instance of the OpenTelemetry based on the builder's values.
      *
      * @return a new OpenTelemetry instance
@@ -85,6 +96,7 @@ public class OpenTelemetryConfiguration {
       VariablesConverter
           .setSystemProperties(new Configuration()
               .withSpanEndpoint(spanEndpoint)
+              .withInsecureTransport(insecureTransport)
               .withAccessToken(accessToken)
               .withServiceName(serviceName)
               .withServiceVersion(serviceVersion)
@@ -108,6 +120,7 @@ public class OpenTelemetryConfiguration {
       this.serviceVersion = VariablesConverter.getServiceVersion();
       this.spanEndpoint = VariablesConverter.getSpanEndpoint();
       this.resourceAttributes = VariablesConverter.getResourceAttributes();
+      this.insecureTransport = VariablesConverter.useInsecureTransport();
     }
 
     List<Propagator> getPropagators() {

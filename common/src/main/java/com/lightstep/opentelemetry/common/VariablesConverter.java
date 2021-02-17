@@ -12,6 +12,8 @@ public class VariablesConverter {
   public static final String DEFAULT_OTEL_EXPORTER_OTLP_METRIC_ENDPOINT = "https://ingest.lightstep.com";
   public static final long DEFAULT_LS_DEADLINE_MILLIS = 30000;
   public static final boolean DEFAULT_METRICS_ENABLED = false;
+  @Deprecated
+  public static final boolean DEFAULT_OTEL_EXPORTER_OTLP_SPAN_INSECURE = false;
   public static final String DEFAULT_PROPAGATOR = "b3multi";
   public static final String DEFAULT_OTEL_LOG_LEVEL = "info";
 
@@ -22,6 +24,8 @@ public class VariablesConverter {
   static final String OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT";
   static final String OTEL_EXPORTER_OTLP_METRIC_ENDPOINT = "OTEL_EXPORTER_OTLP_METRIC_ENDPOINT";
   static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
+  @Deprecated
+  static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
   static final String OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL";
   static final String OTEL_RESOURCE_ATTRIBUTES = "OTEL_RESOURCE_ATTRIBUTES";
   static final String OTEL_IMR_EXPORT_INTERVAL = "OTEL_IMR_EXPORT_INTERVAL";
@@ -41,9 +45,13 @@ public class VariablesConverter {
 
     if (!configuration.spanEndpoint.toLowerCase().startsWith("http://")
         && !configuration.spanEndpoint.toLowerCase().startsWith("https://")) {
-      String msg = "Invalid configuration: span endpoint should start with http:// or https://.";
-      logger.severe(msg);
-      throw new IllegalStateException(msg);
+
+      // to keep backward compatibility:
+      if (configuration.insecureTransport) {
+        configuration.spanEndpoint = "http://" + configuration.spanEndpoint;
+      } else {
+        configuration.spanEndpoint = "https://" + configuration.spanEndpoint;
+      }
     }
 
     if (configuration.serviceName == null || configuration.serviceName.isEmpty()) {
@@ -165,6 +173,7 @@ public class VariablesConverter {
   public static void convertFromEnv() {
     setSystemProperties(new Configuration()
         .withSpanEndpoint(getSpanEndpoint())
+        .withInsecureTransport(useInsecureTransport())
         .withAccessToken(getAccessToken())
         .withPropagators(getPropagator())
         .withLogLevel(getLogLevel())
@@ -218,6 +227,11 @@ public class VariablesConverter {
     return getProperty(OTEL_PROPAGATORS, DEFAULT_PROPAGATOR);
   }
 
+  public static boolean useInsecureTransport() {
+    return Boolean.parseBoolean(getProperty(OTEL_EXPORTER_OTLP_SPAN_INSECURE, String.valueOf(
+        DEFAULT_OTEL_EXPORTER_OTLP_SPAN_INSECURE)));
+  }
+
   // Internal usage, do not need to expose publicly.
   public static String getResourceAttributes() {
     return getProperty(OTEL_RESOURCE_ATTRIBUTES, null);
@@ -241,6 +255,8 @@ public class VariablesConverter {
 
   public static class Configuration {
     private String spanEndpoint;
+    @Deprecated
+    private boolean insecureTransport;
     private String accessToken;
     private String propagators;
     private String logLevel;
@@ -294,6 +310,12 @@ public class VariablesConverter {
 
     public Configuration withExportInterval(Long exportInterval) {
       this.exportInterval = exportInterval;
+      return this;
+    }
+
+    @Deprecated
+    public Configuration withInsecureTransport(boolean insecureTransport) {
+      this.insecureTransport = insecureTransport;
       return this;
     }
 
