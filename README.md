@@ -24,7 +24,7 @@ export LS_ACCESS_TOKEN=your-token
 
 java -javaagent:path/to/lightstep-opentelemetry-javaagent-<version>.jar \
      -Dls.service.name=your-service-name
-     -Dotel.exporter.otlp.span.endpoint=ingest.lightstep.com \
+     -Dotel.exporter.otlp.span.endpoint=https://ingest.lightstep.com \
      -jar myapp.jar
 ```
 
@@ -33,7 +33,7 @@ java -javaagent:path/to/lightstep-opentelemetry-javaagent-<version>.jar \
 ```shell script
 export LS_ACCESS_TOKEN=your-token
 export LS_SERVICE_NAME=your-service-name
-export OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
+export OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com
 
 java -javaagent:path/to/lightstep-opentelemetry-javaagent-<version>.jar \
      -jar myapp.jar
