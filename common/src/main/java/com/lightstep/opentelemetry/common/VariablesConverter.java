@@ -46,6 +46,7 @@ public class VariablesConverter {
     if (!configuration.spanEndpoint.toLowerCase().startsWith("http://")
         && !configuration.spanEndpoint.toLowerCase().startsWith("https://")) {
 
+      // to keep backward compatibility:
       if (configuration.insecureTransport) {
         configuration.spanEndpoint = "http://" + configuration.spanEndpoint;
       } else {
