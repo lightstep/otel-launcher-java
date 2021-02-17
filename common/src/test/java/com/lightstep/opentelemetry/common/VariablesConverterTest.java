@@ -66,6 +66,39 @@ public class VariablesConverterTest {
     assertTrue(resourceAttributes.contains("service.name=service-1"));
     assertTrue(resourceAttributes.contains("host.name=my-host"));
     assertFalse(resourceAttributes.contains("host.name=" + hostname));
+
+    assertEquals(VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT, System
+        .getProperty("otel.exporter.otlp.endpoint"));
+  }
+
+  @Test
+  public void convertFromEnv_InsecureFalse() {
+    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME), "service-1");
+    System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
+        StringUtils.repeat("s", 32));
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_ENDPOINT),
+        "endpoint");
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_INSECURE),
+        "false");
+
+    VariablesConverter.convertFromEnv();
+
+    assertEquals("https://endpoint", System.getProperty("otel.exporter.otlp.endpoint"));
+  }
+
+  @Test
+  public void convertFromEnv_InsecureTrue() {
+    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME), "service-1");
+    System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
+        StringUtils.repeat("s", 32));
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_ENDPOINT),
+        "endpoint");
+    System
+        .setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_INSECURE), "true");
+
+    VariablesConverter.convertFromEnv();
+
+    assertEquals("http://endpoint", System.getProperty("otel.exporter.otlp.endpoint"));
   }
 
   @Test
