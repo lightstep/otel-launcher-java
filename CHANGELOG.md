@@ -1,5 +1,8 @@
 <a name="Pending Release"></a>
-## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.14.0...master)
+## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.16.0...master)
+
+<a name="0.16.0"></a>
+## [0.16.0](https://github.com/lightstep/otel-launcher-java/compare/0.14.0...0.16.0)
 * Use OpenTelemetry Java API version 0.16.0
 * Use OpenTelemetry Java Instrumentation version 0.16.0
 * Deprecate otel.exporter.otlp.span.insecure system property and OTEL_EXPORTER_OTLP_SPAN_INSECURE environment variable
