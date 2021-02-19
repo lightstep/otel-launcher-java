@@ -130,6 +130,7 @@ public class VariablesConverter {
       }
     }
 
+    System.setProperty("otel.traces.exporter", "otlp");
     if (configuration.metricsEnabled) {
       if (configuration.metricEndpoint == null || configuration.metricEndpoint.isEmpty()) {
         String msg = "Invalid configuration: metric endpoint missing. Set environment variable "
@@ -151,10 +152,10 @@ public class VariablesConverter {
       System.setProperty("otel.exporter.otlp.headers",
           "lightstep-access-token=" + configuration.accessToken);
       System.setProperty("otel.exporter.otlp.timeout", String.valueOf(DEFAULT_LS_DEADLINE_MILLIS));
+      System.setProperty("otel.metrics.exporter", "otlp");
     } else {
       // Disable metrics
-      System.setProperty("otel.traces.exporter", "otlp_span");
-      System.setProperty("otel.metrics.exporter", "");
+      System.setProperty("otel.metrics.exporter", "none");
     }
 
     // Disable oshi because we enable metrics manually
