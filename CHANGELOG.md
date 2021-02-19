@@ -1,5 +1,5 @@
 <a name="Pending Release"></a>
-## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.16.0...master)
+## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.17.0...master)
 
 <a name="0.17.0"></a>
 ## [0.17.0](https://github.com/lightstep/otel-launcher-java/compare/0.16.0...0.17.0)
