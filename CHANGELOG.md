@@ -1,5 +1,8 @@
 <a name="Pending Release"></a>
 ## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.16.0...master)
+* Use OpenTelemetry Java API version 0.17.1
+* Use OpenTelemetry Java Instrumentation version 0.17.0
+* Add support for ottrace propagator by launcher
 
 <a name="0.16.0"></a>
 ## [0.16.0](https://github.com/lightstep/otel-launcher-java/compare/0.14.0...0.16.0)
