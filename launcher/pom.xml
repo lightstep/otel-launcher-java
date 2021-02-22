@@ -5,13 +5,13 @@
   <parent>
     <groupId>com.lightstep.opentelemetry</groupId>
     <artifactId>opentelemetry-parent</artifactId>
-    <version>0.17.0</version>
+    <version>0.17.1</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>opentelemetry-launcher</artifactId>
-  <version>0.17.0</version>
+  <version>0.17.1</version>
 
   <name>Lightstep OpenTelemetry Launcher</name>
   <description>Lightstep OpenTelemetry Launcher</description>
@@ -20,7 +20,7 @@
     <dependency>
       <groupId>com.lightstep.opentelemetry</groupId>
       <artifactId>opentelemetry-common</artifactId>
-      <version>0.17.0</version>
+      <version>0.17.1</version>
     </dependency>
     <dependency>
       <groupId>io.opentelemetry</groupId>
