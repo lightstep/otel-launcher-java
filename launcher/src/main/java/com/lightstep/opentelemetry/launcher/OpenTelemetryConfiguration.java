@@ -2,7 +2,6 @@ package com.lightstep.opentelemetry.launcher;
 
 import com.lightstep.opentelemetry.common.VariablesConverter;
 import com.lightstep.opentelemetry.common.VariablesConverter.Configuration;
-import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.sdk.autoconfigure.OpenTelemetrySdkAutoConfiguration;
 import java.util.ArrayList;
@@ -111,7 +110,7 @@ public class OpenTelemetryConfiguration {
      * Installs exporter into tracer SDK default provider with batching span processor.
      */
     public void install() {
-      GlobalOpenTelemetry.set(buildOpenTelemetry());
+      buildOpenTelemetry();
     }
 
     private void readEnvVariablesAndSystemProperties() {

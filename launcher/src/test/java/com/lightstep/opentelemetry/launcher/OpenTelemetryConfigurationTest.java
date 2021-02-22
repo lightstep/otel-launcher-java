@@ -5,6 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.google.common.base.Strings;
 import com.lightstep.opentelemetry.launcher.OpenTelemetryConfiguration.Builder;
 import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.context.propagation.TextMapPropagator;
+import io.opentelemetry.extension.trace.propagation.B3Propagator;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +18,19 @@ public class OpenTelemetryConfigurationTest {
   public void before() {
     GlobalOpenTelemetry.resetForTest();
     System.clearProperty("otel.propagators");
+  }
+
+  @Test
+  public void testInstall() {
+    OpenTelemetryConfiguration.newBuilder()
+        .setServiceName("service-name")
+        .setAccessToken(Strings.repeat("x", 32))
+        .install();
+
+    OpenTelemetry openTelemetry = GlobalOpenTelemetry.get();
+    TextMapPropagator propagator = openTelemetry.getPropagators()
+        .getTextMapPropagator();
+    assertThat(propagator).isInstanceOf(B3Propagator.class);
   }
 
   @Test
