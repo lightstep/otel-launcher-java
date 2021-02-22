@@ -1,6 +1,9 @@
 <a name="Pending Release"></a>
-## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.17.0...master)
-* Fix manual launcher install 
+## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.17.1...master)
+
+<a name="0.17.1"></a>
+## [0.17.1](https://github.com/lightstep/otel-launcher-java/compare/0.17.0...0.17.1)
+* Fix manual launcher install
 
 <a name="0.17.0"></a>
 ## [0.17.0](https://github.com/lightstep/otel-launcher-java/compare/0.16.0...0.17.0)
