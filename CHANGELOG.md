@@ -1,5 +1,6 @@
 <a name="Pending Release"></a>
 ## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/0.17.1...master)
+* Remove the version number from agent jar file
 
 <a name="0.17.1"></a>
 ## [0.17.1](https://github.com/lightstep/otel-launcher-java/compare/0.17.0...0.17.1)
