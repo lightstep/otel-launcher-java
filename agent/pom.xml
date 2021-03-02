@@ -60,7 +60,7 @@
                 </filter>
               </filters>
               <outputFile>
-                ${project.build.directory}/lightstep-opentelemetry-javaagent-${project.version}.jar
+                ${project.build.directory}/lightstep-opentelemetry-javaagent.jar
               </outputFile>
               <transformers>
                 <transformer implementation=
