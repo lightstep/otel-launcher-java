@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 public class VariablesConverter {
   private static final Logger logger = Logger.getLogger(VariablesConverter.class.getName());
 
-  public static final String DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "https://ingest.lightstep.com";
+  public static final String DEFAULT_OTEL_EXPORTER_OTLP_ENDPOINT = "https://ingest.lightstep.com";
   public static final String DEFAULT_OTEL_EXPORTER_OTLP_METRIC_ENDPOINT = "https://ingest.lightstep.com";
   public static final long DEFAULT_LS_DEADLINE_MILLIS = 30000;
   public static final boolean DEFAULT_METRICS_ENABLED = false;
@@ -21,7 +21,9 @@ public class VariablesConverter {
   static final String LS_SERVICE_NAME = "LS_SERVICE_NAME";
   static final String LS_SERVICE_VERSION = "LS_SERVICE_VERSION";
   static final String LS_METRICS_ENABLED = "LS_METRICS_ENABLED";
+  @Deprecated
   static final String OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT";
+  static final String OTEL_EXPORTER_OTLP_ENDPOINT = "OTEL_EXPORTER_OTLP_ENDPOINT";
   static final String OTEL_EXPORTER_OTLP_METRIC_ENDPOINT = "OTEL_EXPORTER_OTLP_METRIC_ENDPOINT";
   static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
   @Deprecated
@@ -33,7 +35,7 @@ public class VariablesConverter {
   public static void setSystemProperties(Configuration configuration, boolean isAgent) {
     if (configuration.spanEndpoint == null || configuration.spanEndpoint.isEmpty()) {
       String msg = "Invalid configuration: span endpoint missing. Set environment variable "
-          + OTEL_EXPORTER_OTLP_SPAN_ENDPOINT;
+          + OTEL_EXPORTER_OTLP_ENDPOINT;
       if (isAgent) {
         msg += ".";
       } else {
@@ -168,7 +170,7 @@ public class VariablesConverter {
   }
 
   static boolean isTokenRequired(String spanEndpoint) {
-    return DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT.equals(spanEndpoint);
+    return DEFAULT_OTEL_EXPORTER_OTLP_ENDPOINT.equals(spanEndpoint);
   }
 
   public static void convertFromEnv() {
@@ -216,7 +218,8 @@ public class VariablesConverter {
   }
 
   public static String getSpanEndpoint() {
-    return getProperty(OTEL_EXPORTER_OTLP_SPAN_ENDPOINT, DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT);
+    return getProperty(OTEL_EXPORTER_OTLP_ENDPOINT,
+        getProperty(OTEL_EXPORTER_OTLP_SPAN_ENDPOINT, DEFAULT_OTEL_EXPORTER_OTLP_ENDPOINT));
   }
 
   public static String getMetricEndpoint() {

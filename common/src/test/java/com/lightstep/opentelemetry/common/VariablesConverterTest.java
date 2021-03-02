@@ -29,6 +29,8 @@ public class VariablesConverterTest {
     System.clearProperty(toSystemProperty(VariablesConverter.LS_SERVICE_VERSION));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_LOG_LEVEL));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_ENDPOINT));
+    System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_ENDPOINT));
+    System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_INSECURE));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_PROPAGATORS));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES));
   }
@@ -67,7 +69,7 @@ public class VariablesConverterTest {
     assertTrue(resourceAttributes.contains("host.name=my-host"));
     assertFalse(resourceAttributes.contains("host.name=" + hostname));
 
-    assertEquals(VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT, System
+    assertEquals(VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_ENDPOINT, System
         .getProperty("otel.exporter.otlp.endpoint"));
   }
 
@@ -76,7 +78,7 @@ public class VariablesConverterTest {
     System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME), "service-1");
     System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
         StringUtils.repeat("s", 32));
-    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_ENDPOINT),
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_ENDPOINT),
         "endpoint");
     System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_INSECURE),
         "false");
@@ -91,7 +93,7 @@ public class VariablesConverterTest {
     System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME), "service-1");
     System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
         StringUtils.repeat("s", 32));
-    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_ENDPOINT),
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_ENDPOINT),
         "endpoint");
     System
         .setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_INSECURE), "true");
@@ -115,7 +117,7 @@ public class VariablesConverterTest {
   @Test
   public void isTokenRequired() {
     assertTrue(VariablesConverter
-        .isTokenRequired(VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT));
+        .isTokenRequired(VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_ENDPOINT));
 
     assertFalse(VariablesConverter.isTokenRequired("localhost"));
   }
@@ -194,13 +196,13 @@ public class VariablesConverterTest {
 
   @Test
   public void getSpanEndpoint_Default() {
-    assertEquals(VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT,
+    assertEquals(VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_ENDPOINT,
         VariablesConverter.getSpanEndpoint());
   }
 
   @Test
   public void getSpanEndpoint_fromSystemProperty() {
-    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_ENDPOINT),
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_ENDPOINT),
         "endpoint-prop");
     assertEquals("endpoint-prop", VariablesConverter.getSpanEndpoint());
   }
@@ -208,7 +210,7 @@ public class VariablesConverterTest {
   @Test
   public void getSpanEndpoint_fromEnvVariable() {
     mockSystem();
-    Mockito.when(System.getenv(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_ENDPOINT))
+    Mockito.when(System.getenv(VariablesConverter.OTEL_EXPORTER_OTLP_ENDPOINT))
         .thenReturn("endpoint-env");
     assertEquals("endpoint-env", VariablesConverter.getSpanEndpoint());
   }

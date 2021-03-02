@@ -33,7 +33,7 @@ java -javaagent:path/to/lightstep-opentelemetry-javaagent.jar \
 ```shell script
 export LS_ACCESS_TOKEN=your-token
 export LS_SERVICE_NAME=your-service-name
-export OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com
+export OTEL_EXPORTER_OTLP_ENDPOINT=https://ingest.lightstep.com
 
 java -javaagent:path/to/lightstep-opentelemetry-javaagent.jar \
      -jar myapp.jar
@@ -103,7 +103,7 @@ Supported system properties and environmental variables:
 | ls.service.name                  | LS_SERVICE_NAME                  | Service name                                                                      |                      |                        
 | ls.service.version               | LS_SERVICE_VERSION               | Service version                                                                   |                      |                        
 | ls.access.token                  | LS_ACCESS_TOKEN                  | Token for Lightstep access                                                        |                      |                        
-| otel.exporter.otlp.span.endpoint | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Satellite URL                                                                     | https://ingest.lightstep.com |
+| otel.exporter.otlp.endpoint      | OTEL_EXPORTER_OTLP_ENDPOINT      | Satellite URL                                                                     | https://ingest.lightstep.com |
 | otel.propagators                 | OTEL_PROPAGATORS                 | Propagator                                                                        | b3multi              |
 | otel.log.level                   | OTEL_LOG_LEVEL                   | Log level for agent, to see more messages set to _debug_, to disable set to _off_ | info                 |
 | otel.resource.attributes         | OTEL_RESOURCE_ATTRIBUTES         | Comma separated key-value pairs                                                   |                      |
