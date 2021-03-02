@@ -9,7 +9,6 @@ public class VariablesConverter {
   private static final Logger logger = Logger.getLogger(VariablesConverter.class.getName());
 
   public static final String DEFAULT_OTEL_EXPORTER_OTLP_ENDPOINT = "https://ingest.lightstep.com";
-  public static final String DEFAULT_OTEL_EXPORTER_OTLP_METRIC_ENDPOINT = "https://ingest.lightstep.com";
   public static final long DEFAULT_LS_DEADLINE_MILLIS = 30000;
   public static final boolean DEFAULT_METRICS_ENABLED = false;
   @Deprecated
@@ -24,7 +23,6 @@ public class VariablesConverter {
   @Deprecated
   static final String OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT";
   static final String OTEL_EXPORTER_OTLP_ENDPOINT = "OTEL_EXPORTER_OTLP_ENDPOINT";
-  static final String OTEL_EXPORTER_OTLP_METRIC_ENDPOINT = "OTEL_EXPORTER_OTLP_METRIC_ENDPOINT";
   static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
   @Deprecated
   static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
@@ -134,26 +132,10 @@ public class VariablesConverter {
 
     System.setProperty("otel.traces.exporter", "otlp");
     if (configuration.metricsEnabled) {
-      if (configuration.metricEndpoint == null || configuration.metricEndpoint.isEmpty()) {
-        String msg = "Invalid configuration: metric endpoint missing. Set environment variable "
-            + OTEL_EXPORTER_OTLP_METRIC_ENDPOINT;
-        if (isAgent) {
-          msg += ".";
-        } else {
-          msg += " or call setMetricEndpoint in the code.";
-        }
-        logger.severe(msg);
-        throw new IllegalStateException(msg);
-      }
-
       if (configuration.exportInterval != null) {
         System
             .setProperty("otel.imr.export.interval", String.valueOf(configuration.exportInterval));
       }
-      System.setProperty("otel.exporter.otlp.endpoint", configuration.metricEndpoint);
-      System.setProperty("otel.exporter.otlp.headers",
-          "lightstep-access-token=" + configuration.accessToken);
-      System.setProperty("otel.exporter.otlp.timeout", String.valueOf(DEFAULT_LS_DEADLINE_MILLIS));
       System.setProperty("otel.metrics.exporter", "otlp");
     } else {
       // Disable metrics
@@ -183,7 +165,6 @@ public class VariablesConverter {
         .withServiceName(getServiceName())
         .withServiceVersion(getServiceVersion())
         .withResourceAttributes(getResourceAttributes())
-        .withMetricEndpoint(getMetricEndpoint())
         .withExportInterval(getExportInterval())
         .withMetricsEnabled(getMetricsEnabled()), true);
   }
@@ -220,11 +201,6 @@ public class VariablesConverter {
   public static String getSpanEndpoint() {
     return getProperty(OTEL_EXPORTER_OTLP_ENDPOINT,
         getProperty(OTEL_EXPORTER_OTLP_SPAN_ENDPOINT, DEFAULT_OTEL_EXPORTER_OTLP_ENDPOINT));
-  }
-
-  public static String getMetricEndpoint() {
-    return getProperty(OTEL_EXPORTER_OTLP_METRIC_ENDPOINT,
-        DEFAULT_OTEL_EXPORTER_OTLP_METRIC_ENDPOINT);
   }
 
   public static String getPropagator() {
@@ -269,7 +245,6 @@ public class VariablesConverter {
     private String resourceAttributes;
 
     private boolean metricsEnabled;
-    private String metricEndpoint;
     private Long exportInterval;
 
     public Configuration withSpanEndpoint(String spanEndpoint) {
@@ -304,11 +279,6 @@ public class VariablesConverter {
 
     public Configuration withResourceAttributes(String resourceAttributes) {
       this.resourceAttributes = resourceAttributes;
-      return this;
-    }
-
-    public Configuration withMetricEndpoint(String metricEndpoint) {
-      this.metricEndpoint = metricEndpoint;
       return this;
     }
 
