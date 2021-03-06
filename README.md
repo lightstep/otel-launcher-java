@@ -24,7 +24,7 @@ export LS_ACCESS_TOKEN=your-token
 
 java -javaagent:path/to/lightstep-opentelemetry-javaagent.jar \
      -Dls.service.name=your-service-name
-     -Dotel.exporter.otlp.traces.endpoint=https://ingest.lightstep.com \
+     -Dotel.exporter.otlp.traces.endpoint=https://ingest.lightstep.com/api/v2/otel/trace \
      -jar myapp.jar
 ```
 
@@ -33,7 +33,7 @@ java -javaagent:path/to/lightstep-opentelemetry-javaagent.jar \
 ```shell script
 export LS_ACCESS_TOKEN=your-token
 export LS_SERVICE_NAME=your-service-name
-export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=https://ingest.lightstep.com
+export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=https://ingest.lightstep.com/api/v2/otel/trace
 
 java -javaagent:path/to/lightstep-opentelemetry-javaagent.jar \
      -jar myapp.jar
@@ -66,7 +66,7 @@ pom.xml
 OpenTelemetryConfiguration.newBuilder()
                       .setServiceName("{service_name}")
                       .setAccessToken("{your_access_token}")
-                      .setSpanEndpoint("{lightstep_host}")
+                      .setTracesEndpoint("{lightstep_host}")
                       .install();
 
 // Get tracer
@@ -80,7 +80,7 @@ Tracer tracer = GlobalOpenTelemetry.getTracer("instrumentation-library-name", "1
 Builder builder = OpenTelemetryConfiguration.newBuilder()
                       .setServiceName("{service_name}")
                       .setAccessToken("{your_access_token}")
-                      .setSpanEndpoint("{lightstep_host}");
+                      .setTracesEndpoint("{lightstep_host}");
 
 // Instantiate the openTelemetry
 OpenTelemetry openTelemetry = builder.buildOpenTelemetry();
@@ -103,7 +103,7 @@ Supported system properties and environmental variables:
 | ls.service.name                    | LS_SERVICE_NAME                  | Service name                                                                      |                      |                        
 | ls.service.version                 | LS_SERVICE_VERSION               | Service version                                                                   |                      |                        
 | ls.access.token                    | LS_ACCESS_TOKEN                  | Token for Lightstep access                                                        |                      |                        
-| otel.exporter.otlp.traces.endpoint | OTEL_EXPORTER_OTLP_TRACES_ENDPOINT      | Satellite URL                                                                     | https://ingest.lightstep.com |
+| otel.exporter.otlp.traces.endpoint | OTEL_EXPORTER_OTLP_TRACES_ENDPOINT      | Satellite URL                                                                     | https://ingest.lightstep.com/api/v2/otel/trace |
 | otel.propagators                 | OTEL_PROPAGATORS                 | Propagator                                                                        | b3multi              |
 | otel.log.level                   | OTEL_LOG_LEVEL                   | Log level for agent, to see more messages set to _debug_, to disable set to _off_ | info                 |
 | otel.resource.attributes         | OTEL_RESOURCE_ATTRIBUTES         | Comma separated key-value pairs                                                   |                      |

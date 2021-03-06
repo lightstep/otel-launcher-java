@@ -16,7 +16,7 @@ public class OpenTelemetryConfiguration {
     private String accessToken;
     private String serviceName;
     private String serviceVersion;
-    private String spanEndpoint;
+    private String tracesEndpoint;
     private String resourceAttributes;
     @Deprecated
     private boolean insecureTransport;
@@ -49,13 +49,13 @@ public class OpenTelemetryConfiguration {
     }
 
     /**
-     * Sets the satellite url
+     * Sets the satellite url for traces
      *
-     * @param spanEndpoint satellite url
+     * @param tracesEndpoint satellite url
      * @return this builder's instance
      */
-    public Builder setSpanEndpoint(String spanEndpoint) {
-      this.spanEndpoint = spanEndpoint;
+    public Builder setTracesEndpoint(String tracesEndpoint) {
+      this.tracesEndpoint = tracesEndpoint;
       return this;
     }
 
@@ -94,7 +94,7 @@ public class OpenTelemetryConfiguration {
 
       VariablesConverter
           .setSystemProperties(new Configuration()
-              .withSpanEndpoint(spanEndpoint)
+              .withTracesEndpoint(tracesEndpoint)
               .withInsecureTransport(insecureTransport)
               .withAccessToken(accessToken)
               .withServiceName(serviceName)
@@ -117,7 +117,7 @@ public class OpenTelemetryConfiguration {
       this.accessToken = VariablesConverter.getAccessToken();
       this.serviceName = VariablesConverter.getServiceName();
       this.serviceVersion = VariablesConverter.getServiceVersion();
-      this.spanEndpoint = VariablesConverter.getSpanEndpoint();
+      this.tracesEndpoint = VariablesConverter.getTracesEndpoint();
       this.resourceAttributes = VariablesConverter.getResourceAttributes();
       this.insecureTransport = VariablesConverter.useInsecureTransport();
     }

@@ -195,24 +195,24 @@ public class VariablesConverterTest {
   }
 
   @Test
-  public void getSpanEndpoint_Default() {
+  public void getTracesEndpoint_Default() {
     assertEquals(VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
-        VariablesConverter.getSpanEndpoint());
+        VariablesConverter.getTracesEndpoint());
   }
 
   @Test
-  public void getSpanEndpoint_fromSystemProperty() {
+  public void getTracesEndpoint_fromSystemProperty() {
     System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT),
         "endpoint-prop");
-    assertEquals("endpoint-prop", VariablesConverter.getSpanEndpoint());
+    assertEquals("endpoint-prop", VariablesConverter.getTracesEndpoint());
   }
 
   @Test
-  public void getSpanEndpoint_fromEnvVariable() {
+  public void getTracesEndpoint_fromEnvVariable() {
     mockSystem();
     Mockito.when(System.getenv(VariablesConverter.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT))
         .thenReturn("endpoint-env");
-    assertEquals("endpoint-env", VariablesConverter.getSpanEndpoint());
+    assertEquals("endpoint-env", VariablesConverter.getTracesEndpoint());
   }
 
   @Test
