@@ -6,7 +6,7 @@ This is the Lightstep package for configuring OpenTelemetry
 
 ## Agent
 The Lightstep OpenTelemetry Agent is a configuration layer over OpenTelemetry Instrumentation Agent.
-Download the [latest version](https://github.com/lightstep/otel-launcher-java/releases/latest/)
+Download the [latest version](https://github.com/lightstep/otel-launcher-java/releases/latest/download/lightstep-opentelemetry-javaagent.jar)
 of `lightstep-opentelemetry-javaagent.jar`.
 
 ### Run
