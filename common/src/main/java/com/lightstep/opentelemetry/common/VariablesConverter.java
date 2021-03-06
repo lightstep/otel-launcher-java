@@ -8,8 +8,7 @@ import java.util.logging.Logger;
 public class VariablesConverter {
   private static final Logger logger = Logger.getLogger(VariablesConverter.class.getName());
 
-  public static final String DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "https://ingest.lightstep.com";
-  public static final String DEFAULT_OTEL_EXPORTER_OTLP_METRIC_ENDPOINT = "https://ingest.lightstep.com";
+  public static final String DEFAULT_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT = "https://ingest.lightstep.com/api/v2/otel/trace";
   public static final long DEFAULT_LS_DEADLINE_MILLIS = 30000;
   public static final boolean DEFAULT_METRICS_ENABLED = false;
   @Deprecated
@@ -21,8 +20,9 @@ public class VariablesConverter {
   static final String LS_SERVICE_NAME = "LS_SERVICE_NAME";
   static final String LS_SERVICE_VERSION = "LS_SERVICE_VERSION";
   static final String LS_METRICS_ENABLED = "LS_METRICS_ENABLED";
+  @Deprecated
   static final String OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT";
-  static final String OTEL_EXPORTER_OTLP_METRIC_ENDPOINT = "OTEL_EXPORTER_OTLP_METRIC_ENDPOINT";
+  static final String OTEL_EXPORTER_OTLP_TRACES_ENDPOINT = "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT";
   static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
   @Deprecated
   static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
@@ -31,26 +31,26 @@ public class VariablesConverter {
   static final String OTEL_IMR_EXPORT_INTERVAL = "OTEL_IMR_EXPORT_INTERVAL";
 
   public static void setSystemProperties(Configuration configuration, boolean isAgent) {
-    if (configuration.spanEndpoint == null || configuration.spanEndpoint.isEmpty()) {
-      String msg = "Invalid configuration: span endpoint missing. Set environment variable "
-          + OTEL_EXPORTER_OTLP_SPAN_ENDPOINT;
+    if (configuration.tracesEndpoint == null || configuration.tracesEndpoint.isEmpty()) {
+      String msg = "Invalid configuration: traces endpoint missing. Set environment variable "
+          + OTEL_EXPORTER_OTLP_TRACES_ENDPOINT;
       if (isAgent) {
         msg += ".";
       } else {
-        msg += " or call setSpanEndpoint in the code.";
+        msg += " or call setTracesEndpoint in the code.";
       }
       logger.severe(msg);
       throw new IllegalStateException(msg);
     }
 
-    if (!configuration.spanEndpoint.toLowerCase().startsWith("http://")
-        && !configuration.spanEndpoint.toLowerCase().startsWith("https://")) {
+    if (!configuration.tracesEndpoint.toLowerCase().startsWith("http://")
+        && !configuration.tracesEndpoint.toLowerCase().startsWith("https://")) {
 
       // to keep backward compatibility:
       if (configuration.insecureTransport) {
-        configuration.spanEndpoint = "http://" + configuration.spanEndpoint;
+        configuration.tracesEndpoint = "http://" + configuration.tracesEndpoint;
       } else {
-        configuration.spanEndpoint = "https://" + configuration.spanEndpoint;
+        configuration.tracesEndpoint = "https://" + configuration.tracesEndpoint;
       }
     }
 
@@ -66,12 +66,12 @@ public class VariablesConverter {
       throw new IllegalStateException(msg);
     }
 
-    if (isTokenRequired(configuration.spanEndpoint) && (
+    if (isTokenRequired(configuration.tracesEndpoint) && (
         configuration.accessToken == null || configuration.accessToken
             .isEmpty())) {
       String msg =
           "Invalid configuration: token missing. Must be set to send data to "
-              + configuration.spanEndpoint
+              + configuration.tracesEndpoint
               + ". Set environment variable " + LS_ACCESS_TOKEN;
       if (isAgent) {
         msg += ".";
@@ -88,7 +88,7 @@ public class VariablesConverter {
       throw new IllegalStateException(msg);
     }
 
-    System.setProperty("otel.exporter.otlp.endpoint", configuration.spanEndpoint);
+    System.setProperty("otel.exporter.otlp.endpoint", configuration.tracesEndpoint);
     System
         .setProperty("otel.exporter.otlp.timeout", String.valueOf(DEFAULT_LS_DEADLINE_MILLIS));
     System.setProperty("otel.exporter.otlp.headers",
@@ -120,7 +120,7 @@ public class VariablesConverter {
       System.setProperty("io.opentelemetry.javaagent.slf4j.simpleLogger.defaultLogLevel",
           configuration.logLevel);
       if (configuration.logLevel.equals("debug")) {
-        String msg = "spanEndpoint: " + configuration.spanEndpoint;
+        String msg = "tracesEndpoint: " + configuration.tracesEndpoint;
         if (configuration.propagators != null) {
           msg += ", propagators: " + configuration.propagators;
         }
@@ -132,26 +132,10 @@ public class VariablesConverter {
 
     System.setProperty("otel.traces.exporter", "otlp");
     if (configuration.metricsEnabled) {
-      if (configuration.metricEndpoint == null || configuration.metricEndpoint.isEmpty()) {
-        String msg = "Invalid configuration: metric endpoint missing. Set environment variable "
-            + OTEL_EXPORTER_OTLP_METRIC_ENDPOINT;
-        if (isAgent) {
-          msg += ".";
-        } else {
-          msg += " or call setMetricEndpoint in the code.";
-        }
-        logger.severe(msg);
-        throw new IllegalStateException(msg);
-      }
-
       if (configuration.exportInterval != null) {
         System
             .setProperty("otel.imr.export.interval", String.valueOf(configuration.exportInterval));
       }
-      System.setProperty("otel.exporter.otlp.endpoint", configuration.metricEndpoint);
-      System.setProperty("otel.exporter.otlp.headers",
-          "lightstep-access-token=" + configuration.accessToken);
-      System.setProperty("otel.exporter.otlp.timeout", String.valueOf(DEFAULT_LS_DEADLINE_MILLIS));
       System.setProperty("otel.metrics.exporter", "otlp");
     } else {
       // Disable metrics
@@ -167,13 +151,13 @@ public class VariablesConverter {
         || token.length() == 104;
   }
 
-  static boolean isTokenRequired(String spanEndpoint) {
-    return DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT.equals(spanEndpoint);
+  static boolean isTokenRequired(String tracesEndpoint) {
+    return DEFAULT_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT.equals(tracesEndpoint);
   }
 
   public static void convertFromEnv() {
     setSystemProperties(new Configuration()
-        .withSpanEndpoint(getSpanEndpoint())
+        .withTracesEndpoint(getTracesEndpoint())
         .withInsecureTransport(useInsecureTransport())
         .withAccessToken(getAccessToken())
         .withPropagators(getPropagator())
@@ -181,7 +165,6 @@ public class VariablesConverter {
         .withServiceName(getServiceName())
         .withServiceVersion(getServiceVersion())
         .withResourceAttributes(getResourceAttributes())
-        .withMetricEndpoint(getMetricEndpoint())
         .withExportInterval(getExportInterval())
         .withMetricsEnabled(getMetricsEnabled()), true);
   }
@@ -215,13 +198,9 @@ public class VariablesConverter {
     return getProperty(OTEL_LOG_LEVEL, DEFAULT_OTEL_LOG_LEVEL);
   }
 
-  public static String getSpanEndpoint() {
-    return getProperty(OTEL_EXPORTER_OTLP_SPAN_ENDPOINT, DEFAULT_OTEL_EXPORTER_OTLP_SPAN_ENDPOINT);
-  }
-
-  public static String getMetricEndpoint() {
-    return getProperty(OTEL_EXPORTER_OTLP_METRIC_ENDPOINT,
-        DEFAULT_OTEL_EXPORTER_OTLP_METRIC_ENDPOINT);
+  public static String getTracesEndpoint() {
+    return getProperty(OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
+        getProperty(OTEL_EXPORTER_OTLP_SPAN_ENDPOINT, DEFAULT_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT));
   }
 
   public static String getPropagator() {
@@ -255,7 +234,7 @@ public class VariablesConverter {
   }
 
   public static class Configuration {
-    private String spanEndpoint;
+    private String tracesEndpoint;
     @Deprecated
     private boolean insecureTransport;
     private String accessToken;
@@ -266,11 +245,10 @@ public class VariablesConverter {
     private String resourceAttributes;
 
     private boolean metricsEnabled;
-    private String metricEndpoint;
     private Long exportInterval;
 
-    public Configuration withSpanEndpoint(String spanEndpoint) {
-      this.spanEndpoint = spanEndpoint;
+    public Configuration withTracesEndpoint(String tracesEndpoint) {
+      this.tracesEndpoint = tracesEndpoint;
       return this;
     }
 
@@ -301,11 +279,6 @@ public class VariablesConverter {
 
     public Configuration withResourceAttributes(String resourceAttributes) {
       this.resourceAttributes = resourceAttributes;
-      return this;
-    }
-
-    public Configuration withMetricEndpoint(String metricEndpoint) {
-      this.metricEndpoint = metricEndpoint;
       return this;
     }
 
