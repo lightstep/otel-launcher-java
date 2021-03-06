@@ -17,7 +17,7 @@ public class Main {
     OpenTelemetry openTelemetry = OpenTelemetryConfiguration.newBuilder()
         .setServiceName(properties.getProperty("ls.service.name"))
         .setAccessToken(properties.getProperty("ls.access.token"))
-        .setTracesEndpoint(properties.getProperty("otel.exporter.otlp.span.endpoint"))
+        .setTracesEndpoint(properties.getProperty("otel.exporter.otlp.traces.endpoint"))
         .buildOpenTelemetry();
 
     Tracer tracer = openTelemetry.getTracer("LightstepExample");
