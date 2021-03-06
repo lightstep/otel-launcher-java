@@ -2,8 +2,6 @@
 
 # Lightstep Distro for OpenTelemetry Java
 
-_NOTE: This is in beta and is expected to GA in Fall 2020._
-
 This is the Lightstep package for configuring OpenTelemetry
 
 ## Agent
