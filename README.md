@@ -93,18 +93,25 @@ Tracer tracer = openTelemetry.get("instrumentation-library-name", "1.0.0");
 It uses _java.util.logging_ therefore logging properties file can be specified via system property 
 _java.util.logging.config.file_. E.g. `-Djava.util.logging.config.file=path/to/logging.properties`
 
-##  System properties and environmental variables
+## System properties and environmental variables
 Supported system properties and environmental variables:
 
-| System property                    | Environment variable             | Purpose                                                                           | Default              | 
-|------------------------------------|----------------------------------|-----------------------------------------------------------------------------------|----------------------|       
-| ls.service.name                    | LS_SERVICE_NAME                  | Service name                                                                      |                      |                        
-| ls.service.version                 | LS_SERVICE_VERSION               | Service version                                                                   |                      |                        
-| ls.access.token                    | LS_ACCESS_TOKEN                  | Token for Lightstep access                                                        |                      |                        
-| otel.exporter.otlp.traces.endpoint | OTEL_EXPORTER_OTLP_TRACES_ENDPOINT      | Satellite URL                                                                     | https://ingest.lightstep.com/api/v2/otel/trace |
-| otel.propagators                 | OTEL_PROPAGATORS                 | Propagator                                                                        | b3multi              |
-| otel.log.level                   | OTEL_LOG_LEVEL                   | Log level for agent, to see more messages set to _debug_, to disable set to _off_ | info                 |
-| otel.resource.attributes         | OTEL_RESOURCE_ATTRIBUTES         | Comma separated key-value pairs                                                   |                      |
+| System property                    | Environment variable               | Purpose                                                                           | Default              | 
+|------------------------------------|------------------------------------|-----------------------------------------------------------------------------------|----------------------|       
+| ls.service.name                    | LS_SERVICE_NAME                    | Service name                                                                      |                      |                        
+| ls.service.version                 | LS_SERVICE_VERSION                 | Service version                                                                   |                      |                        
+| ls.access.token                    | LS_ACCESS_TOKEN                    | Token for Lightstep access                                                        |                      |                        
+| otel.exporter.otlp.traces.endpoint | OTEL_EXPORTER_OTLP_TRACES_ENDPOINT | Satellite URL, should start with _http://_ or _https://_                          | https://ingest.lightstep.com/api/v2/otel/trace |
+| otel.propagators                   | OTEL_PROPAGATORS                   | Propagator                                                                        | b3multi              |
+| otel.log.level                     | OTEL_LOG_LEVEL                     | Log level for agent, to see more messages set to _debug_, to disable set to _off_ | info                 |
+| otel.resource.attributes           | OTEL_RESOURCE_ATTRIBUTES           | Comma separated key-value pairs                                                   |                      |
+
+## Deprecated properties and environmental variables
+
+| System property                    | Environment variable             |
+|------------------------------------|----------------------------------|
+| otel.exporter.otlp.span.insecure   | OTEL_EXPORTER_OTLP_SPAN_INSECURE |
+| otel.exporter.otlp.span.endpoint   | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT |
 
 ## License
 
