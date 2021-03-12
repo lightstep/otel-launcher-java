@@ -70,7 +70,7 @@ public class VariablesConverterTest {
     assertFalse(resourceAttributes.contains("host.name=" + hostname));
 
     assertEquals(VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT, System
-        .getProperty("otel.exporter.otlp.endpoint"));
+        .getProperty("otel.exporter.otlp.traces.endpoint"));
   }
 
   @Test
@@ -85,7 +85,7 @@ public class VariablesConverterTest {
 
     VariablesConverter.convertFromEnv();
 
-    assertEquals("https://endpoint", System.getProperty("otel.exporter.otlp.endpoint"));
+    assertEquals("https://endpoint", System.getProperty("otel.exporter.otlp.traces.endpoint"));
   }
 
   @Test
@@ -100,7 +100,7 @@ public class VariablesConverterTest {
 
     VariablesConverter.convertFromEnv();
 
-    assertEquals("http://endpoint", System.getProperty("otel.exporter.otlp.endpoint"));
+    assertEquals("http://endpoint", System.getProperty("otel.exporter.otlp.traces.endpoint"));
   }
 
   @Test
