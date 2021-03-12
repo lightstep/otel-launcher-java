@@ -16,13 +16,13 @@ make run
     <dependency>
         <groupId>io.opentelemetry</groupId>
         <artifactId>opentelemetry-extension-annotations</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </dependency>
 
     <dependency>
         <groupId>io.opentelemetry</groupId>
         <artifactId>opentelemetry-api</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </dependency>
     ```
 
