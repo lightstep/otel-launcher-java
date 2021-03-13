@@ -8,8 +8,8 @@ import java.util.logging.Logger;
 public class VariablesConverter {
   private static final Logger logger = Logger.getLogger(VariablesConverter.class.getName());
 
-  public static final String DEFAULT_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT = "https://ingest.lightstep.com/api/v2/otel/trace";
-  public static final String DEFAULT_OTEL_EXPORTER_OTLP_METRICS_ENDPOINT = "https://ingest.lightstep.com/metrics/otlp/v0.5";
+  public static final String DEFAULT_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT = "https://ingest.lightstep.com:443";
+  public static final String DEFAULT_OTEL_EXPORTER_OTLP_METRICS_ENDPOINT = "https://ingest.lightstep.com:443";
   public static final long DEFAULT_LS_DEADLINE_MILLIS = 30000;
   public static final boolean DEFAULT_METRICS_ENABLED = false;
   @Deprecated
