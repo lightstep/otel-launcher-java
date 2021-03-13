@@ -8,7 +8,8 @@ import java.util.logging.Logger;
 public class VariablesConverter {
   private static final Logger logger = Logger.getLogger(VariablesConverter.class.getName());
 
-  public static final String DEFAULT_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT = "https://ingest.lightstep.com/api/v2/otel/trace";
+  public static final String DEFAULT_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT = "https://ingest.lightstep.com:443";
+  public static final String DEFAULT_OTEL_EXPORTER_OTLP_METRICS_ENDPOINT = "https://ingest.lightstep.com:443";
   public static final long DEFAULT_LS_DEADLINE_MILLIS = 30000;
   public static final boolean DEFAULT_METRICS_ENABLED = false;
   @Deprecated
@@ -23,6 +24,7 @@ public class VariablesConverter {
   @Deprecated
   static final String OTEL_EXPORTER_OTLP_SPAN_ENDPOINT = "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT";
   static final String OTEL_EXPORTER_OTLP_TRACES_ENDPOINT = "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT";
+  static final String OTEL_EXPORTER_OTLP_METRICS_ENDPOINT = "OTEL_EXPORTER_OTLP_METRICS_ENDPOINT";
   static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
   @Deprecated
   static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
@@ -88,7 +90,9 @@ public class VariablesConverter {
       throw new IllegalStateException(msg);
     }
 
+    // "otel.exporter.otlp.endpoint" should be replaced by "otel.exporter.otlp.traces.endpoint" in next releases
     System.setProperty("otel.exporter.otlp.endpoint", configuration.tracesEndpoint);
+    System.setProperty("otel.exporter.otlp.traces.endpoint", configuration.tracesEndpoint);
     System
         .setProperty("otel.exporter.otlp.timeout", String.valueOf(DEFAULT_LS_DEADLINE_MILLIS));
     System.setProperty("otel.exporter.otlp.headers",
@@ -132,6 +136,9 @@ public class VariablesConverter {
 
     System.setProperty("otel.traces.exporter", "otlp");
     if (configuration.metricsEnabled) {
+      if (configuration.metricsEndpoint != null) {
+        System.setProperty("otel.exporter.otlp.metrics.endpoint", configuration.metricsEndpoint);
+      }
       if (configuration.exportInterval != null) {
         System
             .setProperty("otel.imr.export.interval", String.valueOf(configuration.exportInterval));
@@ -158,6 +165,7 @@ public class VariablesConverter {
   public static void convertFromEnv() {
     setSystemProperties(new Configuration()
         .withTracesEndpoint(getTracesEndpoint())
+        .withMetricsEndpoint(getMetricsEndpoint())
         .withInsecureTransport(useInsecureTransport())
         .withAccessToken(getAccessToken())
         .withPropagators(getPropagator())
@@ -203,6 +211,11 @@ public class VariablesConverter {
         getProperty(OTEL_EXPORTER_OTLP_SPAN_ENDPOINT, DEFAULT_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT));
   }
 
+  public static String getMetricsEndpoint() {
+    return getProperty(OTEL_EXPORTER_OTLP_METRICS_ENDPOINT,
+        DEFAULT_OTEL_EXPORTER_OTLP_METRICS_ENDPOINT);
+  }
+
   public static String getPropagator() {
     return getProperty(OTEL_PROPAGATORS, DEFAULT_PROPAGATOR);
   }
@@ -235,6 +248,7 @@ public class VariablesConverter {
 
   public static class Configuration {
     private String tracesEndpoint;
+    private String metricsEndpoint;
     @Deprecated
     private boolean insecureTransport;
     private String accessToken;
@@ -249,6 +263,11 @@ public class VariablesConverter {
 
     public Configuration withTracesEndpoint(String tracesEndpoint) {
       this.tracesEndpoint = tracesEndpoint;
+      return this;
+    }
+
+    public Configuration withMetricsEndpoint(String metricsEndpoint) {
+      this.metricsEndpoint = metricsEndpoint;
       return this;
     }
 

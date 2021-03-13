@@ -22,7 +22,7 @@ export LS_ACCESS_TOKEN=your-token
 
 java -javaagent:path/to/lightstep-opentelemetry-javaagent.jar \
      -Dls.service.name=your-service-name
-     -Dotel.exporter.otlp.traces.endpoint=https://ingest.lightstep.com/api/v2/otel/trace \
+     -Dotel.exporter.otlp.traces.endpoint=https://ingest.lightstep.com:443 \
      -jar myapp.jar
 ```
 
@@ -31,7 +31,7 @@ java -javaagent:path/to/lightstep-opentelemetry-javaagent.jar \
 ```shell script
 export LS_ACCESS_TOKEN=your-token
 export LS_SERVICE_NAME=your-service-name
-export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=https://ingest.lightstep.com/api/v2/otel/trace
+export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=https://ingest.lightstep.com:443
 
 java -javaagent:path/to/lightstep-opentelemetry-javaagent.jar \
      -jar myapp.jar
@@ -101,7 +101,7 @@ Supported system properties and environmental variables:
 | ls.service.name                    | LS_SERVICE_NAME                    | Service name                                                                      |                      |                        
 | ls.service.version                 | LS_SERVICE_VERSION                 | Service version                                                                   |                      |                        
 | ls.access.token                    | LS_ACCESS_TOKEN                    | Token for Lightstep access                                                        |                      |                        
-| otel.exporter.otlp.traces.endpoint | OTEL_EXPORTER_OTLP_TRACES_ENDPOINT | Satellite URL, should start with _http://_ or _https://_                          | https://ingest.lightstep.com/api/v2/otel/trace |
+| otel.exporter.otlp.traces.endpoint | OTEL_EXPORTER_OTLP_TRACES_ENDPOINT | Satellite URL, should start with _http://_ or _https://_                          | https://ingest.lightstep.com:443 |
 | otel.propagators                   | OTEL_PROPAGATORS                   | Propagator                                                                        | b3multi              |
 | otel.log.level                     | OTEL_LOG_LEVEL                     | Log level for agent, to see more messages set to _debug_, to disable set to _off_ | info                 |
 | otel.resource.attributes           | OTEL_RESOURCE_ATTRIBUTES           | Comma separated key-value pairs                                                   |                      |
