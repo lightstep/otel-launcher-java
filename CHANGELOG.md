@@ -1,10 +1,13 @@
 <a name="Pending Release"></a>
-## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/1.0.0...master)
+## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/1.0.1...master)
+
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/lightstep/otel-launcher-java/compare/1.0.0...1.0.1)
 * Use OpenTelemetry Java API version 1.0.1
 * Use OpenTelemetry Java Instrumentation version 1.0.1
 
 <a name="1.0.0"></a>
-## [0.17.1](https://github.com/lightstep/otel-launcher-java/compare/0.17.1...1.0.0)
+## [1.0.0](https://github.com/lightstep/otel-launcher-java/compare/0.17.1...1.0.0)
 * Remove the version number from agent jar file
 * Use OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable instead of OTEL_EXPORTER_OTLP_SPAN_ENDPOINT
 * Use OpenTelemetry Java API version 1.0.0
