@@ -5,12 +5,12 @@
   <parent>
     <groupId>com.lightstep.opentelemetry</groupId>
     <artifactId>opentelemetry-parent</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>opentelemetry-common</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
   <name>Lightstep OpenTelemetry Common</name>
   <description>Lightstep OpenTelemetry Common</description>
