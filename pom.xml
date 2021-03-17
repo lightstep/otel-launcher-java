@@ -57,14 +57,6 @@
     </license>
   </licenses>
 
-  <distributionManagement>
-    <repository>
-      <id>lightstep-bintray</id>
-      <url>https://api.bintray.com/maven/lightstep/maven/otel-launcher-java/;publish=1
-      </url>
-    </repository>
-  </distributionManagement>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
