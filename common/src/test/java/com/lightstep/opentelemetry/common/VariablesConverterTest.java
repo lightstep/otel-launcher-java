@@ -178,7 +178,7 @@ public class VariablesConverterTest {
 
   @Test
   public void getAccessToken_Default() {
-    assertEquals("", VariablesConverter.getAccessToken());
+    assertNull(VariablesConverter.getAccessToken());
   }
 
   @Test

@@ -95,8 +95,12 @@ public class VariablesConverter {
     System.setProperty("otel.exporter.otlp.traces.endpoint", configuration.tracesEndpoint);
     System
         .setProperty("otel.exporter.otlp.timeout", String.valueOf(DEFAULT_LS_DEADLINE_MILLIS));
-    System.setProperty("otel.exporter.otlp.headers",
-        "lightstep-access-token=" + configuration.accessToken);
+
+    if (configuration.accessToken != null && !configuration.accessToken.isEmpty()) {
+      System.setProperty("otel.exporter.otlp.headers",
+          "lightstep-access-token=" + configuration.accessToken);
+    }
+
     if (configuration.propagators != null) {
       System.setProperty("otel.propagators", configuration.propagators);
     }
@@ -191,7 +195,7 @@ public class VariablesConverter {
   }
 
   public static String getAccessToken() {
-    return getProperty(LS_ACCESS_TOKEN, "");
+    return getProperty(LS_ACCESS_TOKEN, null);
   }
 
   public static String getServiceName() {
