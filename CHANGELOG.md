@@ -1,5 +1,8 @@
 <a name="Pending Release"></a>
-## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/1.0.1...master)
+## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/1.0.4...master)
+
+<a name="1.0.4"></a>
+## [1.0.4](https://github.com/lightstep/otel-launcher-java/compare/1.0.1...1.0.4)
 * Allow empty LS_ACCESS_TOKEN when using Developer Satellite
 
 <a name="1.0.1"></a>
