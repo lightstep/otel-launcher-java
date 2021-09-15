@@ -28,7 +28,7 @@
     <opentelemetry.instrumentation.version>1.5.3</opentelemetry.instrumentation.version>
     <powermock.version>2.0.7</powermock.version>
     <maven-source-plugin.version>3.2.0</maven-source-plugin.version>
-    <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
+    <maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
   </properties>
 
   <organization>
