@@ -15,7 +15,7 @@ public class Main {
     Properties properties = loadConfig();
 
     OpenTelemetry openTelemetry = OpenTelemetryConfiguration.newBuilder()
-        .setServiceName(properties.getProperty("ls.service.name"))
+        .setServiceName(properties.getProperty("otel.service.name"))
         .setAccessToken(properties.getProperty("ls.access.token"))
         .setTracesEndpoint(properties.getProperty("otel.exporter.otlp.traces.endpoint"))
         .buildOpenTelemetry();

@@ -60,7 +60,7 @@ public class VariablesConverter {
 
     if (configuration.serviceName == null || configuration.serviceName.isEmpty()) {
       String msg = "Invalid configuration: service name missing. Set environment variable "
-          + LS_SERVICE_NAME;
+          + OTEL_SERVICE_NAME;
       if (isAgent) {
         msg += ".";
       } else {

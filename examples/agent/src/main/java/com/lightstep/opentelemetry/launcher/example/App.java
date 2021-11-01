@@ -28,7 +28,7 @@ public class App {
   }
 
   public static void firstMethod() throws Exception {
-    Tracer tracer = GlobalOpenTelemetry.getTracer(System.getenv("LS_SERVICE_NAME"));
+    Tracer tracer = GlobalOpenTelemetry.getTracer(System.getenv("OTEL_SERVICE_NAME"));
     Span span = tracer.spanBuilder("firstMethod").startSpan();
     try (Scope ignored = span.makeCurrent()) {
       nestedMethod();

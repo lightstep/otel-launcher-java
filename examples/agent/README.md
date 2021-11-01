@@ -3,7 +3,7 @@
 ## Build and Run
 ```shell script
 export LS_ACCESS_TOKEN=your-token
-export LS_SERVICE_NAME=your-service-name
+export OTEL_SERVICE_NAME=your-service-name
 
 make buid
 make run
@@ -38,7 +38,7 @@ make run
 
     1. Manually get tracer and create span
         ```java
-        Tracer tracer = GlobalOpenTelemetry.getTracer(System.getenv("LS_SERVICE_NAME"));
+        Tracer tracer = GlobalOpenTelemetry.getTracer(System.getenv("OTEL_SERVICE_NAME"));
         Span span = tracer.spanBuilder("name").startSpan();
         span.end();
         ```
