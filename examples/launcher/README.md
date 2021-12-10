@@ -3,7 +3,7 @@
 ## Configuration
 
 Update [config.properties](./config.properties) file with correct values for 
-- _ls.service.name_
+- _otel.service.name_
 - _ls.access.token_
 - _otel.exporter.otlp.traces.endpoint_
 

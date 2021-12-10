@@ -27,6 +27,7 @@ public class VariablesConverterTest {
     System.clearProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN));
     System.clearProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME));
     System.clearProperty(toSystemProperty(VariablesConverter.LS_SERVICE_VERSION));
+    System.clearProperty(toSystemProperty(VariablesConverter.OTEL_SERVICE_NAME));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_LOG_LEVEL));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_ENDPOINT));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT));
@@ -37,7 +38,7 @@ public class VariablesConverterTest {
 
   @Test
   public void convertFromEnv() {
-    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME), "service-1");
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_SERVICE_NAME), "service-1");
     System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
         StringUtils.repeat("s", 32));
     System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_VERSION), "1.0");
@@ -54,7 +55,7 @@ public class VariablesConverterTest {
 
   @Test
   public void convertFromEnv_withAttributes() {
-    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME), "service-1");
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_SERVICE_NAME), "service-1");
     System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
         StringUtils.repeat("s", 32));
     System.setProperty(toSystemProperty(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES),
@@ -75,7 +76,7 @@ public class VariablesConverterTest {
 
   @Test
   public void convertFromEnv_InsecureFalse() {
-    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME), "service-1");
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_SERVICE_NAME), "service-1");
     System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
         StringUtils.repeat("s", 32));
     System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT),
@@ -90,7 +91,7 @@ public class VariablesConverterTest {
 
   @Test
   public void convertFromEnv_InsecureTrue() {
-    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME), "service-1");
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_SERVICE_NAME), "service-1");
     System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
         StringUtils.repeat("s", 32));
     System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT),
@@ -147,15 +148,21 @@ public class VariablesConverterTest {
 
   @Test
   public void getServiceName_fromSystemProperty() {
-    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME), "service-prop");
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_SERVICE_NAME), "service-prop");
     assertEquals("service-prop", VariablesConverter.getServiceName());
   }
 
   @Test
   public void getServiceName_fromEnvVariable() {
     mockSystem();
-    Mockito.when(System.getenv(VariablesConverter.LS_SERVICE_NAME)).thenReturn("service-env");
+    Mockito.when(System.getenv(VariablesConverter.OTEL_SERVICE_NAME)).thenReturn("service-env");
     assertEquals("service-env", VariablesConverter.getServiceName());
+  }
+
+  @Test
+  public void getServiceName_legacy() {
+    System.setProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME), "service-prop");
+    assertEquals("service-prop", VariablesConverter.getServiceName());
   }
 
   @Test

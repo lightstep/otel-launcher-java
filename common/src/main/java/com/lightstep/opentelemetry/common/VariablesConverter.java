@@ -17,6 +17,8 @@ public class VariablesConverter {
   public static final String DEFAULT_PROPAGATOR = "b3multi";
   public static final String DEFAULT_OTEL_LOG_LEVEL = "info";
 
+  static final String OTEL_SERVICE_NAME = "OTEL_SERVICE_NAME";
+  @Deprecated
   static final String LS_ACCESS_TOKEN = "LS_ACCESS_TOKEN";
   static final String LS_SERVICE_NAME = "LS_SERVICE_NAME";
   static final String LS_SERVICE_VERSION = "LS_SERVICE_VERSION";
@@ -58,7 +60,7 @@ public class VariablesConverter {
 
     if (configuration.serviceName == null || configuration.serviceName.isEmpty()) {
       String msg = "Invalid configuration: service name missing. Set environment variable "
-          + LS_SERVICE_NAME;
+          + OTEL_SERVICE_NAME;
       if (isAgent) {
         msg += ".";
       } else {
@@ -199,7 +201,8 @@ public class VariablesConverter {
   }
 
   public static String getServiceName() {
-    return getProperty(LS_SERVICE_NAME, null);
+    return getProperty(OTEL_SERVICE_NAME,
+        getProperty(LS_SERVICE_NAME, null));
   }
 
   public static String getServiceVersion() {
