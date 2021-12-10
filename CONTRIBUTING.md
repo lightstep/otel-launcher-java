@@ -41,6 +41,12 @@ To run the tests:
 make test
 ```
 
+Building the artifacts and agent jar:
+
+```
+make build
+```
+
 ## Submitting a Pull Request
 
 _Note that this section should be treated as a general guideline and replaced with language/repo specific instructions_
