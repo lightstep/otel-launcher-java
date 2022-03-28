@@ -154,9 +154,6 @@ public class VariablesConverter {
       // Disable metrics
       System.setProperty("otel.metrics.exporter", "none");
     }
-
-    // Disable oshi because we enable metrics manually
-    System.setProperty("otel.instrumentation.oshi.enabled", "false");
   }
 
   static boolean isValidToken(String token) {

@@ -3,7 +3,7 @@ package com.lightstep.opentelemetry.launcher;
 import com.lightstep.opentelemetry.common.VariablesConverter;
 import com.lightstep.opentelemetry.common.VariablesConverter.Configuration;
 import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.sdk.autoconfigure.OpenTelemetrySdkAutoConfiguration;
+import io.opentelemetry.sdk.autoconfigure.AutoConfiguredOpenTelemetrySdk;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -76,9 +76,9 @@ public class OpenTelemetryConfiguration {
     /**
      * Constructs a new instance of the OpenTelemetry based on the builder's values.
      *
-     * @return a new OpenTelemetry instance
+     * @return a new AutoConfiguredOpenTelemetrySdk instance
      */
-    public OpenTelemetry buildOpenTelemetry() {
+    public AutoConfiguredOpenTelemetrySdk buildOpenTelemetry() {
       if (propagators.isEmpty()) {
         String propagatorFromEnv = VariablesConverter.getPropagator();
         String[] propagatorsArray = propagatorFromEnv.split("\\s*,\\s*");
@@ -103,7 +103,7 @@ public class OpenTelemetryConfiguration {
                   propagators.stream().map(Propagator::label).collect(Collectors.joining(",")))
               .withResourceAttributes(resourceAttributes), false);
 
-      return OpenTelemetrySdkAutoConfiguration.initialize();
+      return AutoConfiguredOpenTelemetrySdk.initialize();
     }
 
     /**
