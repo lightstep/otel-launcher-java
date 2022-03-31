@@ -24,18 +24,7 @@
     <dependency>
       <groupId>io.opentelemetry.javaagent</groupId>
       <artifactId>opentelemetry-javaagent</artifactId>
-      <classifier>all</classifier>
       <version>${opentelemetry.instrumentation.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.github.oshi</groupId>
-      <artifactId>oshi-core</artifactId>
-      <version>5.3.6</version>
-    </dependency>
-    <dependency>
-      <groupId>io.opentelemetry.instrumentation</groupId>
-      <artifactId>opentelemetry-oshi</artifactId>
-      <version>${opentelemetry.instrumentation.version}-alpha</version>
     </dependency>
   </dependencies>
 
@@ -70,7 +59,7 @@
                     <Agent-Class>com.lightstep.opentelemetry.agent.LightstepBootstrap</Agent-Class>
                     <Premain-Class>com.lightstep.opentelemetry.agent.LightstepBootstrap
                     </Premain-Class>
-                    <Implementation-Version>1.6.0</Implementation-Version>
+                    <Implementation-Version>1.12.1</Implementation-Version>
                     <Can-Redefine-Classes>true</Can-Redefine-Classes>
                     <Can-Retransform-Classes>true</Can-Retransform-Classes>
                   </manifestEntries>

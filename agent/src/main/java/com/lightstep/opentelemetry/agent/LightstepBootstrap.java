@@ -18,15 +18,8 @@ public class LightstepBootstrap {
     OpenTelemetryAgent.premain(agentArgs, inst);
 
     if (VariablesConverter.getMetricsEnabled()) {
-      try {
-        Class<?> oshiSystemInfoClass =
-            ClassLoader.getSystemClassLoader()
-                .loadClass("io.opentelemetry.instrumentation.oshi.SystemMetrics");
-        Method getCurrentPlatformEnumMethod = oshiSystemInfoClass.getMethod("registerObservers");
-        getCurrentPlatformEnumMethod.invoke(null);
-      } catch (Throwable ex) {
-        ex.printStackTrace();
-      }
+      // TODO: Perform any required set up for metrics in this block.
+      // (We used to import the Oshi instrumentation here).
     }
   }
 

@@ -80,9 +80,8 @@ Builder builder = OpenTelemetryConfiguration.newBuilder()
                       .setAccessToken("{your_access_token}")
                       .setTracesEndpoint("{lightstep_host}");
 
-// Instantiate the openTelemetry
-OpenTelemetry openTelemetry = builder.buildOpenTelemetry();
-
+// Instantiate openTelemetry
+OpenTelemetry openTelemetry = builder.buildOpenTelemetry().getOpenTelemetrySdk();
 
 // Get tracer
 Tracer tracer = openTelemetry.get("instrumentation-library-name", "1.0.0");
