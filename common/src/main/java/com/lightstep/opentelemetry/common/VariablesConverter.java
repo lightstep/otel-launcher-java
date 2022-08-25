@@ -13,7 +13,7 @@ public class VariablesConverter {
   public static final long DEFAULT_LS_DEADLINE_MILLIS = 30000;
   public static final boolean DEFAULT_METRICS_ENABLED = false;
   @Deprecated
-  public static final boolean DEFAULT_OTEL_EXPORTER_OTLP_SPAN_INSECURE = false;
+  public static final boolean DEFAULT_OTEL_EXPORTER_OTLP_INSECURE = false;
   public static final String DEFAULT_PROPAGATOR = "b3multi";
   public static final String DEFAULT_OTEL_LOG_LEVEL = "info";
 
@@ -29,11 +29,13 @@ public class VariablesConverter {
   static final String OTEL_EXPORTER_OTLP_METRICS_ENDPOINT = "OTEL_EXPORTER_OTLP_METRICS_ENDPOINT";
   static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
   @Deprecated
-  static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE";
+  static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE"; // Backwards support.
+  static final String OTEL_EXPORTER_OTLP_METRIC_INSECURE = "OTEL_EXPORTER_OTLP_METRIC_INSECURE"; // Backwards support.
   static final String OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL";
   static final String OTEL_RESOURCE_ATTRIBUTES = "OTEL_RESOURCE_ATTRIBUTES";
-  static final String OTEL_IMR_EXPORT_INTERVAL = "OTEL_IMR_EXPORT_INTERVAL";
+  static final String OTEL_METRIC_EXPORT_INTERVAL = "OTEL_METRIC_EXPORT_INTERVAL"; // Yes, _METRIC_, singular.
 
+  // TODO: Once Metrics are enabled by default, check that the metrics endpoint is always set.
   public static void setSystemProperties(Configuration configuration, boolean isAgent) {
     if (configuration.tracesEndpoint == null || configuration.tracesEndpoint.isEmpty()) {
       String msg = "Invalid configuration: traces endpoint missing. Set environment variable "
@@ -47,16 +49,10 @@ public class VariablesConverter {
       throw new IllegalStateException(msg);
     }
 
-    if (!configuration.tracesEndpoint.toLowerCase().startsWith("http://")
-        && !configuration.tracesEndpoint.toLowerCase().startsWith("https://")) {
-
-      // to keep backward compatibility:
-      if (configuration.insecureTransport) {
-        configuration.tracesEndpoint = "http://" + configuration.tracesEndpoint;
-      } else {
-        configuration.tracesEndpoint = "https://" + configuration.tracesEndpoint;
-      }
-    }
+    configuration.tracesEndpoint = normalizeEndpoint(configuration.tracesEndpoint,
+        configuration.tracesInsecureTransport);
+    configuration.metricsEndpoint = normalizeEndpoint(configuration.metricsEndpoint,
+        configuration.metricsInsecureTransport);
 
     if (configuration.serviceName == null || configuration.serviceName.isEmpty()) {
       String msg = "Invalid configuration: service name missing. Set environment variable "
@@ -145,15 +141,30 @@ public class VariablesConverter {
       if (configuration.metricsEndpoint != null) {
         System.setProperty("otel.exporter.otlp.metrics.endpoint", configuration.metricsEndpoint);
       }
-      if (configuration.exportInterval != null) {
+      if (configuration.metricsExportInterval != null) {
         System
-            .setProperty("otel.imr.export.interval", String.valueOf(configuration.exportInterval));
+            .setProperty("otel.metric.export.interval", String.valueOf(configuration.metricsExportInterval));
       }
       System.setProperty("otel.metrics.exporter", "otlp");
+
+      // Enable by default a) expo histogram and b) delta aggregation temporality.
+      System.setProperty("otel.exporter.otlp.metrics.default.histogram.aggregation", "exponential_bucket_histogram");
+      System.setProperty("otel.exporter.otlp.metrics.temporality.preference", "delta");
     } else {
       // Disable metrics
       System.setProperty("otel.metrics.exporter", "none");
     }
+  }
+
+  static String normalizeEndpoint(String endpoint, boolean insecureTransport) {
+    if (endpoint.toLowerCase().startsWith("http://")
+        || endpoint.toLowerCase().startsWith("https://")) {
+      // Explicit/full endpoint, no need to adjust it.
+      return endpoint;
+    }
+
+    String prefix = insecureTransport ? "http://" : "https://";
+    return prefix + endpoint;
   }
 
   static boolean isValidToken(String token) {
@@ -169,14 +180,15 @@ public class VariablesConverter {
     setSystemProperties(new Configuration()
         .withTracesEndpoint(getTracesEndpoint())
         .withMetricsEndpoint(getMetricsEndpoint())
-        .withInsecureTransport(useInsecureTransport())
+        .withTracesInsecureTransport(useTracesInsecureTransport())
+        .withMetricsInsecureTransport(useMetricsInsecureTransport())
         .withAccessToken(getAccessToken())
         .withPropagators(getPropagator())
         .withLogLevel(getLogLevel())
         .withServiceName(getServiceName())
         .withServiceVersion(getServiceVersion())
         .withResourceAttributes(getResourceAttributes())
-        .withExportInterval(getExportInterval())
+        .withMetricsExportInterval(getMetricsExportInterval())
         .withMetricsEnabled(getMetricsEnabled()), true);
   }
 
@@ -185,8 +197,8 @@ public class VariablesConverter {
         DEFAULT_METRICS_ENABLED)));
   }
 
-  private static Long getExportInterval() {
-    String interval = getProperty(OTEL_IMR_EXPORT_INTERVAL, null);
+  private static Long getMetricsExportInterval() {
+    String interval = getProperty(OTEL_METRIC_EXPORT_INTERVAL, null);
     if (interval != null) {
       return Long.parseLong(interval);
     }
@@ -224,9 +236,16 @@ public class VariablesConverter {
     return getProperty(OTEL_PROPAGATORS, DEFAULT_PROPAGATOR);
   }
 
-  public static boolean useInsecureTransport() {
+  @Deprecated
+  public static boolean useTracesInsecureTransport() {
     return Boolean.parseBoolean(getProperty(OTEL_EXPORTER_OTLP_SPAN_INSECURE, String.valueOf(
-        DEFAULT_OTEL_EXPORTER_OTLP_SPAN_INSECURE)));
+        DEFAULT_OTEL_EXPORTER_OTLP_INSECURE)));
+  }
+
+  @Deprecated
+  public static boolean useMetricsInsecureTransport() {
+    return Boolean.parseBoolean(getProperty(OTEL_EXPORTER_OTLP_METRIC_INSECURE, String.valueOf(
+        DEFAULT_OTEL_EXPORTER_OTLP_INSECURE)));
   }
 
   // Internal usage, do not need to expose publicly.
@@ -254,7 +273,9 @@ public class VariablesConverter {
     private String tracesEndpoint;
     private String metricsEndpoint;
     @Deprecated
-    private boolean insecureTransport;
+    private boolean tracesInsecureTransport;
+    @Deprecated
+    private boolean metricsInsecureTransport;
     private String accessToken;
     private String propagators;
     private String logLevel;
@@ -263,7 +284,7 @@ public class VariablesConverter {
     private String resourceAttributes;
 
     private boolean metricsEnabled;
-    private Long exportInterval;
+    private Long metricsExportInterval;
 
     public Configuration withTracesEndpoint(String tracesEndpoint) {
       this.tracesEndpoint = tracesEndpoint;
@@ -305,14 +326,20 @@ public class VariablesConverter {
       return this;
     }
 
-    public Configuration withExportInterval(Long exportInterval) {
-      this.exportInterval = exportInterval;
+    public Configuration withMetricsExportInterval(Long metricsExportInterval) {
+      this.metricsExportInterval = metricsExportInterval;
       return this;
     }
 
     @Deprecated
-    public Configuration withInsecureTransport(boolean insecureTransport) {
-      this.insecureTransport = insecureTransport;
+    public Configuration withTracesInsecureTransport(boolean insecureTransport) {
+      this.tracesInsecureTransport = insecureTransport;
+      return this;
+    }
+
+    @Deprecated
+    public Configuration withMetricsInsecureTransport(boolean insecureTransport) {
+      this.metricsInsecureTransport = insecureTransport;
       return this;
     }
 
