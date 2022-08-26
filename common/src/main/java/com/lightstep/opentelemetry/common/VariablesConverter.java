@@ -30,7 +30,9 @@ public class VariablesConverter {
   static final String OTEL_PROPAGATORS = "OTEL_PROPAGATORS";
   @Deprecated
   static final String OTEL_EXPORTER_OTLP_SPAN_INSECURE = "OTEL_EXPORTER_OTLP_SPAN_INSECURE"; // Backwards support.
+  @Deprecated
   static final String OTEL_EXPORTER_OTLP_METRIC_INSECURE = "OTEL_EXPORTER_OTLP_METRIC_INSECURE"; // Backwards support.
+  static final String OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE = "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE";
   static final String OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL";
   static final String OTEL_RESOURCE_ATTRIBUTES = "OTEL_RESOURCE_ATTRIBUTES";
   static final String OTEL_METRIC_EXPORT_INTERVAL = "OTEL_METRIC_EXPORT_INTERVAL"; // Yes, _METRIC_, singular.
@@ -145,11 +147,14 @@ public class VariablesConverter {
         System
             .setProperty("otel.metric.export.interval", String.valueOf(configuration.metricsExportInterval));
       }
-      System.setProperty("otel.metrics.exporter", "otlp");
 
-      // Enable by default a) expo histogram and b) delta aggregation temporality.
+      if (configuration.metricsTemporality != null) {
+        System.setProperty("otel.exporter.otlp.metrics.temporality.preference", configuration.metricsTemporality);
+      }
+      // Enable by default expo histogram aggregation.
       System.setProperty("otel.exporter.otlp.metrics.default.histogram.aggregation", "exponential_bucket_histogram");
-      System.setProperty("otel.exporter.otlp.metrics.temporality.preference", "delta");
+
+      System.setProperty("otel.metrics.exporter", "otlp");
     } else {
       // Disable metrics
       System.setProperty("otel.metrics.exporter", "none");
@@ -189,6 +194,7 @@ public class VariablesConverter {
         .withServiceVersion(getServiceVersion())
         .withResourceAttributes(getResourceAttributes())
         .withMetricsExportInterval(getMetricsExportInterval())
+        .withMetricsTemporalityPreference(getMetricsTemporalityPreference())
         .withMetricsEnabled(getMetricsEnabled()), true);
   }
 
@@ -197,12 +203,16 @@ public class VariablesConverter {
         DEFAULT_METRICS_ENABLED)));
   }
 
-  private static Long getMetricsExportInterval() {
+  public static Long getMetricsExportInterval() {
     String interval = getProperty(OTEL_METRIC_EXPORT_INTERVAL, null);
     if (interval != null) {
       return Long.parseLong(interval);
     }
     return null;
+  }
+
+  public static String getMetricsTemporalityPreference() {
+    return getProperty(OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE, null);
   }
 
   public static String getAccessToken() {
@@ -285,6 +295,7 @@ public class VariablesConverter {
 
     private boolean metricsEnabled;
     private Long metricsExportInterval;
+    private String metricsTemporality;
 
     public Configuration withTracesEndpoint(String tracesEndpoint) {
       this.tracesEndpoint = tracesEndpoint;
@@ -328,6 +339,11 @@ public class VariablesConverter {
 
     public Configuration withMetricsExportInterval(Long metricsExportInterval) {
       this.metricsExportInterval = metricsExportInterval;
+      return this;
+    }
+
+    public Configuration withMetricsTemporalityPreference(String metricsTemporality) {
+      this.metricsTemporality = metricsTemporality;
       return this;
     }
 

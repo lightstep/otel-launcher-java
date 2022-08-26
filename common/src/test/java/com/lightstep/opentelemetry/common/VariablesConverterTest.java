@@ -357,6 +357,26 @@ public class VariablesConverterTest {
     assertFalse(VariablesConverter.getMetricsEnabled());
   }
 
+  @Test
+  public void getMetricsTemporality_Default() {
+    assertNull(VariablesConverter.getMetricsTemporalityPreference());
+  }
+
+  @Test
+  public void getMetricsTemporality_fromSystemProperty() {
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE),
+        "delta");
+    assertEquals("delta", VariablesConverter.getMetricsTemporalityPreference());
+  }
+
+  @Test
+  public void getMetricsTemporality_fromEnvVariable() {
+    mockSystem();
+    Mockito.when(System.getenv(VariablesConverter.OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE))
+        .thenReturn("cumulative");
+    assertEquals("cumulative", VariablesConverter.getMetricsTemporalityPreference());
+  }
+
   private void mockSystem() {
     PowerMockito.mockStatic(System.class);
     Mockito.when(System.getProperty(anyString(), anyString())).thenAnswer(
