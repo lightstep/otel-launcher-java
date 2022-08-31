@@ -116,6 +116,11 @@ Supported system properties and environmental variables:
 | otel.exporter.otlp.span.endpoint   | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT |
 | ls.service.name                    | LS_SERVICE_NAME                  |
 
+## OpenTelemetry Metrics support
+
+Metrics support is currently **experimental** and it is disabled by default. It can be enabled via `LS_METRICS_ENABLED=true`.
+Breaking changes may still occur. Use at your own risk.
+
 ## License
 
 [Apache 2.0 License](./LICENSE).
