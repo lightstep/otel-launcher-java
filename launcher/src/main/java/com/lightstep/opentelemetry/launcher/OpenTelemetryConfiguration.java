@@ -17,9 +17,11 @@ public class OpenTelemetryConfiguration {
     private String serviceName;
     private String serviceVersion;
     private String tracesEndpoint;
+    private String metricsEndpoint;
     private String resourceAttributes;
     @Deprecated
-    private boolean insecureTransport;
+    private boolean tracesInsecureTransport;
+    private boolean metricsInsecureTransport;
     private final List<Propagator> propagators = new ArrayList<>();
 
 
@@ -69,7 +71,7 @@ public class OpenTelemetryConfiguration {
      */
     @Deprecated
     public Builder useInsecureTransport(boolean insecureTransport) {
-      this.insecureTransport = insecureTransport;
+      this.tracesInsecureTransport = insecureTransport;
       return this;
     }
 
@@ -95,7 +97,9 @@ public class OpenTelemetryConfiguration {
       VariablesConverter
           .setSystemProperties(new Configuration()
               .withTracesEndpoint(tracesEndpoint)
-              .withInsecureTransport(insecureTransport)
+              .withTracesInsecureTransport(tracesInsecureTransport)
+              .withMetricsEndpoint(metricsEndpoint)
+              .withMetricsInsecureTransport(metricsInsecureTransport)
               .withAccessToken(accessToken)
               .withServiceName(serviceName)
               .withServiceVersion(serviceVersion)
@@ -118,8 +122,10 @@ public class OpenTelemetryConfiguration {
       this.serviceName = VariablesConverter.getServiceName();
       this.serviceVersion = VariablesConverter.getServiceVersion();
       this.tracesEndpoint = VariablesConverter.getTracesEndpoint();
+      this.metricsEndpoint = VariablesConverter.getMetricsEndpoint();
       this.resourceAttributes = VariablesConverter.getResourceAttributes();
-      this.insecureTransport = VariablesConverter.useInsecureTransport();
+      this.tracesInsecureTransport = VariablesConverter.useTracesInsecureTransport();
+      this.metricsInsecureTransport = VariablesConverter.useMetricsInsecureTransport();
     }
 
     List<Propagator> getPropagators() {

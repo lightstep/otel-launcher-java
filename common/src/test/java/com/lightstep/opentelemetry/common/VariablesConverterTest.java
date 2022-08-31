@@ -27,11 +27,14 @@ public class VariablesConverterTest {
     System.clearProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN));
     System.clearProperty(toSystemProperty(VariablesConverter.LS_SERVICE_NAME));
     System.clearProperty(toSystemProperty(VariablesConverter.LS_SERVICE_VERSION));
+    System.clearProperty(toSystemProperty(VariablesConverter.LS_METRICS_ENABLED));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_SERVICE_NAME));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_LOG_LEVEL));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_ENDPOINT));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT));
+    System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_METRICS_ENDPOINT));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_SPAN_INSECURE));
+    System.clearProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_METRIC_INSECURE));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_PROPAGATORS));
     System.clearProperty(toSystemProperty(VariablesConverter.OTEL_RESOURCE_ATTRIBUTES));
   }
@@ -75,6 +78,31 @@ public class VariablesConverterTest {
   }
 
   @Test
+  public void convertFromEnv_withtMetricsDisabled() {
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_SERVICE_NAME), "service-1");
+    System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
+        StringUtils.repeat("s", 32));
+    System.setProperty(toSystemProperty(VariablesConverter.LS_METRICS_ENABLED), "false");
+
+    VariablesConverter.convertFromEnv();
+
+    assertNull(System.getProperty("otel.exporter.otlp.metrics.endpoint"));
+  }
+
+  @Test
+  public void convertFromEnv_withMetricsEnabled() {
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_SERVICE_NAME), "service-1");
+    System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
+        StringUtils.repeat("s", 32));
+    System.setProperty(toSystemProperty(VariablesConverter.LS_METRICS_ENABLED), "true");
+
+    VariablesConverter.convertFromEnv();
+
+    assertEquals(VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_METRICS_ENDPOINT, System
+        .getProperty("otel.exporter.otlp.metrics.endpoint"));
+  }
+
+  @Test
   public void convertFromEnv_InsecureFalse() {
     System.setProperty(toSystemProperty(VariablesConverter.OTEL_SERVICE_NAME), "service-1");
     System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
@@ -102,6 +130,38 @@ public class VariablesConverterTest {
     VariablesConverter.convertFromEnv();
 
     assertEquals("http://endpoint", System.getProperty("otel.exporter.otlp.traces.endpoint"));
+  }
+
+  @Test
+  public void convertFromEnv_InsecureMetricFalse() {
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_SERVICE_NAME), "service-1");
+    System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
+        StringUtils.repeat("s", 32));
+    System.setProperty(toSystemProperty(VariablesConverter.LS_METRICS_ENABLED), "true");
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_METRICS_ENDPOINT),
+        "endpoint");
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_METRIC_INSECURE),
+        "false");
+
+    VariablesConverter.convertFromEnv();
+
+    assertEquals("https://endpoint", System.getProperty("otel.exporter.otlp.metrics.endpoint"));
+  }
+
+  @Test
+  public void convertFromEnv_InsecureMetricTrue() {
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_SERVICE_NAME), "service-1");
+    System.setProperty(toSystemProperty(VariablesConverter.LS_ACCESS_TOKEN),
+        StringUtils.repeat("s", 32));
+    System.setProperty(toSystemProperty(VariablesConverter.LS_METRICS_ENABLED), "true");
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_METRICS_ENDPOINT),
+        "endpoint");
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_METRIC_INSECURE),
+        "true");
+
+    VariablesConverter.convertFromEnv();
+
+    assertEquals("http://endpoint", System.getProperty("otel.exporter.otlp.metrics.endpoint"));
   }
 
   @Test
@@ -223,6 +283,27 @@ public class VariablesConverterTest {
   }
 
   @Test
+  public void getMetricsEndpoint_Default() {
+    assertEquals(VariablesConverter.DEFAULT_OTEL_EXPORTER_OTLP_METRICS_ENDPOINT,
+        VariablesConverter.getMetricsEndpoint());
+  }
+
+  @Test
+  public void getMetricsEndpoint_fromSystemProperty() {
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_METRICS_ENDPOINT),
+        "endpoint-prop");
+    assertEquals("endpoint-prop", VariablesConverter.getMetricsEndpoint());
+  }
+
+  @Test
+  public void getMetricsEndpoint_fromEnvVariable() {
+    mockSystem();
+    Mockito.when(System.getenv(VariablesConverter.OTEL_EXPORTER_OTLP_METRICS_ENDPOINT))
+        .thenReturn("endpoint-env");
+    assertEquals("endpoint-env", VariablesConverter.getMetricsEndpoint());
+  }
+
+  @Test
   public void getPropagator_Default() {
     assertEquals(VariablesConverter.DEFAULT_PROPAGATOR,
         VariablesConverter.getPropagator());
@@ -268,6 +349,32 @@ public class VariablesConverterTest {
     final String hostName = VariablesConverter.getHostName();
     assertNotNull(hostName);
     assertFalse(hostName.isEmpty());
+  }
+
+  // Make sure metrics is enabled till we *officially* support it.
+  @Test
+  public void getMetricsEnabled() {
+    assertFalse(VariablesConverter.getMetricsEnabled());
+  }
+
+  @Test
+  public void getMetricsTemporality_Default() {
+    assertNull(VariablesConverter.getMetricsTemporalityPreference());
+  }
+
+  @Test
+  public void getMetricsTemporality_fromSystemProperty() {
+    System.setProperty(toSystemProperty(VariablesConverter.OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE),
+        "delta");
+    assertEquals("delta", VariablesConverter.getMetricsTemporalityPreference());
+  }
+
+  @Test
+  public void getMetricsTemporality_fromEnvVariable() {
+    mockSystem();
+    Mockito.when(System.getenv(VariablesConverter.OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE))
+        .thenReturn("cumulative");
+    assertEquals("cumulative", VariablesConverter.getMetricsTemporalityPreference());
   }
 
   private void mockSystem() {

@@ -101,9 +101,12 @@ Supported system properties and environmental variables:
 | ls.service.version                 | LS_SERVICE_VERSION                 | Service version                                                                   |                      |                        
 | ls.access.token                    | LS_ACCESS_TOKEN                    | Token for Lightstep access                                                        |                      |                        
 | otel.exporter.otlp.traces.endpoint | OTEL_EXPORTER_OTLP_TRACES_ENDPOINT | Satellite URL, should start with _http://_ or _https://_                          | https://ingest.lightstep.com:443 |
+| otel.exporter.otlp.metrics.endpoint| OTEL_EXPORTER_OTLP_METRICS_ENDPOINT| Satellite URL, should start with _http://_ or _https://_                          | https://ingest.lightstep.com:443 |
 | otel.propagators                   | OTEL_PROPAGATORS                   | Propagator                                                                        | b3multi              |
 | otel.log.level                     | OTEL_LOG_LEVEL                     | Log level for agent, to see more messages set to _debug_, to disable set to _off_ | info                 |
 | otel.resource.attributes           | OTEL_RESOURCE_ATTRIBUTES           | Comma separated key-value pairs                                                   |                      |
+| otel.exporter.otlp.metrics.temporality.preference | OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | Metrics aggregation temporality                     | cumulative           |
+| ls.metrics.enabled                 | LS_METRICS_ENABLED                 | Enable or disable metrics                                                         | false                |
 
 ## Deprecated properties and environmental variables
 
@@ -112,6 +115,11 @@ Supported system properties and environmental variables:
 | otel.exporter.otlp.span.insecure   | OTEL_EXPORTER_OTLP_SPAN_INSECURE |
 | otel.exporter.otlp.span.endpoint   | OTEL_EXPORTER_OTLP_SPAN_ENDPOINT |
 | ls.service.name                    | LS_SERVICE_NAME                  |
+
+## OpenTelemetry Metrics support
+
+Metrics support is currently **experimental** and it is disabled by default. It can be enabled via `LS_METRICS_ENABLED=true`.
+Breaking changes may still occur. Use at your own risk.
 
 ## License
 
