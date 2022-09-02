@@ -1,8 +1,10 @@
 # Lightstep Launcher with OpenTracing Shim Example
 
 This example shows to to configure the Lightstep OTel Launcher along the
-OpenTracing Shim layer, in order to easily report OTel traces/spans from
-codebases already instrumented using the OpenTracing API.
+OpenTracing Shim layer.
+
+This use case is intended for codebases already instrumented with OpenTracing
+and desiring to report traces & spans using the OpenTelemetry SDK.
 
 ## Configuration
 
