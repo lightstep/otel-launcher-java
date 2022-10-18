@@ -105,7 +105,11 @@ public class VariablesConverter {
       System.setProperty("otel.propagators", configuration.propagators);
     }
 
-    String otelResourceAttributes = "service.name=" + configuration.serviceName;
+    String otelResourceAttributes =
+      "telemetry.distro.name=lightstep," +
+      "telemetry.distro.version=" + Version.get() + "," +
+      "service.name=" + configuration.serviceName;
+
     if (configuration.serviceVersion != null) {
       otelResourceAttributes += ",service.version=" + configuration.serviceVersion;
     }
