@@ -1,5 +1,6 @@
 <a name="Pending Release"></a>
 ## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/1.17.0...main)
+* Add telemetry.distro.name/version to Resource.
 
 <a name="1.17.0"></a>
 ## [1.17.0](https://github.com/lightstep/otel-launcher-java/compare/1.15.0...1.17.0)
