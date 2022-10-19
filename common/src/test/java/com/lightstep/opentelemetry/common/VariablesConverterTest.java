@@ -51,6 +51,8 @@ public class VariablesConverterTest {
     String hostname = VariablesConverter.getHostName();
 
     String resourceAttributes = System.getProperty("otel.resource.attributes");
+    assertTrue(resourceAttributes.contains("telemetry.distro.name=lightstep"));
+    assertTrue(resourceAttributes.contains("telemetry.distro.version=" + Version.get()));
     assertTrue(resourceAttributes.contains("service.name=service-1"));
     assertTrue(resourceAttributes.contains("service.version=1.0"));
     assertTrue(resourceAttributes.contains("host.name=" + hostname));
@@ -69,6 +71,8 @@ public class VariablesConverterTest {
     String hostname = VariablesConverter.getHostName();
 
     String resourceAttributes = System.getProperty("otel.resource.attributes");
+    assertTrue(resourceAttributes.contains("telemetry.distro.name=lightstep"));
+    assertTrue(resourceAttributes.contains("telemetry.distro.version=" + Version.get()));
     assertTrue(resourceAttributes.contains("service.name=service-1"));
     assertTrue(resourceAttributes.contains("host.name=my-host"));
     assertFalse(resourceAttributes.contains("host.name=" + hostname));

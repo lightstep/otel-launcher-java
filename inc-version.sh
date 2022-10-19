@@ -5,6 +5,9 @@
 # which will call out to this script
 set -e
 
+# File containing the launcher version (internal usage, avoid funky Maven version fetching)
+VERSION_FILE=common/src/main/java/com/lightstep/opentelemetry/common/Version.java
+
 if [ "$#" -lt 1 ]; then
         echo "Increasing minor version automatically"
 
@@ -23,7 +26,11 @@ git checkout -b $NEW_VERSION_BRANCH
 # Use maven-help-plugin to update the project.version
 mvn versions:set -DnewVersion=$NEW_VERSION -DgenerateBackupPoms=false
 
+# Update the version file (internal usage, avoid funky Maven version fetching)
+perl -pi -e 's/(\d+)\.(\d+)\.(\d+)/$ENV{NEW_VERSION}/ge' $VERSION_FILE
+
 # Commit the changes
+git add $VERSION_FILE
 git add agent/pom.xml
 git add common/pom.xml
 git add launcher/pom.xml
