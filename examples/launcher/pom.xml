@@ -22,7 +22,7 @@
     <dependency>
       <groupId>com.lightstep.opentelemetry</groupId>
       <artifactId>opentelemetry-launcher</artifactId>
-      <version>1.5.0</version>
+      <version>1.6.0</version>
     </dependency>
   </dependencies>
 
@@ -57,8 +57,7 @@
               </filters>
               <outputFile>${project.build.directory}/${project.artifactId}.jar</outputFile>
               <transformers>
-                <transformer implementation=
-                  "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <mainClass>com.lightstep.opentelemetry.launcher.example.Main</mainClass>
                 </transformer>
               </transformers>
