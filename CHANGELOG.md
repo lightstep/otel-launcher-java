@@ -1,5 +1,6 @@
 <a name="Pending Release"></a>
 ## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/1.19.0...main)
+* Remove our grpc dependency for launcher/
 
 <a name="1.19.0"></a>
 ## [1.19.0](https://github.com/lightstep/otel-launcher-java/compare/1.17.0...1.19.0)
