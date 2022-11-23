@@ -59,7 +59,7 @@
                     <Agent-Class>com.lightstep.opentelemetry.agent.LightstepBootstrap</Agent-Class>
                     <Premain-Class>com.lightstep.opentelemetry.agent.LightstepBootstrap
                     </Premain-Class>
-                    <Implementation-Version>1.19.0</Implementation-Version>
+                    <Implementation-Version>1.20.2</Implementation-Version>
                     <Can-Redefine-Classes>true</Can-Redefine-Classes>
                     <Can-Retransform-Classes>true</Can-Retransform-Classes>
                   </manifestEntries>
