@@ -18,7 +18,7 @@ public class Main {
         .setServiceName(properties.getProperty("otel.service.name"))
         .setAccessToken(properties.getProperty("ls.access.token"))
         .setTracesEndpoint(properties.getProperty("otel.exporter.otlp.traces.endpoint"))
-        .buildOpenTelemetry();
+        .buildOpenTelemetry().getOpenTelemetrySdk();
 
     Tracer tracer = openTelemetry.getTracer("LightstepExample");
     Span span = tracer.spanBuilder("start example").setSpanKind(SpanKind.CLIENT).startSpan();
