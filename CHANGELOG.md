@@ -1,5 +1,7 @@
 <a name="Pending Release"></a>
 ## [Pending Release](https://github.com/lightstep/otel-launcher-java/compare/1.19.0...main)
+* Use OpenTelemetry Java API/SDK version 1.20.1
+* Use OpenTelemetry Java Instrumentation version 1.20.2
 * Remove our grpc dependency for launcher/
 
 <a name="1.19.0"></a>
