@@ -30,7 +30,7 @@
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-extension-annotations</artifactId>
-      <version>1.17.0</version>
+      <version>1.18.0</version>
     </dependency>
     <dependency>
       <groupId>io.opentelemetry</groupId>
@@ -70,8 +70,7 @@
               </filters>
               <outputFile>${project.build.directory}/${project.artifactId}.jar</outputFile>
               <transformers>
-                <transformer implementation=
-                  "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <mainClass>com.lightstep.opentelemetry.launcher.example.App</mainClass>
                 </transformer>
               </transformers>
