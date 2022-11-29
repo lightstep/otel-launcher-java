@@ -22,7 +22,7 @@
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp</artifactId>
-      <version>3.14.9</version>
+      <version>4.9.2</version>
     </dependency>
 
     <!-- These dependencies are only needed to add manual instrumentation;
@@ -70,8 +70,7 @@
               </filters>
               <outputFile>${project.build.directory}/${project.artifactId}.jar</outputFile>
               <transformers>
-                <transformer implementation=
-                  "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <mainClass>com.lightstep.opentelemetry.launcher.example.App</mainClass>
                 </transformer>
               </transformers>
