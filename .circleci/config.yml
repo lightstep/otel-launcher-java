@@ -32,7 +32,6 @@ jobs:
 
       - run: |
           mvn dependency:go-offline integration-test
-          mvn -DrepoToken=$REPO_TOKEN -q jacoco:report coveralls:report
 
       - run:
           name: Collect Test Results
