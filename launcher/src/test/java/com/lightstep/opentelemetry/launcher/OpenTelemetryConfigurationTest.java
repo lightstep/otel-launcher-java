@@ -7,6 +7,7 @@ import com.lightstep.opentelemetry.launcher.OpenTelemetryConfiguration.Builder;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.logs.GlobalLoggerProvider;
+import io.opentelemetry.api.events.GlobalEventEmitterProvider;
 import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.extension.trace.propagation.B3Propagator;
 import java.util.List;
@@ -18,9 +19,11 @@ public class OpenTelemetryConfigurationTest {
   @Before
   public void before() {
     GlobalOpenTelemetry.resetForTest();
-    // Need to reset GlobalLoggerProvider as it's not part of the main API yet
+    // Need to reset GlobalLoggerProvider/GlobalEventEmitterProvider as
+    // they are not part of the main API yet
     // BUT it is used/set by default using the autoconfiguration artifact.
     GlobalLoggerProvider.resetForTest();
+    GlobalEventEmitterProvider.resetForTest();
     System.clearProperty("otel.propagators");
   }
 
