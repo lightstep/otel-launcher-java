@@ -156,7 +156,7 @@ public class VariablesConverter {
         System.setProperty("otel.exporter.otlp.metrics.temporality.preference", configuration.metricsTemporality);
       }
       // Enable by default expo histogram aggregation.
-      System.setProperty("otel.exporter.otlp.metrics.default.histogram.aggregation", "exponential_bucket_histogram");
+      System.setProperty("otel.exporter.otlp.metrics.default.histogram.aggregation", "base2_exponential_bucket_histogram");
 
       System.setProperty("otel.metrics.exporter", "otlp");
     } else {
