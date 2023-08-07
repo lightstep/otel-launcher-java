@@ -2,7 +2,9 @@
 
 # Lightstep Distro for OpenTelemetry Java
 
-This is the Lightstep package for configuring OpenTelemetry
+This is the Lightstep package for configuring OpenTelemetry.
+
+There are two ways you can use this package - either as an agent JAR, or directly integrated in your Java code. You should select only one of these integration options, not both. If you'd like to extend the automatic instrumentation offered by the agent, then please see [this page](https://github.com/open-telemetry/opentelemetry-java-instrumentation#manually-instrumenting) for information on extending traces into your code.
 
 ## Agent
 The Lightstep OpenTelemetry Agent is a configuration layer over OpenTelemetry Instrumentation Agent.
