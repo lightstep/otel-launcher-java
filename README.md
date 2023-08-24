@@ -1,6 +1,11 @@
 [![Download](https://img.shields.io/maven-central/v/com.lightstep.opentelemetry/opentelemetry-launcher.svg)](http://search.maven.org/#search%7Cga%7C1%7Ccom.lightstep.opentelemetry%20opentelemetry-launcher) [![Circle CI](https://circleci.com/gh/lightstep/otel-launcher-java.svg?style=shield)](https://circleci.com/gh/lightstep/otel-launcher-java) [![Apache-2.0 license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-# Lightstep Distro for OpenTelemetry Java
+# Lightstep Distro for OpenTelemetry Java [Deprecated]
+
+In August 2023, [Lightstep became ServiceNow
+Cloud](https://docs.lightstep.com/docs/banner-faq) Observability. To ease the
+transition, all code artifacts will continue to use the Lightstep name. You
+don't need to do anything to keep using this repository.
 
 This is the Lightstep package for configuring OpenTelemetry
 
